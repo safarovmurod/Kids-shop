@@ -4,6 +4,7 @@ import Layout from "./layout/Layout"
 
 const Home = lazy(() => import("./pages/Home"))
 const BlogPage = lazy(() => import("./pages/BlogPage"))
+const AkciiPage = lazy(() => import("./pages/AkciiPage"))
 
 const router = createBrowserRouter([
   {
@@ -17,6 +18,10 @@ const router = createBrowserRouter([
       {
         path: "blog",
         element: <BlogPage />,
+      },
+      {
+        path: "akcii",
+        element: <AkciiPage />,
       },
     ],
   },
