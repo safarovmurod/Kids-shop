@@ -16,7 +16,7 @@ export default function Hero() {
           mx: "auto",
           px: { xs: "16px", lg: "20px" },
           pt: { xs: "26px", lg: "50px" },
-          pb: { xs: "0px", lg: "30px" },
+          pb: { xs: "26px", lg: "40px" },
         }}
       >
         <Box
@@ -65,14 +65,20 @@ export default function Hero() {
         </Box>
 
         <Box
-          component="img"
-          src={hero}
           sx={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: { xs: "center", lg: "flex-end" },
             width: { xs: "100%", lg: "560px" },
-            height: { xs: "260px", lg: "400px" },
-            display: "block",
+            height: { xs: "250px", lg: "400px" },
           }}
-        />
+        >
+          <Box
+            component="img"
+            src={hero}
+            sx={{ maxWidth: "100%", maxHeight: "100%", display: "block" }}
+          />
+        </Box>
       </Box>
     </Box>
   )

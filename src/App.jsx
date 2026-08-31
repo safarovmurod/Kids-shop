@@ -3,6 +3,7 @@ import { createBrowserRouter, RouterProvider } from "react-router"
 import Layout from "./layout/Layout"
 
 const Home = lazy(() => import("./pages/Home"))
+const BlogPage = lazy(() => import("./pages/BlogPage"))
 
 const router = createBrowserRouter([
   {
@@ -12,6 +13,10 @@ const router = createBrowserRouter([
       {
         index: true,
         element: <Home />,
+      },
+      {
+        path: "blog",
+        element: <BlogPage />,
       },
     ],
   },

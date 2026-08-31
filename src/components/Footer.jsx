@@ -7,7 +7,15 @@ import facebook from "../assets/icons/facebook.svg"
 
 export default function Footer() {
   return (
-    <Box sx={{ width: "100%", pt: { xs: "30px", lg: "40px" }, pb: "20px", backgroundColor: "#FCF6F5" }}>
+    <Box
+      sx={{
+        width: "100%",
+        pt: { xs: "30px", lg: "40px" },
+        pb: "20px",
+        borderTop: "1px solid #EDEEEF",
+        backgroundColor: "#FFFFFF",
+      }}
+    >
       <Box sx={{ width: "100%", maxWidth: "1200px", mx: "auto", px: { xs: "16px", lg: "20px" } }}>
         <Box
           sx={{
@@ -66,15 +74,13 @@ export default function Footer() {
           </Box>
         </Box>
 
-        <Box sx={{ width: "100%", height: "1px", mt: { xs: "24px", lg: "30px" }, backgroundColor: "#EDE3E1" }} />
-
         <Box
           sx={{
             display: "flex",
             flexDirection: { xs: "column", lg: "row" },
             justifyContent: "space-between",
             gap: "10px",
-            pt: "16px",
+            pt: { xs: "24px", lg: "34px" },
           }}
         >
           <Typography sx={{ color: "#A9B7C0", fontSize: "12px" }}>© 2020 karapuz05.ru</Typography>
