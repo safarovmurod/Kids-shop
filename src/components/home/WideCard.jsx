@@ -1,4 +1,4 @@
-import { Box, Stack, Typography, Button, IconButton } from "@mui/material"
+import { Box, Typography, Button, IconButton } from "@mui/material"
 import { FavoriteBorder } from "@mui/icons-material"
 
 export default function WideCard({ items = [] }) {
@@ -9,7 +9,7 @@ export default function WideCard({ items = [] }) {
         maxWidth: "1200px",
         mx: "auto",
         px: { xs: "16px", lg: "20px" },
-        pt: { xs: "24px", lg: "60px" },
+        pt: { xs: "26px", lg: "60px" },
       }}
     >
       <Box
@@ -19,7 +19,7 @@ export default function WideCard({ items = [] }) {
           gap: { xs: "14px", lg: "24px" },
         }}
       >
-        {items.slice(0, 2).map((item) => (
+        {items.map((item) => (
           <Box
             key={item.id}
             sx={{
@@ -28,9 +28,9 @@ export default function WideCard({ items = [] }) {
               alignItems: "center",
               justifyContent: "space-between",
               gap: { xs: "10px", lg: "16px" },
-              height: { xs: "180px", lg: "190px" },
-              px: { xs: "14px", lg: "26px" },
-              borderRadius: "8px",
+              height: { xs: "175px", lg: "185px" },
+              px: { xs: "16px", lg: "26px" },
+              borderRadius: "6px",
               border: "1px solid #F1F1F1",
               backgroundColor: "#FFFFFF",
             }}
@@ -39,25 +39,36 @@ export default function WideCard({ items = [] }) {
               <Typography
                 sx={{
                   color: "#446B80",
-                  fontSize: { xs: "11px", lg: "12px" },
+                  fontSize: { xs: "10px", lg: "11px" },
                   fontWeight: 500,
-                  lineHeight: { xs: "17px", lg: "19px" },
+                  lineHeight: { xs: "16px", lg: "18px" },
                 }}
               >
                 {item.title}
               </Typography>
 
               <Typography
-                sx={{ mt: { xs: "12px", lg: "18px" }, color: "#7FC9F0", fontSize: { xs: "14px", lg: "16px" } }}
+                sx={{
+                  mt: { xs: "12px", lg: "16px" },
+                  color: "#7FC9F0",
+                  fontSize: { xs: "14px", lg: "15px" },
+                }}
               >
                 {item.price} ₽
               </Typography>
 
-              <Stack direction="row" alignItems="center" gap="12px" sx={{ mt: { xs: "12px", lg: "20px" } }}>
+              <Box
+                sx={{
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "12px",
+                  mt: { xs: "12px", lg: "18px" },
+                }}
+              >
                 <Button
                   sx={{
                     width: "80px",
-                    height: "28px",
+                    height: "26px",
                     borderRadius: "4px",
                     backgroundColor: "#7FC9F0",
                     color: "#FFFFFF",
@@ -69,29 +80,57 @@ export default function WideCard({ items = [] }) {
                   В корзину
                 </Button>
 
-                <Typography sx={{ color: "#446B80", fontSize: { xs: "10px", lg: "11px" } }}>
+                <Typography sx={{ color: "#446B80", fontSize: { xs: "9px", lg: "10px" } }}>
                   Купить в один клик
                 </Typography>
-              </Stack>
+              </Box>
             </Box>
 
             <Box
-              component="img"
-              src={item.image}
-              sx={{ width: "42%", height: { xs: "130px", lg: "150px" }, display: "block" }}
-            />
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                width: "42%",
+                height: { xs: "130px", lg: "145px" },
+              }}
+            >
+              <Box
+                component="img"
+                src={item.image}
+                sx={{ maxWidth: "100%", maxHeight: "100%", display: "block" }}
+              />
+            </Box>
 
-            <IconButton sx={{ position: "absolute", top: "6px", right: "6px", color: "#7FC9F0" }}>
-              <FavoriteBorder sx={{ fontSize: "18px" }} />
+            <IconButton
+              sx={{
+                position: "absolute",
+                top: "4px",
+                right: "4px",
+                color: "#7FC9F0",
+                "&:hover": { backgroundColor: "transparent" },
+              }}
+            >
+              <FavoriteBorder sx={{ fontSize: "16px" }} />
             </IconButton>
           </Box>
         ))}
       </Box>
 
-      <Stack direction="row" justifyContent="center" gap="8px" sx={{ display: { xs: "flex", lg: "none" }, mt: "16px" }}>
+      <Box
+        sx={{
+          display: { xs: "flex", lg: "none" },
+          alignItems: "center",
+          justifyContent: "center",
+          gap: "8px",
+          width: "100%",
+          mt: "16px",
+        }}
+      >
         <Box sx={{ width: "8px", height: "8px", borderRadius: "50%", backgroundColor: "#7FC9F0" }} />
+
         <Box sx={{ width: "8px", height: "8px", borderRadius: "50%", backgroundColor: "#D9D9D9" }} />
-      </Stack>
+      </Box>
     </Box>
   )
 }

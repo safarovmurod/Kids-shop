@@ -13,12 +13,12 @@ export default function Home() {
     <Box sx={{ width: "100%", backgroundColor: "#FFFFFF" }}>
       <Hero />
       <WideCard items={[]} />
-      <Categories />
+      <Categories items={[]} />
       <NewProducts items={[]} />
       <Banner />
       <Offers items={[]} />
       <PopularProducts items={[]} />
-      <AboutShop />
+      <AboutShop items={[]} brands={[]} />
     </Box>
   )
 }

@@ -1,4 +1,4 @@
-import { Box, Stack, Typography, Button, IconButton, InputBase } from "@mui/material"
+import { Box, Typography, Button, IconButton, InputBase } from "@mui/material"
 import { Menu, Search, ShoppingCartOutlined, PersonOutlined, LocationOnOutlined } from "@mui/icons-material"
 import { NavLink } from "react-router"
 import logo from "../assets/images/logo.png"
@@ -109,7 +109,7 @@ export default function Header() {
           px: "20px",
         }}
       >
-        <Stack direction="row" alignItems="center" gap="28px">
+        <Box sx={{ display: "flex", alignItems: "center", gap: "28px" }}>
           <Typography sx={{ color: "#446B80", fontSize: "9px", lineHeight: "12px" }}>
             Онлайн гипермаркет<br />товаров для детей
           </Typography>
@@ -131,15 +131,15 @@ export default function Header() {
           <Typography sx={{ color: "#446B80", fontSize: "13px" }}>Оплата и доставка</Typography>
 
           <Typography sx={{ color: "#446B80", fontSize: "13px" }}>Контакты</Typography>
-        </Stack>
+        </Box>
 
-        <Stack direction="row" alignItems="center" gap="6px">
+        <Box sx={{ display: "flex", alignItems: "center", gap: "6px" }}>
           <LocationOnOutlined sx={{ fontSize: "16px", color: "#A9C4D2" }} />
 
           <Typography sx={{ color: "#446B80", fontSize: "13px" }}>Город:</Typography>
 
           <Typography sx={{ color: "#7FC9F0", fontSize: "13px" }}>Москва</Typography>
-        </Stack>
+        </Box>
       </Box>
     </Box>
   )

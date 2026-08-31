@@ -1,4 +1,4 @@
-import { lazy, Suspense } from "react"
+import { lazy } from "react"
 import { createBrowserRouter, RouterProvider } from "react-router"
 import Layout from "./layout/Layout"
 
@@ -11,11 +11,7 @@ const router = createBrowserRouter([
     children: [
       {
         index: true,
-        element: (
-          <Suspense fallback={null}>
-            <Home />
-          </Suspense>
-        ),
+        element: <Home />,
       },
     ],
   },
