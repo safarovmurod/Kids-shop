@@ -1,0 +1,20 @@
+{
+  "brand": {
+    "homeLabel": "Okey Post — на главную"
+  },
+  "navigation": {
+    "label": "Основная навигация",
+    "stories": "Истории",
+    "guides": "Гайды",
+    "ideas": "Идеи",
+    "about": "О нас"
+  },
+  "search": {
+    "open": "Открыть поиск"
+  },
+  "subscribe": "Подписаться",
+  "menu": {
+    "open": "Открыть меню",
+    "close": "Закрыть меню"
+  }
+}

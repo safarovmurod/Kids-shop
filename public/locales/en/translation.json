@@ -1,0 +1,20 @@
+{
+  "brand": {
+    "homeLabel": "Okey Post — go to home"
+  },
+  "navigation": {
+    "label": "Main navigation",
+    "stories": "Stories",
+    "guides": "Guides",
+    "ideas": "Ideas",
+    "about": "About us"
+  },
+  "search": {
+    "open": "Open search"
+  },
+  "subscribe": "Subscribe",
+  "menu": {
+    "open": "Open menu",
+    "close": "Close menu"
+  }
+}
