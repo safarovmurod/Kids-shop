@@ -1,10 +1,11 @@
-import { lazy } from "react"
-import { createBrowserRouter, RouterProvider } from "react-router"
-import Layout from "./layout/Layout"
+import { lazy } from "react";
+import { createBrowserRouter, RouterProvider } from "react-router";
+import Layout from "./layout/Layout";
 
-const Home = lazy(() => import("./pages/Home"))
-const BlogPage = lazy(() => import("./pages/BlogPage"))
-const AkciiPage = lazy(() => import("./pages/AkciiPage"))
+const Home = lazy(() => import("./pages/Home"));
+const BlogPage = lazy(() => import("./pages/BlogPage"));
+const AkciiPage = lazy(() => import("./pages/AkciiPage"));
+const CartPage = lazy(() => import("./pages/CartPage"));
 
 const router = createBrowserRouter([
   {
@@ -23,10 +24,14 @@ const router = createBrowserRouter([
         path: "akcii",
         element: <AkciiPage />,
       },
+      {
+        path: "cart",
+        element: <CartPage />,
+      },
     ],
   },
-])
+]);
 
 export default function App() {
-  return <RouterProvider router={router} />
+  return <RouterProvider router={router} />;
 }

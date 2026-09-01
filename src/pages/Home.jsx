@@ -4,8 +4,8 @@ import WideCard from "../components/home/WideCard";
 import Categories from "../components/home/Categories";
 import NewProducts from "../components/home/NewProducts";
 import Banner from "../components/home/Banner";
-import Offers from "../components/home/Offers";
-import PopularProducts from "../components/home/PopularProducts";
+
+// import PopularProducts from "../components/home/PopularProducts";
 import AboutShop from "../components/home/AboutShop";
 
 export default function Home() {
@@ -16,8 +16,8 @@ export default function Home() {
       <Categories />
       <NewProducts />
       <Banner />
-      <Offers />
-      <PopularProducts />
+      <NewProducts isAkcii={"Выгодное предложение"} />
+      <NewProducts isAkcii={"Популярные товары"} />
       <AboutShop />
     </Box>
   );

@@ -1,8 +1,30 @@
-import { Box, Typography } from "@mui/material"
-import ProductCard from "./ProductCard"
-import Arrows from "./Arrows"
+import { Box, Typography } from "@mui/material";
+import ProductCard from "./ProductCard";
+import Arrows from "./Arrows";
+import { useEffect, useState } from "react";
+import axios from "axios";
 
-export default function NewProducts({ items = [] }) {
+const api = "https://swagger-wheat.vercel.app/api/detskaya-mebel";
+
+export default function NewProducts({ isAkcii }) {
+  const [data, setData] = useState([]);
+  const [page, setPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+
+  async function get() {
+    try {
+      const { data } = await axios.get(`${api}?page=${page}&pageSize=4`);
+      setData(data.data || []);
+      setTotalPages(data.totalPages || 1);
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  useEffect(() => {
+    get();
+  }, [page]);
+
   return (
     <Box
       sx={{
@@ -16,13 +38,13 @@ export default function NewProducts({ items = [] }) {
       <Typography
         sx={{
           color: "#446B80",
-          fontSize: { xs: "19px", lg: "34px" },
+          fontSize: { xs: "22px", lg: "34px" },
           fontWeight: 400,
-          lineHeight: { xs: "26px", lg: "44px" },
+          lineHeight: { xs: "28px", lg: "44px" },
           textAlign: "center",
         }}
       >
-        Новинки
+        {isAkcii}
       </Typography>
 
       <Box
@@ -33,12 +55,17 @@ export default function NewProducts({ items = [] }) {
           mt: { xs: "18px", lg: "34px" },
         }}
       >
-        {items.map((item) => (
-          <ProductCard key={item.id} item={item} />
+        {data.map((el) => (
+          <ProductCard key={el.id} item={el} />
         ))}
       </Box>
 
-      <Arrows />
+      <Arrows
+        onPrev={() => setPage((p) => (p > 1 ? p - 1 : 1))}
+        onNext={() => setPage((p) => (p < totalPages ? p + 1 : p))}
+        disabledPrev={page === 1}
+        disabledNext={page >= totalPages}
+      />
     </Box>
-  )
+  );
 }

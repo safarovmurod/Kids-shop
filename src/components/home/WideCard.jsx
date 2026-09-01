@@ -25,7 +25,7 @@ export default function WideCard() {
     <Box
       sx={{
         width: "100%",
-        maxWidth: "1200px",
+        maxWidth: "1464px",
         mx: "auto",
         px: { xs: "16px", lg: "20px" },
         pt: { xs: "26px", lg: "60px" },
@@ -38,17 +38,18 @@ export default function WideCard() {
           gap: { xs: "14px", lg: "24px" },
         }}
       >
-        {data.map((item) => (
+        {data.slice(0, 2).map((el) => (
           <Box
-            key={item.id}
+            key={el.id}
             sx={{
               position: "relative",
               display: "flex",
               alignItems: "center",
               justifyContent: "space-between",
               gap: { xs: "10px", lg: "16px" },
-              height: { xs: "175px", lg: "185px" },
-              px: { xs: "16px", lg: "26px" },
+              width: { xs: "100%", lg: "720px" },
+              height: { xs: "auto", lg: "360px" },
+              px: { xs: "16px", lg: "30px" },
               borderRadius: "6px",
               border: "1px solid #F1F1F1",
               backgroundColor: "#FFFFFF",
@@ -58,22 +59,23 @@ export default function WideCard() {
               <Typography
                 sx={{
                   color: "#446B80",
-                  fontSize: { xs: "10px", lg: "11px" },
+                  fontSize: { xs: "10px", lg: "14px" },
                   fontWeight: 500,
-                  lineHeight: { xs: "16px", lg: "18px" },
+                  lineHeight: { xs: "16px", lg: "22px" },
                 }}
               >
-                {item.title}
+                {el.name}
               </Typography>
 
               <Typography
                 sx={{
                   mt: { xs: "12px", lg: "16px" },
                   color: "#7FC9F0",
-                  fontSize: { xs: "14px", lg: "15px" },
+                  fontSize: { xs: "14px", lg: "18px" },
+                  fontWeight: 600,
                 }}
               >
-                {item.price} ₽
+                {el.price} ₽
               </Typography>
 
               <Box
@@ -81,17 +83,17 @@ export default function WideCard() {
                   display: "flex",
                   alignItems: "center",
                   gap: "12px",
-                  mt: { xs: "12px", lg: "18px" },
+                  mt: { xs: "12px", lg: "24px" },
                 }}
               >
                 <Button
                   sx={{
-                    width: "80px",
-                    height: "26px",
+                    width: { xs: "80px", lg: "110px" },
+                    height: { xs: "26px", lg: "34px" },
                     borderRadius: "4px",
                     backgroundColor: "#7FC9F0",
                     color: "#FFFFFF",
-                    fontSize: "10px",
+                    fontSize: { xs: "10px", lg: "12px" },
                     textTransform: "none",
                     "&:hover": { backgroundColor: "#7FC9F0" },
                   }}
@@ -100,7 +102,11 @@ export default function WideCard() {
                 </Button>
 
                 <Typography
-                  sx={{ color: "#446B80", fontSize: { xs: "9px", lg: "10px" } }}
+                  sx={{
+                    color: "#446B80",
+                    fontSize: { xs: "9px", lg: "12px" },
+                    cursor: "pointer",
+                  }}
                 >
                   Купить в один клик
                 </Typography>
@@ -112,27 +118,28 @@ export default function WideCard() {
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
-                width: "42%",
-                height: { xs: "130px", lg: "145px" },
+                width: "291px",
+                height: "291px",
+                flexShrink: 0,
               }}
             >
               <Box
                 component="img"
-                src={item.image}
-                sx={{ maxWidth: "100%", maxHeight: "100%", display: "block" }}
+                src={el.image}
+                sx={{ width: "291px", height: "291px", display: "block" }}
               />
             </Box>
 
             <IconButton
               sx={{
                 position: "absolute",
-                top: "4px",
-                right: "4px",
+                top: "8px",
+                right: "8px",
                 color: "#7FC9F0",
                 "&:hover": { backgroundColor: "transparent" },
               }}
             >
-              <FavoriteBorder sx={{ fontSize: "16px" }} />
+              <FavoriteBorder sx={{ fontSize: "18px" }} />
             </IconButton>
           </Box>
         ))}

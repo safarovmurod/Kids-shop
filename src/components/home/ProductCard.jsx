@@ -1,5 +1,5 @@
-import { Box, Typography, Button, IconButton } from "@mui/material"
-import { FavoriteBorder } from "@mui/icons-material"
+import { Box, Typography, Button, IconButton } from "@mui/material";
+import { FavoriteBorder } from "@mui/icons-material";
 
 export default function ProductCard({ item }) {
   return (
@@ -9,45 +9,44 @@ export default function ProductCard({ item }) {
         display: "flex",
         flexDirection: "column",
         alignItems: "center",
+        justifyContent: "space-between",
         width: "100%",
-        height: { xs: "250px", lg: "290px" },
-        px: { xs: "10px", lg: "14px" },
-        pt: { xs: "10px", lg: "14px" },
-        pb: { xs: "10px", lg: "14px" },
-        borderRadius: "6px",
+        minHeight: { xs: "280px", lg: "330px" },
+        px: { xs: "12px", lg: "16px" },
+        pt: { xs: "14px", lg: "18px" },
+        pb: { xs: "14px", lg: "18px" },
+        borderRadius: "8px",
         border: "1px solid #F1F1F1",
         backgroundColor: "#FFFFFF",
       }}
     >
-      {item.isNew && (
-        <Typography
-          sx={{
-            position: "absolute",
-            top: { xs: "10px", lg: "14px" },
-            left: { xs: "10px", lg: "14px" },
-            px: "6px",
-            py: "2px",
-            borderRadius: "3px",
-            backgroundColor: "#DFF2FB",
-            color: "#7FC9F0",
-            fontSize: "8px",
-            lineHeight: "12px",
-          }}
-        >
-          NEW
-        </Typography>
-      )}
+      <Typography
+        sx={{
+          position: "absolute",
+          top: "12px",
+          left: "12px",
+          px: "6px",
+          py: "2px",
+          borderRadius: "3px",
+          backgroundColor: "#DFF2FB",
+          color: "#7FC9F0",
+          fontSize: "9px",
+          fontWeight: 600,
+        }}
+      >
+        NEW
+      </Typography>
 
       <IconButton
         sx={{
           position: "absolute",
-          top: { xs: "2px", lg: "5px" },
-          right: { xs: "2px", lg: "5px" },
+          top: "6px",
+          right: "6px",
           color: "#7FC9F0",
           "&:hover": { backgroundColor: "transparent" },
         }}
       >
-        <FavoriteBorder sx={{ fontSize: "16px" }} />
+        <FavoriteBorder sx={{ fontSize: "18px" }} />
       </IconButton>
 
       <Box
@@ -56,8 +55,8 @@ export default function ProductCard({ item }) {
           alignItems: "center",
           justifyContent: "center",
           width: "100%",
-          height: { xs: "105px", lg: "130px" },
-          mt: { xs: "18px", lg: "20px" },
+          height: { xs: "120px", lg: "145px" },
+          mt: "14px",
         }}
       >
         <Box
@@ -72,50 +71,41 @@ export default function ProductCard({ item }) {
           width: "100%",
           mt: { xs: "10px", lg: "14px" },
           color: "#446B80",
-          fontSize: { xs: "9px", lg: "11px" },
-          lineHeight: { xs: "13px", lg: "15px" },
+          fontSize: { xs: "10px", lg: "12px" },
+          fontWeight: 500,
+          lineHeight: { xs: "14px", lg: "16px" },
+          textAlign: "center",
+          minHeight: { xs: "28px", lg: "32px" },
+          display: "-webkit-box",
+          WebkitLineClamp: 2,
+          WebkitBoxOrient: "vertical",
+          overflow: "hidden",
+        }}
+      >
+        {item.name || item.title}
+      </Typography>
+
+      <Typography
+        sx={{
+          mt: { xs: "6px", lg: "8px" },
+          color: "#7FC9F0",
+          fontSize: { xs: "14px", lg: "16px" },
+          fontWeight: 600,
           textAlign: "center",
         }}
       >
-        {item.title}
+        {item.price} ₽
       </Typography>
-
-      <Box
-        sx={{
-          display: "flex",
-          alignItems: "baseline",
-          justifyContent: "center",
-          gap: "6px",
-          width: "100%",
-          mt: { xs: "8px", lg: "10px" },
-        }}
-      >
-        <Typography sx={{ color: "#7FC9F0", fontSize: { xs: "12px", lg: "14px" } }}>
-          {item.price} ₽
-        </Typography>
-
-        {item.oldPrice && (
-          <Typography
-            sx={{
-              color: "#A9B7C0",
-              fontSize: { xs: "9px", lg: "10px" },
-              textDecoration: "line-through",
-            }}
-          >
-            {item.oldPrice} ₽
-          </Typography>
-        )}
-      </Box>
 
       <Button
         sx={{
-          width: { xs: "100%", lg: "104px" },
-          height: { xs: "28px", lg: "26px" },
-          mt: "auto",
+          width: { xs: "90px", lg: "110px" },
+          height: { xs: "26px", lg: "30px" },
+          mt: { xs: "10px", lg: "12px" },
           borderRadius: "4px",
           backgroundColor: "#7FC9F0",
           color: "#FFFFFF",
-          fontSize: { xs: "10px", lg: "10px" },
+          fontSize: { xs: "10px", lg: "11px" },
           textTransform: "none",
           "&:hover": { backgroundColor: "#7FC9F0" },
         }}
@@ -125,15 +115,15 @@ export default function ProductCard({ item }) {
 
       <Typography
         sx={{
-          width: "100%",
-          mt: { xs: "8px", lg: "10px" },
+          mt: { xs: "6px", lg: "8px" },
           color: "#7FC9F0",
           fontSize: { xs: "9px", lg: "10px" },
           textAlign: "center",
+          cursor: "pointer",
         }}
       >
         Купить в один клик
       </Typography>
     </Box>
-  )
+  );
 }

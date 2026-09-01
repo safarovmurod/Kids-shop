@@ -1,5 +1,38 @@
-import { Box, Typography, IconButton } from "@mui/material"
-import { ArrowBack, ArrowForward } from "@mui/icons-material"
+import { Box, Typography, IconButton } from "@mui/material";
+import { ArrowBack, ArrowForward } from "@mui/icons-material";
+
+import num1 from "../../assets/images/num1.png";
+import num2 from "../../assets/images/num2.png";
+import num3 from "../../assets/images/num3.png";
+import num4 from "../../assets/images/num4.png";
+import cybex from "../../assets/images/brand-cybex.png";
+import erbesi from "../../assets/images/brand-erbesi.png";
+const brends = [
+  {
+    id: 1,
+    image: cybex,
+  },
+  {
+    id: 2,
+    image: erbesi,
+  },
+  {
+    id: 3,
+    image: cybex,
+  },
+  {
+    id: 4,
+    image: erbesi,
+  },
+  {
+    id: 5,
+    image: cybex,
+  },
+  {
+    id: 6,
+    image: erbesi,
+  },
+];
 
 export default function AboutShop({ items = [], brands = [] }) {
   return (
@@ -22,7 +55,8 @@ export default function AboutShop({ items = [], brands = [] }) {
           textAlign: "center",
         }}
       >
-        Карапуз - это онлайн гипермаркет товаров для детей. С нами вырастают поколения!
+        Карапуз - это онлайн гипермаркет товаров для детей. С нами вырастают
+        поколения!
       </Typography>
 
       <Box
@@ -33,35 +67,125 @@ export default function AboutShop({ items = [], brands = [] }) {
           mt: { xs: "20px", lg: "36px" },
         }}
       >
-        {items.map((item) => (
+        <Box
+          sx={{
+            height: { xs: "140px", lg: "150px" },
+            p: { xs: "14px", lg: "20px" },
+            borderRadius: "6px",
+            border: "1px solid #DFF2FB",
+            backgroundColor: "#FFFFFF",
+            display: "flex",
+            alignItems: "center",
+            flexDirection: "column",
+          }}
+        >
           <Box
-            key={item.id}
+            component="img"
+            src={num1}
+            sx={{ width: "44px", height: "44px", display: "block" }}
+          />
+
+          <Typography
             sx={{
-              height: { xs: "140px", lg: "150px" },
-              p: { xs: "14px", lg: "20px" },
-              borderRadius: "6px",
-              border: "1px solid #DFF2FB",
-              backgroundColor: "#FFFFFF",
+              mt: { xs: "14px", lg: "20px" },
+              color: "#446B80",
+              fontSize: { xs: "10px", lg: "11px" },
+              lineHeight: { xs: "15px", lg: "17px" },
             }}
           >
-            <Box
-              component="img"
-              src={item.image}
-              sx={{ width: "44px", height: "44px", display: "block" }}
-            />
+            Все товары для детей в одном месте
+          </Typography>
+        </Box>
+        <Box
+          sx={{
+            height: { xs: "140px", lg: "150px" },
+            p: { xs: "14px", lg: "20px" },
+            borderRadius: "6px",
+            border: "1px solid #DFF2FB",
+            backgroundColor: "#FFFFFF",
+            display: "flex",
+            alignItems: "center",
+            flexDirection: "column",
+          }}
+        >
+          <Box
+            component="img"
+            src={num2}
+            sx={{ width: "44px", height: "44px", display: "block" }}
+          />
 
-            <Typography
-              sx={{
-                mt: { xs: "14px", lg: "20px" },
-                color: "#446B80",
-                fontSize: { xs: "10px", lg: "11px" },
-                lineHeight: { xs: "15px", lg: "17px" },
-              }}
-            >
-              {item.text}
-            </Typography>
-          </Box>
-        ))}
+          <Typography
+            sx={{
+              mt: { xs: "14px", lg: "20px" },
+              color: "#446B80",
+              fontSize: { xs: "10px", lg: "11px" },
+              lineHeight: { xs: "15px", lg: "17px" },
+            }}
+          >
+            Цены ниже, чем у конкурентов
+          </Typography>
+        </Box>
+        <Box
+          sx={{
+            height: { xs: "140px", lg: "150px" },
+            p: { xs: "14px", lg: "20px" },
+            borderRadius: "6px",
+            border: "1px solid #DFF2FB",
+            backgroundColor: "#FFFFFF",
+            display: "flex",
+            alignItems: "center",
+            textAlign: "center",
+            flexDirection: "column",
+          }}
+        >
+          <Box
+            component="img"
+            src={num3}
+            sx={{ width: "44px", height: "44px", display: "block" }}
+          />
+
+          <Typography
+            sx={{
+              mt: { xs: "14px", lg: "20px" },
+              color: "#446B80",
+              fontSize: { xs: "10px", lg: "11px" },
+              lineHeight: { xs: "15px", lg: "17px" },
+            }}
+          >
+            Официальные дилеры лучших мировых производителей
+          </Typography>
+        </Box>
+        <Box
+          sx={{
+            height: { xs: "140px", lg: "150px" },
+            p: { xs: "14px", lg: "20px" },
+            borderRadius: "6px",
+            border: "1px solid #DFF2FB",
+            backgroundColor: "#FFFFFF",
+            display: "flex",
+            alignItems: "center",
+            flexDirection: "column",
+            textAlign: "center",
+          }}
+        >
+          <Box
+            component="img"
+            src={num4}
+            sx={{ width: "44px", height: "44px", display: "block" }}
+          />
+
+          <Typography
+            sx={{
+              mt: { xs: "14px", lg: "20px" },
+              color: "#446B80",
+              fontSize: { xs: "10px", lg: "11px" },
+              lineHeight: { xs: "15px", lg: "17px" },
+              textAlign: "center",
+            }}
+          >
+            Собственное эко-производство
+          </Typography>
+        </Box>
       </Box>
 
       <Box
@@ -96,7 +220,7 @@ export default function AboutShop({ items = [], brands = [] }) {
             overflow: "hidden",
           }}
         >
-          {brands.map((item) => (
+          {brends.map((item) => (
             <Box
               key={item.id}
               component="img"
@@ -124,5 +248,5 @@ export default function AboutShop({ items = [], brands = [] }) {
         </IconButton>
       </Box>
     </Box>
-  )
+  );
 }

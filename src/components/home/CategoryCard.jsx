@@ -1,53 +1,72 @@
-import { Box, Typography, Button } from "@mui/material"
+import { Box, Typography, Button } from "@mui/material";
 
-export default function CategoryCard({ item }) {
+export default function CategoryCard({ item, index }) {
   return (
     <Box
       sx={{
         display: "flex",
         alignItems: "center",
         justifyContent: "space-between",
-        gap: "10px",
+        gap: { xs: "12px", lg: "16px" },
         width: "100%",
-        height: { xs: "150px", lg: "175px" },
-        px: { xs: "16px", lg: "20px" },
-        borderRadius: "6px",
-        backgroundColor: item.color || "#F8FAFC",
+        height: { xs: "170px", lg: "210px" },
+        p: { xs: "16px", lg: "24px" },
+        borderRadius: "8px",
+        backgroundColor:
+          item.color ||
+          (index === 0
+            ? "#F8E5E2"
+            : index === 1
+            ? "#FAF4EC"
+            : "#E9F4FB"),
       }}
     >
-      <Box sx={{ width: "50%" }}>
-        <Typography
-          sx={{
-            color: "#446B80",
-            fontSize: { xs: "13px", lg: "14px" },
-            fontWeight: 700,
-            lineHeight: { xs: "18px", lg: "19px" },
-          }}
-        >
-          {item.name || item.title}
-        </Typography>
+      <Box
+        sx={{
+          width: "52%",
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "space-between",
+          height: "100%",
+        }}
+      >
+        <Box>
+          <Typography
+            sx={{
+              color: "#3B637B",
+              fontSize: { xs: "14px", lg: "18px" },
+              fontWeight: 700,
+              lineHeight: 1.2,
+            }}
+          >
+            {item.name || item.title}
+          </Typography>
 
-        <Typography
-          sx={{
-            mt: { xs: "8px", lg: "12px" },
-            color: "#8FA6B3",
-            fontSize: { xs: "10px", lg: "11px" },
-            lineHeight: { xs: "15px", lg: "16px" },
-          }}
-        >
-          {item.description || item.text}
-        </Typography>
+          <Typography
+            sx={{
+              mt: { xs: "6px", lg: "10px" },
+              color: "#7E96A6",
+              fontSize: { xs: "10px", lg: "11px" },
+              lineHeight: 1.4,
+              display: "-webkit-box",
+              WebkitLineClamp: 2,
+              WebkitBoxOrient: "vertical",
+              overflow: "hidden",
+            }}
+          >
+            {item.description || item.text}
+          </Typography>
+        </Box>
 
         <Button
           sx={{
             width: "86px",
             height: "28px",
-            mt: { xs: "12px", lg: "18px" },
             borderRadius: "4px",
-            border: "1px solid #DCDCDC",
+            border: "1px solid #C4D3DC",
             backgroundColor: "#FFFFFF",
-            color: "#446B80",
-            fontSize: "10px",
+            color: "#3B637B",
+            fontSize: "11px",
             textTransform: "none",
             "&:hover": { backgroundColor: "#FFFFFF" },
           }}
@@ -61,16 +80,16 @@ export default function CategoryCard({ item }) {
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
-          width: "46%",
-          height: { xs: "115px", lg: "140px" },
+          width: "45%",
+          height: "100%",
         }}
       >
         <Box
           component="img"
           src={item.image}
-          sx={{ maxWidth: "100%", maxHeight: "100%", display: "block" }}
+          sx={{ maxWidth: "100%", maxHeight: { xs: "110px", lg: "140px" }, display: "block" }}
         />
       </Box>
     </Box>
-  )
+  );
 }

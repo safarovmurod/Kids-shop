@@ -3,14 +3,15 @@ import CategoryCard from "./CategoryCard";
 import { useEffect, useState } from "react";
 import axios from "axios";
 
-const api = "https://swagger-wheat.vercel.app/api/categories";
+const api = "https://swagger-wheat.vercel.app/api/detskaya-mebel";
 export default function Categories() {
   const [data, setData] = useState([]);
 
   async function get() {
     try {
       const { data } = await axios.get(api);
-      setData(data.data || []);
+      const list = (data.data || []).filter((c) => c.slug !== "akcii");
+      setData(list.length > 0 ? list : data.data || []);
     } catch (error) {
       console.error(error);
     }
@@ -50,8 +51,8 @@ export default function Categories() {
           mt: { xs: "18px", lg: "34px" },
         }}
       >
-        {data.map((item) => (
-          <CategoryCard key={item.id} item={item} />
+        {data.slice(3, 6).map((item, index) => (
+          <CategoryCard key={item.id} item={item} index={index} />
         ))}
       </Box>
     </Box>
