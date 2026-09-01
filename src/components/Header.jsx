@@ -1,11 +1,37 @@
-import { Box, Typography, Button, IconButton, InputBase } from "@mui/material"
-import { Menu, Search, ShoppingCartOutlined, PersonOutlined, LocationOnOutlined } from "@mui/icons-material"
-import { NavLink } from "react-router"
-import logo from "../assets/images/logo.png"
+import { useState } from "react";
+import {
+  Box,
+  Typography,
+  Button,
+  IconButton,
+  InputBase,
+  Avatar,
+} from "@mui/material";
+import {
+  Menu as MenuIcon,
+  Search,
+  ShoppingCartOutlined,
+  PersonOutlined,
+  LocationOnOutlined,
+} from "@mui/icons-material";
+import { NavLink } from "react-router";
+import logo from "../assets/images/logo.png";
+import AuthModal from "./AuthModal";
+import UserMenuModal from "./UserMenuModal";
 
-export default function Header() {
+export default function Header({ user, onLogin, onLogout }) {
+  const [openAuthModal, setOpenAuthModal] = useState(false);
+  const [openUserModal, setOpenUserModal] = useState(false);
+
+  const handleProfileClick = () => {
+    setOpenUserModal((prev) => !prev);
+  };
+
   return (
-    <Box sx={{ width: "100%", backgroundColor: "#FFFFFF" }}>
+    <Box
+      sx={{ width: "100%", backgroundColor: "#FFFFFF", position: "relative" }}
+    >
+      {/* Верхняя строка Header */}
       <Box
         sx={{
           display: "flex",
@@ -18,14 +44,37 @@ export default function Header() {
           px: { xs: "16px", lg: "20px" },
         }}
       >
-        <Box component="img" src={logo} sx={{ width: { xs: "36px", lg: "48px" }, height: { xs: "36px", lg: "48px" }, display: "block" }} />
+        <Box
+          component={NavLink}
+          to="/"
+          sx={{ display: "flex", alignItems: "center" }}
+        >
+          <Box
+            component="img"
+            src={logo}
+            sx={{
+              width: { xs: "36px", lg: "48px" },
+              height: { xs: "36px", lg: "48px" },
+              display: "block",
+            }}
+          />
+        </Box>
 
-        <Typography sx={{ display: { xs: "block", lg: "none" }, color: "#446B80", fontSize: "9px", lineHeight: "12px" }}>
-          Онлайн гипермаркет<br />товаров для детей
+        <Typography
+          sx={{
+            display: { xs: "block", lg: "none" },
+            color: "#446B80",
+            fontSize: "9px",
+            lineHeight: "12px",
+          }}
+        >
+          Онлайн гипермаркет
+          <br />
+          товаров для детей
         </Typography>
 
         <Button
-          endIcon={<Menu sx={{ fontSize: "16px" }} />}
+          endIcon={<MenuIcon sx={{ fontSize: "16px" }} />}
           sx={{
             display: { xs: "none", lg: "inline-flex" },
             height: "36px",
@@ -36,12 +85,13 @@ export default function Header() {
             fontSize: "13px",
             textTransform: "none",
             whiteSpace: "nowrap",
-            "&:hover": { backgroundColor: "#7FC9F0" },
+            "&:hover": { backgroundColor: "#68B7DE" },
           }}
         >
           Каталог товаров
         </Button>
 
+        {/* Поле поиска */}
         <Box
           sx={{
             display: "flex",
@@ -71,32 +121,86 @@ export default function Header() {
               color: "#FFFFFF",
               fontSize: "13px",
               textTransform: "none",
-              "&:hover": { backgroundColor: "#7FC9F0" },
+              "&:hover": { backgroundColor: "#68B7DE" },
             }}
           >
             Найти
           </Button>
         </Box>
 
-        <Button
-          startIcon={<PersonOutlined sx={{ fontSize: "18px" }} />}
-          sx={{ display: { xs: "none", lg: "inline-flex" }, color: "#446B80", fontSize: "13px", textTransform: "none", whiteSpace: "nowrap" }}
-        >
-          Войти в личный кабинет
-        </Button>
+        {/* Профиль ё кнопка Вход */}
+        {user ? (
+          <Box
+            onClick={handleProfileClick}
+            sx={{
+              display: { xs: "none", lg: "flex" },
+              alignItems: "center",
+              gap: "8px",
+              cursor: "pointer",
+            }}
+          >
+            <Avatar
+              sx={{
+                width: 32,
+                height: 32,
+                backgroundColor: "#EBF6FC",
+                color: "#7FC9F0",
+                fontSize: "14px",
+                fontWeight: 600,
+              }}
+            >
+              {user.name ? user.name[0].toUpperCase() : "А"}
+            </Avatar>
+            <Typography
+              sx={{
+                color: "#446B80",
+                fontSize: "13px",
+                fontWeight: 500,
+              }}
+            >
+              Личный кабинет
+            </Typography>
+          </Box>
+        ) : (
+          <Button
+            onClick={() => setOpenAuthModal((prev) => !prev)}
+            startIcon={<PersonOutlined sx={{ fontSize: "18px" }} />}
+            sx={{
+              display: { xs: "none", lg: "inline-flex" },
+              color: "#446B80",
+              fontSize: "13px",
+              textTransform: "none",
+              whiteSpace: "nowrap",
+            }}
+          >
+            Войти в личный кабинет
+          </Button>
+        )}
 
         <Button
+          component={NavLink}
+          to="/cart"
           startIcon={<ShoppingCartOutlined sx={{ fontSize: "18px" }} />}
-          sx={{ display: { xs: "none", lg: "inline-flex" }, color: "#446B80", fontSize: "13px", textTransform: "none" }}
+          sx={{
+            display: { xs: "none", lg: "inline-flex" },
+            color: "#446B80",
+            fontSize: "13px",
+            textTransform: "none",
+          }}
         >
           Корзина
         </Button>
 
-        <IconButton sx={{ display: { xs: "inline-flex", lg: "none" }, color: "#446B80" }}>
+        <IconButton
+          component={NavLink}
+          to="/cart"
+          sx={{ display: { xs: "inline-flex", lg: "none" }, color: "#446B80" }}
+        >
           <ShoppingCartOutlined sx={{ fontSize: "20px" }} />
         </IconButton>
       </Box>
 
+      {/* Нижняя строка Header */}
       <Box
         sx={{
           display: { xs: "none", lg: "flex" },
@@ -110,37 +214,107 @@ export default function Header() {
         }}
       >
         <Box sx={{ display: "flex", alignItems: "center", gap: "28px" }}>
-          <Typography sx={{ color: "#446B80", fontSize: "9px", lineHeight: "12px" }}>
-            Онлайн гипермаркет<br />товаров для детей
+          <Typography
+            sx={{ color: "#446B80", fontSize: "9px", lineHeight: "12px" }}
+          >
+            Онлайн гипермаркет
+            <br />
+            товаров для детей
           </Typography>
 
-          <Box component={NavLink} to="/" sx={{ color: "#446B80", fontSize: "13px", "&.active": { color: "#7FC9F0" } }}>
+          <Box
+            component={NavLink}
+            to="/akcii"
+            sx={{
+              color: "#446B80",
+              fontSize: "13px",
+              textDecoration: "none",
+              "&.active": { color: "#7FC9F0" },
+            }}
+          >
             Акции
           </Box>
 
-          <Box component={NavLink} to="/about" sx={{ color: "#446B80", fontSize: "13px", "&.active": { color: "#7FC9F0" } }}>
+          <Box
+            component={NavLink}
+            to="/about"
+            sx={{
+              color: "#446B80",
+              fontSize: "13px",
+              textDecoration: "none",
+              "&.active": { color: "#7FC9F0" },
+            }}
+          >
             О нас
           </Box>
 
-          <Typography sx={{ color: "#446B80", fontSize: "13px" }}>Блог</Typography>
+          <Box
+            component={NavLink}
+            to="/blog"
+            sx={{
+              color: "#446B80",
+              fontSize: "13px",
+              textDecoration: "none",
+              "&.active": { color: "#7FC9F0" },
+            }}
+          >
+            Блог
+          </Box>
 
-          <Typography sx={{ color: "#446B80", fontSize: "13px" }}>Оптовым клиентам</Typography>
+          <Typography
+            sx={{ color: "#446B80", fontSize: "13px", cursor: "pointer" }}
+          >
+            Оптовым клиентам
+          </Typography>
 
-          <Typography sx={{ color: "#446B80", fontSize: "13px" }}>Возврат</Typography>
+          <Typography
+            sx={{ color: "#446B80", fontSize: "13px", cursor: "pointer" }}
+          >
+            Возврат
+          </Typography>
 
-          <Typography sx={{ color: "#446B80", fontSize: "13px" }}>Оплата и доставка</Typography>
+          <Typography
+            sx={{ color: "#446B80", fontSize: "13px", cursor: "pointer" }}
+          >
+            Оплата и доставка
+          </Typography>
 
-          <Typography sx={{ color: "#446B80", fontSize: "13px" }}>Контакты</Typography>
+          <Typography
+            sx={{ color: "#446B80", fontSize: "13px", cursor: "pointer" }}
+          >
+            Контакты
+          </Typography>
         </Box>
 
         <Box sx={{ display: "flex", alignItems: "center", gap: "6px" }}>
           <LocationOnOutlined sx={{ fontSize: "16px", color: "#A9C4D2" }} />
 
-          <Typography sx={{ color: "#446B80", fontSize: "13px" }}>Город:</Typography>
+          <Typography sx={{ color: "#446B80", fontSize: "13px" }}>
+            Город:
+          </Typography>
 
-          <Typography sx={{ color: "#7FC9F0", fontSize: "13px" }}>Москва</Typography>
+          <Typography
+            sx={{ color: "#7FC9F0", fontSize: "13px", cursor: "pointer" }}
+          >
+            Москва
+          </Typography>
         </Box>
       </Box>
+
+      {/* Модалка Входа */}
+      <AuthModal
+        open={openAuthModal}
+        onClose={() => setOpenAuthModal(false)}
+        onLogin={onLogin}
+      />
+
+      {/* Модалка Меню Личного Кабинета */}
+      <UserMenuModal
+        open={openUserModal}
+        onClose={() => setOpenUserModal(false)}
+        user={user}
+        onLogout={onLogout}
+      />
     </Box>
-  )
+  );
 }

@@ -9,10 +9,12 @@ import {
 } from "@mui/material";
 import {
   FavoriteBorder as FavoriteBorderIcon,
-  DeleteOutline as DeleteOutlineIcon,
+  DeleteOutlined as DeleteOutlineIcon,
   ArrowBack as ArrowBackIcon,
   ArrowForward as ArrowForwardIcon,
+  Close as CloseIcon,
 } from "@mui/icons-material";
+import { NavLink } from "react-router";
 
 const initialCartItems = [
   {
@@ -67,6 +69,7 @@ const recommendedProducts = [
 
 export default function CartPage() {
   const [cartItems, setCartItems] = useState(initialCartItems);
+  const [deletedItems, setDeletedItems] = useState([]);
   const [promoCode, setPromoCode] = useState("");
 
   const handleQuantityChange = (id, delta) => {
@@ -81,8 +84,18 @@ export default function CartPage() {
     );
   };
 
-  const handleRemove = (id) => {
-    setCartItems((prev) => prev.filter((item) => item.id !== id));
+  const handleRemove = (item) => {
+    setDeletedItems((prev) => [...prev, item]);
+    setCartItems((prev) => prev.filter((el) => el.id !== item.id));
+  };
+
+  const handleRestore = (item) => {
+    setCartItems((prev) => [...prev, item]);
+    setDeletedItems((prev) => prev.filter((el) => el.id !== item.id));
+  };
+
+  const handleDismiss = (item) => {
+    setDeletedItems((prev) => prev.filter((el) => el.id !== item.id));
   };
 
   const totalCount = cartItems.reduce((acc, item) => acc + item.count, 0);
@@ -116,6 +129,51 @@ export default function CartPage() {
       <Grid container spacing={4} sx={{ marginBottom: "80px" }}>
         {/* Список товаров */}
         <Grid item xs={12} md={8}>
+          {deletedItems.map((el) => (
+            <Box
+              key={el.id}
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between",
+                padding: "16px 0",
+                borderBottom: "1px solid #EAEAEA",
+                gap: "16px",
+              }}
+            >
+              <Typography
+                sx={{
+                  fontSize: "12px",
+                  color: "#708090",
+                  lineHeight: 1.4,
+                  maxWidth: { xs: "65%", sm: "80%" },
+                }}
+              >
+                Вы удалили {el.title}
+              </Typography>
+
+              <Box sx={{ display: "flex", alignItems: "center", gap: "20px" }}>
+                <Typography
+                  onClick={() => handleRestore(el)}
+                  sx={{
+                    fontSize: "13px",
+                    color: "#7FC9F0",
+                    cursor: "pointer",
+                  }}
+                >
+                  Отменить
+                </Typography>
+
+                <IconButton
+                  onClick={() => handleDismiss(el)}
+                  sx={{ padding: 0, color: "#708090" }}
+                >
+                  <CloseIcon sx={{ fontSize: "16px" }} />
+                </IconButton>
+              </Box>
+            </Box>
+          ))}
+
           <Box sx={{ display: "flex", flexDirection: "column" }}>
             {cartItems.map((item) => (
               <Box
@@ -226,7 +284,7 @@ export default function CartPage() {
                     <FavoriteBorderIcon sx={{ fontSize: "20px" }} />
                   </IconButton>
                   <IconButton
-                    onClick={() => handleRemove(item.id)}
+                    onClick={() => handleRemove(item)}
                     sx={{ padding: 0, color: "#B2CAD6" }}
                   >
                     <DeleteOutlineIcon sx={{ fontSize: "20px" }} />
@@ -348,6 +406,8 @@ export default function CartPage() {
             </Box>
 
             <Button
+              component={NavLink}
+              to="/checkout"
               fullWidth
               variant="contained"
               disableElevation
