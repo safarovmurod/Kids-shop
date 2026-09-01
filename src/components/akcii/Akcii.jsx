@@ -1,6 +1,24 @@
-import { Box, Typography, Button } from "@mui/material"
+import { Box, Typography, Button } from "@mui/material";
+import { useEffect, useState } from "react";
+import axios from "axios";
 
-export default function Akcii({ items = [] }) {
+const api = "https://swagger-wheat.vercel.app/api/akcii";
+
+export default function Akcii() {
+  const [user, setUser] = useState([]);
+
+  async function get() {
+    try {
+      const { data } = await axios.get(api);
+      setUser(data.data || []);
+    } catch (error) {
+      console.error(error);
+    }
+  }
+  useEffect(() => {
+    get();
+  }, []);
+
   return (
     <Box
       sx={{
@@ -13,11 +31,23 @@ export default function Akcii({ items = [] }) {
       }}
     >
       <Box sx={{ display: "flex", alignItems: "center", gap: "8px" }}>
-        <Typography sx={{ color: "#A9B7C0", fontSize: { xs: "10px", lg: "11px" } }}>Главная</Typography>
+        <Typography
+          sx={{ color: "#A9B7C0", fontSize: { xs: "10px", lg: "11px" } }}
+        >
+          Главная
+        </Typography>
 
-        <Typography sx={{ color: "#A9B7C0", fontSize: { xs: "10px", lg: "11px" } }}>/</Typography>
+        <Typography
+          sx={{ color: "#A9B7C0", fontSize: { xs: "10px", lg: "11px" } }}
+        >
+          /
+        </Typography>
 
-        <Typography sx={{ color: "#446B80", fontSize: { xs: "10px", lg: "11px" } }}>Акции</Typography>
+        <Typography
+          sx={{ color: "#446B80", fontSize: { xs: "10px", lg: "11px" } }}
+        >
+          Акции
+        </Typography>
       </Box>
 
       <Typography
@@ -41,7 +71,7 @@ export default function Akcii({ items = [] }) {
           mt: { xs: "18px", lg: "26px" },
         }}
       >
-        {items.map((item) => (
+        {user.map((item) => (
           <Box
             key={item.id}
             sx={{
@@ -59,7 +89,11 @@ export default function Akcii({ items = [] }) {
                 overflow: "hidden",
               }}
             >
-              <Box component="img" src={item.image} sx={{ width: "100%", height: "100%", display: "block" }} />
+              <Box
+                component="img"
+                src={item.image}
+                sx={{ width: "100%", height: "100%", display: "block" }}
+              />
             </Box>
 
             <Typography
@@ -87,7 +121,14 @@ export default function Akcii({ items = [] }) {
         ))}
       </Box>
 
-      <Box sx={{ display: { xs: "none", lg: "flex" }, alignItems: "center", gap: "8px", mt: "34px" }}>
+      <Box
+        sx={{
+          display: { xs: "none", lg: "flex" },
+          alignItems: "center",
+          gap: "8px",
+          mt: "34px",
+        }}
+      >
         <Typography
           sx={{
             display: "flex",
@@ -104,11 +145,17 @@ export default function Akcii({ items = [] }) {
           1
         </Typography>
 
-        <Typography sx={{ px: "8px", color: "#8FA6B3", fontSize: "11px" }}>2</Typography>
+        <Typography sx={{ px: "8px", color: "#8FA6B3", fontSize: "11px" }}>
+          2
+        </Typography>
 
-        <Typography sx={{ px: "8px", color: "#8FA6B3", fontSize: "11px" }}>3</Typography>
+        <Typography sx={{ px: "8px", color: "#8FA6B3", fontSize: "11px" }}>
+          3
+        </Typography>
 
-        <Typography sx={{ ml: "10px", color: "#446B80", fontSize: "11px" }}>Далее</Typography>
+        <Typography sx={{ ml: "10px", color: "#446B80", fontSize: "11px" }}>
+          Далее
+        </Typography>
       </Box>
 
       <Button
@@ -129,5 +176,5 @@ export default function Akcii({ items = [] }) {
         Показать еще
       </Button>
     </Box>
-  )
+  );
 }

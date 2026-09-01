@@ -1,7 +1,26 @@
-import { Box, Typography, Button, IconButton } from "@mui/material"
-import { FavoriteBorder } from "@mui/icons-material"
+import { Box, Typography, Button, IconButton } from "@mui/material";
+import { FavoriteBorder } from "@mui/icons-material";
+import { useEffect, useState } from "react";
+import axios from "axios";
 
-export default function WideCard({ items = [] }) {
+const api = "https://swagger-wheat.vercel.app/api/akcii";
+
+export default function WideCard() {
+  const [data, setData] = useState([]);
+
+  async function get() {
+    try {
+      const { data } = await axios.get(api);
+      setData(data.data);
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  useEffect(() => {
+    get();
+  }, []);
+
   return (
     <Box
       sx={{
@@ -19,7 +38,7 @@ export default function WideCard({ items = [] }) {
           gap: { xs: "14px", lg: "24px" },
         }}
       >
-        {items.map((item) => (
+        {data.map((item) => (
           <Box
             key={item.id}
             sx={{
@@ -80,7 +99,9 @@ export default function WideCard({ items = [] }) {
                   В корзину
                 </Button>
 
-                <Typography sx={{ color: "#446B80", fontSize: { xs: "9px", lg: "10px" } }}>
+                <Typography
+                  sx={{ color: "#446B80", fontSize: { xs: "9px", lg: "10px" } }}
+                >
                   Купить в один клик
                 </Typography>
               </Box>
@@ -127,10 +148,24 @@ export default function WideCard({ items = [] }) {
           mt: "16px",
         }}
       >
-        <Box sx={{ width: "8px", height: "8px", borderRadius: "50%", backgroundColor: "#7FC9F0" }} />
+        <Box
+          sx={{
+            width: "8px",
+            height: "8px",
+            borderRadius: "50%",
+            backgroundColor: "#7FC9F0",
+          }}
+        />
 
-        <Box sx={{ width: "8px", height: "8px", borderRadius: "50%", backgroundColor: "#D9D9D9" }} />
+        <Box
+          sx={{
+            width: "8px",
+            height: "8px",
+            borderRadius: "50%",
+            backgroundColor: "#D9D9D9",
+          }}
+        />
       </Box>
     </Box>
-  )
+  );
 }

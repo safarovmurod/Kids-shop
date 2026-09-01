@@ -12,7 +12,7 @@ export default function CategoryCard({ item }) {
         height: { xs: "150px", lg: "175px" },
         px: { xs: "16px", lg: "20px" },
         borderRadius: "6px",
-        backgroundColor: item.color,
+        backgroundColor: item.color || "#F8FAFC",
       }}
     >
       <Box sx={{ width: "50%" }}>
@@ -24,7 +24,7 @@ export default function CategoryCard({ item }) {
             lineHeight: { xs: "18px", lg: "19px" },
           }}
         >
-          {item.title}
+          {item.name || item.title}
         </Typography>
 
         <Typography
@@ -35,7 +35,7 @@ export default function CategoryCard({ item }) {
             lineHeight: { xs: "15px", lg: "16px" },
           }}
         >
-          {item.text}
+          {item.description || item.text}
         </Typography>
 
         <Button

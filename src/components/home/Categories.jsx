@@ -1,7 +1,25 @@
-import { Box, Typography } from "@mui/material"
-import CategoryCard from "./CategoryCard"
+import { Box, Typography } from "@mui/material";
+import CategoryCard from "./CategoryCard";
+import { useEffect, useState } from "react";
+import axios from "axios";
 
-export default function Categories({ items = [] }) {
+const api = "https://swagger-wheat.vercel.app/api/categories";
+export default function Categories() {
+  const [data, setData] = useState([]);
+
+  async function get() {
+    try {
+      const { data } = await axios.get(api);
+      setData(data.data || []);
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  useEffect(() => {
+    get();
+  }, []);
+
   return (
     <Box
       sx={{
@@ -32,10 +50,10 @@ export default function Categories({ items = [] }) {
           mt: { xs: "18px", lg: "34px" },
         }}
       >
-        {items.map((item) => (
+        {data.map((item) => (
           <CategoryCard key={item.id} item={item} />
         ))}
       </Box>
     </Box>
-  )
+  );
 }
