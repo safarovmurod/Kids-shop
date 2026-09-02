@@ -10,7 +10,7 @@ import { AppContext } from "../context/AppContext";
 import { menuLinks, userMenuLinks } from "../data/data";
 import MobileCatalog from "./MobileCatalog";
 
-export default function MobileMenu({ open, onClose, onOpenAuth }) {
+export default function MobileMenu({ open, onClose }) {
   const { state, logout } = useContext(AppContext);
   const [openCatalog, setOpenCatalog] = useState(false);
   const navigate = useNavigate();
@@ -70,14 +70,14 @@ export default function MobileMenu({ open, onClose, onOpenAuth }) {
                   fontWeight: 600,
                 }}
               >
-                {user.name ? user.name[0].toUpperCase() : "А"}
+                {user.fullName ? user.fullName[0].toUpperCase() : "А"}
               </Avatar>
 
               <Box sx={{ overflow: "hidden" }}>
                 <Typography
                   sx={{ color: "#2B5674", fontSize: "14px", fontWeight: 600 }}
                 >
-                  {user.name}
+                  {user.fullName}
                 </Typography>
 
                 <Typography
@@ -122,10 +122,7 @@ export default function MobileMenu({ open, onClose, onOpenAuth }) {
           </Box>
         ) : (
           <Box
-            onClick={() => {
-              onClose();
-              onOpenAuth();
-            }}
+            onClick={() => handleClick("/register")}
             sx={{
               display: "flex",
               alignItems: "center",
@@ -164,7 +161,7 @@ export default function MobileMenu({ open, onClose, onOpenAuth }) {
             Каталог товаров
           </Typography>
 
-          {menuLinks.slice(1).map((el) => (
+          {menuLinks.map((el) => (
             <Typography
               key={el.id}
               onClick={() => handleClick(el.path)}

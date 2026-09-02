@@ -6,7 +6,7 @@ export default function AkciiCard({ item }) {
 
   return (
     <Box
-      onClick={() => navigate(`/akcii/${item.id}`)}
+      onClick={() => navigate(`/akcii/${item.slug}`)}
       sx={{
         display: "flex",
         flexDirection: "column",
@@ -17,7 +17,7 @@ export default function AkciiCard({ item }) {
       <Box
         component="img"
         src={item.image}
-        alt={item.name}
+        alt={item.title}
         sx={{
           width: "100%",
           height: { xs: "150px", lg: "240px" },
@@ -34,19 +34,19 @@ export default function AkciiCard({ item }) {
           fontSize: { xs: "16px", lg: "12px" },
         }}
       >
-        {item.createdAt}
+        {item.date}
       </Typography>
 
       <Typography
         sx={{
-          marginTop: { xs: "10px", lg: "10px" },
+          marginTop: "10px",
           color: "#446B80",
           fontSize: { xs: "18px", lg: "15px" },
           fontWeight: 500,
           lineHeight: { xs: "26px", lg: "22px" },
         }}
       >
-        {item.name}
+        {item.title}
       </Typography>
     </Box>
   );

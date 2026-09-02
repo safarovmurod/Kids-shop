@@ -1,15 +1,16 @@
 import { Box, Typography } from "@mui/material";
-import { FormatQuote } from "@mui/icons-material";
 import { NavLink } from "react-router";
+import ProductCard from "../ProductCard";
 
 export default function AkciiInfo({ item }) {
-  const blocks = item.blocks || [];
+  // Дар як акция маҳсулот дар productDetails меояд
+  const products = item.productDetails || [];
 
   return (
     <Box
       sx={{
         width: "100%",
-        maxWidth: "860px",
+        maxWidth: "1240px",
         marginLeft: "auto",
         marginRight: "auto",
         paddingLeft: { xs: "16px", lg: "20px" },
@@ -22,42 +23,42 @@ export default function AkciiInfo({ item }) {
         sx={{
           display: { xs: "none", lg: "flex" },
           alignItems: "center",
-          gap: "8px",
+          gap: "10px",
+          marginBottom: "20px",
         }}
       >
         <Typography
           component={NavLink}
           to="/"
-          sx={{ color: "#A9B7C0", fontSize: "11px", textDecoration: "none" }}
+          sx={{ color: "#A9B7C0", fontSize: "12px", textDecoration: "none" }}
         >
           Главная
         </Typography>
 
-        <Typography sx={{ color: "#A9B7C0", fontSize: "11px" }}>/</Typography>
+        <Typography sx={{ color: "#A9B7C0", fontSize: "12px" }}>›</Typography>
 
         <Typography
           component={NavLink}
           to="/akcii"
-          sx={{ color: "#A9B7C0", fontSize: "11px", textDecoration: "none" }}
+          sx={{ color: "#A9B7C0", fontSize: "12px", textDecoration: "none" }}
         >
           Акции
         </Typography>
 
-        <Typography sx={{ color: "#A9B7C0", fontSize: "11px" }}>/</Typography>
+        <Typography sx={{ color: "#A9B7C0", fontSize: "12px" }}>›</Typography>
 
-        <Typography sx={{ color: "#446B80", fontSize: "11px" }}>
-          {item.name}
+        <Typography sx={{ color: "#446B80", fontSize: "12px" }}>
+          {item.title}
         </Typography>
       </Box>
 
       <Box
         component="img"
         src={item.image}
-        alt={item.name}
+        alt={item.title}
         sx={{
           width: "100%",
           maxHeight: { xs: "220px", lg: "380px" },
-          marginTop: { xs: "0px", lg: "22px" },
           borderRadius: "8px",
           objectFit: "cover",
           display: "block",
@@ -68,12 +69,12 @@ export default function AkciiInfo({ item }) {
         sx={{
           marginTop: { xs: "20px", lg: "28px" },
           color: "#446B80",
-          fontSize: { xs: "24px", lg: "30px" },
+          fontSize: { xs: "26px", lg: "30px" },
           fontWeight: 600,
-          lineHeight: { xs: "32px", lg: "40px" },
+          lineHeight: 1.35,
         }}
       >
-        {item.name}
+        {item.title}
       </Typography>
 
       <Typography
@@ -83,7 +84,7 @@ export default function AkciiInfo({ item }) {
           fontSize: { xs: "16px", lg: "12px" },
         }}
       >
-        {item.createdAt}
+        {item.date}
       </Typography>
 
       <Typography
@@ -91,74 +92,38 @@ export default function AkciiInfo({ item }) {
           marginTop: { xs: "18px", lg: "24px" },
           color: "#8FA6B3",
           fontSize: { xs: "17px", lg: "14px" },
-          lineHeight: { xs: "26px", lg: "24px" },
+          lineHeight: 1.7,
         }}
       >
         {item.description}
       </Typography>
 
-      {blocks.map((block) => (
-        <Box key={block.id} sx={{ width: "100%" }}>
-          {block.type === "text" && (
-            <Typography
-              sx={{
-                marginTop: { xs: "18px", lg: "24px" },
-                color: "#8FA6B3",
-                fontSize: { xs: "17px", lg: "14px" },
-                lineHeight: { xs: "26px", lg: "24px" },
-              }}
-            >
-              {block.value}
-            </Typography>
-          )}
+      {products.length > 0 && (
+        <Box sx={{ marginTop: { xs: "40px", lg: "60px" } }}>
+          <Typography
+            sx={{
+              marginBottom: "24px",
+              color: "#446B80",
+              fontSize: { xs: "24px", lg: "26px" },
+              fontWeight: 600,
+            }}
+          >
+            Товары по акции
+          </Typography>
 
-          {block.type === "image" && (
-            <Box
-              component="img"
-              src={block.value}
-              alt={item.name}
-              sx={{
-                width: "100%",
-                height: { xs: "220px", lg: "380px" },
-                marginTop: { xs: "20px", lg: "28px" },
-                borderRadius: "8px",
-                objectFit: "cover",
-                display: "block",
-              }}
-            />
-          )}
-
-          {block.type === "quote" && (
-            <Box
-              sx={{
-                display: "flex",
-                alignItems: "flex-start",
-                gap: { xs: "12px", lg: "20px" },
-                marginTop: { xs: "20px", lg: "28px" },
-              }}
-            >
-              <FormatQuote
-                sx={{
-                  flexShrink: 0,
-                  color: "#D0DADF",
-                  fontSize: { xs: "38px", lg: "48px" },
-                  transform: "scaleX(-1)",
-                }}
-              />
-
-              <Typography
-                sx={{
-                  color: "#8FA6B3",
-                  fontSize: { xs: "17px", lg: "14px" },
-                  lineHeight: { xs: "26px", lg: "24px" },
-                }}
-              >
-                {block.value}
-              </Typography>
-            </Box>
-          )}
+          <Box
+            sx={{
+              display: "grid",
+              gridTemplateColumns: { xs: "1fr 1fr", lg: "repeat(4, 1fr)" },
+              gap: { xs: "12px", lg: "24px" },
+            }}
+          >
+            {products.map((el) => (
+              <ProductCard key={el.id} item={el} />
+            ))}
+          </Box>
         </Box>
-      ))}
+      )}
     </Box>
   );
 }

@@ -15,7 +15,6 @@ import {
 } from "@mui/icons-material";
 import { NavLink, useNavigate } from "react-router";
 import logo from "../assets/images/logo.png";
-import AuthModal from "./AuthModal";
 import UserMenuModal from "./UserMenuModal";
 import CatalogDropdown from "./CatalogDropdown";
 import HeaderNav from "./HeaderNav";
@@ -25,7 +24,6 @@ import { AppContext } from "../context/AppContext";
 
 export default function Header() {
   const { state } = useContext(AppContext);
-  const [openAuthModal, setOpenAuthModal] = useState(false);
   const [openUserModal, setOpenUserModal] = useState(false);
   const [openCatalog, setOpenCatalog] = useState(false);
   const [openMobileMenu, setOpenMobileMenu] = useState(false);
@@ -156,7 +154,7 @@ export default function Header() {
                 fontWeight: 600,
               }}
             >
-              {user.name ? user.name[0].toUpperCase() : "А"}
+              {user.fullName ? user.fullName[0].toUpperCase() : "А"}
             </Avatar>
 
             <Typography
@@ -167,7 +165,8 @@ export default function Header() {
           </Box>
         ) : (
           <Button
-            onClick={() => setOpenAuthModal(!openAuthModal)}
+            component={NavLink}
+            to="/register"
             startIcon={<PersonOutlined sx={{ fontSize: "18px" }} />}
             sx={{
               display: { xs: "none", lg: "inline-flex" },
@@ -233,10 +232,7 @@ export default function Header() {
       <MobileMenu
         open={openMobileMenu}
         onClose={() => setOpenMobileMenu(false)}
-        onOpenAuth={() => setOpenAuthModal(true)}
       />
-
-      <AuthModal open={openAuthModal} onClose={() => setOpenAuthModal(false)} />
 
       <UserMenuModal
         open={openUserModal}

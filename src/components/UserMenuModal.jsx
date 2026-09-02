@@ -45,7 +45,7 @@ export default function UserMenuModal({ open, onClose }) {
             fontWeight: 600,
           }}
         >
-          {user.name ? user.name[0].toUpperCase() : "А"}
+          {user.fullName ? user.fullName[0].toUpperCase() : "А"}
         </Avatar>
         <Box sx={{ overflow: "hidden" }}>
           <Typography
@@ -56,7 +56,7 @@ export default function UserMenuModal({ open, onClose }) {
               lineHeight: 1.2,
             }}
           >
-            {user.name}
+            {user.fullName}
           </Typography>
           <Typography
             sx={{

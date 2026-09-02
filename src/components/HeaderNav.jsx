@@ -28,7 +28,7 @@ export default function HeaderNav() {
           товаров для детей
         </Typography>
 
-        {menuLinks.slice(1).map((el) => (
+        {menuLinks.map((el) => (
           <Box
             key={el.id}
             component={NavLink}
