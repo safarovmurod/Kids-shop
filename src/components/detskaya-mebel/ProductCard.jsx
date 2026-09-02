@@ -1,10 +1,12 @@
 import { useContext } from "react";
 import { Box, Typography, Button, Card, CardMedia, IconButton } from "@mui/material";
 import { FavoriteBorder, Favorite } from "@mui/icons-material";
+import { useNavigate } from "react-router";
 import { AppContext } from "../../context/AppContext";
 
 export default function ProductCard({ item }) {
   const { state, dispatch } = useContext(AppContext);
+  const navigate = useNavigate();
 
   const isFavorite = state.favorites.find((el) => el.id === item.id);
 
@@ -63,7 +65,7 @@ export default function ProductCard({ item }) {
         )}
       </IconButton>
 
-      <Box>
+      <Box onClick={() => navigate(`/product/${item.id}`)} sx={{ cursor: "pointer" }}>
         <CardMedia
           component="img"
           image={item.image}

@@ -17,6 +17,7 @@ const MyOrdersPage = lazy(() => import("./pages/MyOrdersPage"));
 const FavoritesPage = lazy(() => import("./pages/FavoritesPage"));
 const ProfileSettingsPage = lazy(() => import("./pages/ProfileSettingsPage"));
 const Contacts = lazy(() => import("./pages/Contacts"));
+const ProductPage = lazy(() => import("./pages/ProductPage"));
 const InfoPage = lazy(() => import("./pages/InfoPage"));
 const NotFound = lazy(() => import("./pages/NotFound"));
 
@@ -142,6 +143,14 @@ const router = createBrowserRouter([
         element: (
           <Suspense fallback={null}>
             <Contacts />
+          </Suspense>
+        ),
+      },
+      {
+        path: "product/:id",
+        element: (
+          <Suspense fallback={null}>
+            <ProductPage />
           </Suspense>
         ),
       },

@@ -1,10 +1,12 @@
 import { useContext } from "react";
 import { Box, Typography, Button, IconButton } from "@mui/material";
 import { FavoriteBorder, Favorite } from "@mui/icons-material";
+import { useNavigate } from "react-router";
 import { AppContext } from "../../context/AppContext";
 
 export default function ProductCard({ item }) {
   const { state, dispatch } = useContext(AppContext);
+  const navigate = useNavigate();
 
   const isFavorite = state.favorites.find((el) => el.id === item.id);
 
@@ -88,6 +90,7 @@ export default function ProductCard({ item }) {
       </IconButton>
 
       <Box
+        onClick={() => navigate(`/product/${item.id}`)}
         sx={{
           display: "flex",
           alignItems: "center",
@@ -95,6 +98,7 @@ export default function ProductCard({ item }) {
           width: "100%",
           height: { xs: "120px", lg: "145px" },
           marginTop: "20px",
+          cursor: "pointer",
         }}
       >
         <Box
@@ -106,9 +110,11 @@ export default function ProductCard({ item }) {
       </Box>
 
       <Typography
+        onClick={() => navigate(`/product/${item.id}`)}
         sx={{
           width: "100%",
           marginTop: { xs: "10px", lg: "14px" },
+          cursor: "pointer",
           color: "#446B80",
           fontSize: { xs: "12px", lg: "13px" },
           fontWeight: 500,

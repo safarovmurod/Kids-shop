@@ -1,5 +1,5 @@
 import axios from "axios";
-import { apiMebel } from "../../data/data";
+import { apiMebel, subCategories } from "../../data/data";
 
 export async function fetchProductsByEndpoint(endpoint) {
   try {
@@ -9,4 +9,18 @@ export async function fetchProductsByEndpoint(endpoint) {
     console.error(error);
     return [];
   }
+}
+
+// API маҳсулотро аз рӯи id намедиҳад, барои ҳамин аз рӯи зеркатегорияҳо меҷӯем
+export async function fetchProductById(id) {
+  for (const sub of subCategories) {
+    const list = await fetchProductsByEndpoint(sub.endpoint);
+    const found = list.find((el) => String(el.id) === String(id));
+
+    if (found) {
+      return found;
+    }
+  }
+
+  return null;
 }
