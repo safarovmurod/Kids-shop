@@ -1,22 +1,30 @@
 import { Box, Typography, Button } from "@mui/material";
 import { useEffect, useState } from "react";
+import { useNavigate, NavLink } from "react-router";
 import axios from "axios";
 
 const api = "https://swagger-wheat.vercel.app/api/akcii";
 
 export default function Akcii() {
-  const [user, setUser] = useState([]);
+  const [items, setItems] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
 
-  async function get() {
+  async function getAkcii() {
     try {
+      setLoading(true);
       const { data } = await axios.get(api);
-      setUser(data.data || []);
+      const list = Array.isArray(data) ? data : data.data || [];
+      setItems(list);
     } catch (error) {
-      console.error(error);
+      console.error("Ошибка при получении акций:", error);
+    } finally {
+      setLoading(false);
     }
   }
+
   useEffect(() => {
-    get();
+    getAkcii();
   }, []);
 
   return (
@@ -30,9 +38,17 @@ export default function Akcii() {
         pb: { xs: "34px", lg: "60px" },
       }}
     >
+      {/* Breadcrumbs */}
       <Box sx={{ display: "flex", alignItems: "center", gap: "8px" }}>
         <Typography
-          sx={{ color: "#A9B7C0", fontSize: { xs: "10px", lg: "11px" } }}
+          component={NavLink}
+          to="/"
+          sx={{
+            color: "#A9B7C0",
+            fontSize: { xs: "10px", lg: "11px" },
+            textDecoration: "none",
+            "&:hover": { color: "#7FC9F0" },
+          }}
         >
           Главная
         </Typography>
@@ -50,6 +66,7 @@ export default function Akcii() {
         </Typography>
       </Box>
 
+      {/* Заголовок */}
       <Typography
         sx={{
           mt: { xs: "10px", lg: "14px" },
@@ -62,115 +79,108 @@ export default function Akcii() {
         Акции
       </Typography>
 
+      {/* Сетка акций (2 колонки) */}
       <Box
         sx={{
           display: "grid",
           gridTemplateColumns: { xs: "1fr", lg: "repeat(2, 1fr)" },
-          columnGap: { xs: "0px", lg: "16px" },
-          rowGap: { xs: "26px", lg: "26px" },
+          columnGap: { xs: "0px", lg: "20px" },
+          rowGap: { xs: "26px", lg: "32px" },
           mt: { xs: "18px", lg: "26px" },
         }}
       >
-        {user.map((item) => (
-          <Box
-            key={item.id}
-            sx={{
-              display: "flex",
-              flexDirection: "column",
-              width: "100%",
-              backgroundColor: "#FFFFFF",
-            }}
-          >
+        {items.map((item, index) => {
+          const id = item.id || item._id || index + 1;
+          const title =
+            item.name ||
+            item.title ||
+            "Вкусные скидки до -25% на все детское питание";
+          const image =
+            item.image ||
+            item.img ||
+            "https://swagger-wheat.vercel.app/assets/products/tovar-nedeli-nuovita-day-offer-1.jpg";
+          const date = item.date || item.createdAt || "25.05.2020";
+
+          return (
             <Box
+              key={id}
+              onClick={() => navigate(`/akcii/${id}`)}
               sx={{
+                display: "flex",
+                flexDirection: "column",
                 width: "100%",
-                height: { xs: "140px", lg: "200px" },
-                borderRadius: "4px",
-                overflow: "hidden",
+                cursor: "pointer",
+                backgroundColor: "#FFFFFF",
+                "&:hover img": { transform: "scale(1.02)" },
               }}
             >
               <Box
-                component="img"
-                src={item.image}
-                sx={{ width: "100%", height: "100%", display: "block" }}
-              />
+                sx={{
+                  width: "100%",
+                  height: { xs: "160px", lg: "240px" },
+                  borderRadius: "8px",
+                  overflow: "hidden",
+                }}
+              >
+                <Box
+                  component="img"
+                  src={image}
+                  alt={title}
+                  sx={{
+                    width: "100%",
+                    height: "100%",
+                    objectFit: "cover",
+                    display: "block",
+                    transition: "transform 0.3s ease",
+                  }}
+                />
+              </Box>
+
+              <Typography
+                sx={{
+                  mt: { xs: "12px", lg: "16px" },
+                  color: "#A9B7C0",
+                  fontSize: "11px",
+                  lineHeight: "15px",
+                }}
+              >
+                {date}
+              </Typography>
+
+              <Typography
+                sx={{
+                  mt: { xs: "6px", lg: "10px" },
+                  color: "#446B80",
+                  fontSize: { xs: "13px", lg: "15px" },
+                  fontWeight: 500,
+                  lineHeight: { xs: "18px", lg: "22px" },
+                  "&:hover": { color: "#7FC9F0" },
+                }}
+              >
+                {title}
+              </Typography>
             </Box>
-
-            <Typography
-              sx={{
-                mt: { xs: "12px", lg: "16px" },
-                color: "#A9B7C0",
-                fontSize: { xs: "11px", lg: "11px" },
-                lineHeight: { xs: "15px", lg: "15px" },
-              }}
-            >
-              {item.date}
-            </Typography>
-
-            <Typography
-              sx={{
-                mt: { xs: "6px", lg: "10px" },
-                color: "#446B80",
-                fontSize: { xs: "12px", lg: "13px" },
-                lineHeight: { xs: "18px", lg: "19px" },
-              }}
-            >
-              {item.title}
-            </Typography>
-          </Box>
-        ))}
+          );
+        })}
       </Box>
 
-      <Box
-        sx={{
-          display: { xs: "none", lg: "flex" },
-          alignItems: "center",
-          gap: "8px",
-          mt: "34px",
-        }}
-      >
-        <Typography
-          sx={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            width: "26px",
-            height: "26px",
-            borderRadius: "4px",
-            border: "1px solid #D0DADF",
-            color: "#446B80",
-            fontSize: "11px",
-          }}
-        >
-          1
-        </Typography>
-
-        <Typography sx={{ px: "8px", color: "#8FA6B3", fontSize: "11px" }}>
-          2
-        </Typography>
-
-        <Typography sx={{ px: "8px", color: "#8FA6B3", fontSize: "11px" }}>
-          3
-        </Typography>
-
-        <Typography sx={{ ml: "10px", color: "#446B80", fontSize: "11px" }}>
-          Далее
-        </Typography>
-      </Box>
-
+      {/* Кнопка Показать еще */}
       <Button
+        disabled={loading}
         sx={{
-          display: { xs: "flex", lg: "none" },
-          width: "100%",
+          display: "flex",
+          mx: "auto",
+          width: { xs: "100%", lg: "220px" },
           height: "40px",
-          mt: "24px",
-          borderRadius: "4px",
-          border: "1px solid #D0DADF",
+          mt: "40px",
+          borderRadius: "20px",
+          border: "1px solid #7FC9F0",
           backgroundColor: "#FFFFFF",
-          color: "#446B80",
-          fontSize: "12px",
+          color: "#7FC9F0",
+          fontSize: "13px",
           textTransform: "none",
-          "&:hover": { backgroundColor: "#FFFFFF" },
+          fontWeight: 500,
+          "&:hover": { backgroundColor: "#7FC9F0", color: "#FFFFFF" },
         }}
       >
         Показать еще

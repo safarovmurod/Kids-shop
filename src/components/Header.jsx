@@ -9,6 +9,7 @@ import {
 } from "@mui/material";
 import {
   Menu as MenuIcon,
+  Close as CloseIcon,
   Search,
   ShoppingCartOutlined,
   PersonOutlined,
@@ -18,10 +19,12 @@ import { NavLink } from "react-router";
 import logo from "../assets/images/logo.png";
 import AuthModal from "./AuthModal";
 import UserMenuModal from "./UserMenuModal";
+import CatalogDropdown from "./CatalogDropdown"; // Фарёд кардани компоненти алоҳида
 
 export default function Header({ user, onLogin, onLogout }) {
   const [openAuthModal, setOpenAuthModal] = useState(false);
   const [openUserModal, setOpenUserModal] = useState(false);
+  const [openCatalog, setOpenCatalog] = useState(false);
 
   const handleProfileClick = () => {
     setOpenUserModal((prev) => !prev);
@@ -29,7 +32,12 @@ export default function Header({ user, onLogin, onLogout }) {
 
   return (
     <Box
-      sx={{ width: "100%", backgroundColor: "#FFFFFF", position: "relative" }}
+      sx={{
+        width: "100%",
+        backgroundColor: "#FFFFFF",
+        position: "relative",
+        zIndex: 1000,
+      }}
     >
       {/* Верхняя строка Header */}
       <Box
@@ -73,14 +81,22 @@ export default function Header({ user, onLogin, onLogout }) {
           товаров для детей
         </Typography>
 
+        {/* Тугмаи Каталог */}
         <Button
-          endIcon={<MenuIcon sx={{ fontSize: "16px" }} />}
+          onClick={() => setOpenCatalog((prev) => !prev)}
+          endIcon={
+            openCatalog ? (
+              <CloseIcon sx={{ fontSize: "16px" }} />
+            ) : (
+              <MenuIcon sx={{ fontSize: "16px" }} />
+            )
+          }
           sx={{
             display: { xs: "none", lg: "inline-flex" },
             height: "36px",
             px: "16px",
             borderRadius: "18px",
-            backgroundColor: "#7FC9F0",
+            backgroundColor: openCatalog ? "#52B4E8" : "#7FC9F0",
             color: "#FFFFFF",
             fontSize: "13px",
             textTransform: "none",
@@ -105,12 +121,10 @@ export default function Header({ user, onLogin, onLogout }) {
           }}
         >
           <Search sx={{ fontSize: "18px", color: "#A9C4D2" }} />
-
           <InputBase
             placeholder="Я хочу купить..."
             sx={{ flexGrow: 1, ml: "8px", fontSize: "13px", color: "#446B80" }}
           />
-
           <Button
             sx={{
               display: { xs: "none", lg: "inline-flex" },
@@ -128,7 +142,7 @@ export default function Header({ user, onLogin, onLogout }) {
           </Button>
         </Box>
 
-        {/* Профиль ё кнопка Вход */}
+        {/* Профиль ё Вход */}
         {user ? (
           <Box
             onClick={handleProfileClick}
@@ -140,23 +154,20 @@ export default function Header({ user, onLogin, onLogout }) {
             }}
           >
             <Avatar
+              src={user.avatar ? user.avatar : undefined}
               sx={{
-                width: 32,
-                height: 32,
+                width: 36,
+                height: 36,
                 backgroundColor: "#EBF6FC",
                 color: "#7FC9F0",
-                fontSize: "14px",
+                fontSize: "15px",
                 fontWeight: 600,
               }}
             >
-              {user.name ? user.name[0].toUpperCase() : "А"}
+              {!user.avatar && (user.name ? user.name[0].toUpperCase() : "А")}
             </Avatar>
             <Typography
-              sx={{
-                color: "#446B80",
-                fontSize: "13px",
-                fontWeight: 500,
-              }}
+              sx={{ color: "#446B80", fontSize: "13px", fontWeight: 500 }}
             >
               Личный кабинет
             </Typography>
@@ -190,14 +201,6 @@ export default function Header({ user, onLogin, onLogout }) {
         >
           Корзина
         </Button>
-
-        <IconButton
-          component={NavLink}
-          to="/cart"
-          sx={{ display: { xs: "inline-flex", lg: "none" }, color: "#446B80" }}
-        >
-          <ShoppingCartOutlined sx={{ fontSize: "20px" }} />
-        </IconButton>
       </Box>
 
       {/* Нижняя строка Header */}
@@ -234,7 +237,6 @@ export default function Header({ user, onLogin, onLogout }) {
           >
             Акции
           </Box>
-
           <Box
             component={NavLink}
             to="/about"
@@ -247,7 +249,6 @@ export default function Header({ user, onLogin, onLogout }) {
           >
             О нас
           </Box>
-
           <Box
             component={NavLink}
             to="/blog"
@@ -260,39 +261,61 @@ export default function Header({ user, onLogin, onLogout }) {
           >
             Блог
           </Box>
-
-          <Typography
-            sx={{ color: "#446B80", fontSize: "13px", cursor: "pointer" }}
+          <Box
+            component={NavLink}
+            to="/wholesale"
+            sx={{
+              color: "#446B80",
+              fontSize: "13px",
+              textDecoration: "none",
+              "&.active": { color: "#7FC9F0" },
+            }}
           >
             Оптовым клиентам
-          </Typography>
-
-          <Typography
-            sx={{ color: "#446B80", fontSize: "13px", cursor: "pointer" }}
+          </Box>
+          <Box
+            component={NavLink}
+            to="/returns"
+            sx={{
+              color: "#446B80",
+              fontSize: "13px",
+              textDecoration: "none",
+              "&.active": { color: "#7FC9F0" },
+            }}
           >
             Возврат
-          </Typography>
-
-          <Typography
-            sx={{ color: "#446B80", fontSize: "13px", cursor: "pointer" }}
+          </Box>
+          <Box
+            component={NavLink}
+            to="/delivery"
+            sx={{
+              color: "#446B80",
+              fontSize: "13px",
+              textDecoration: "none",
+              "&.active": { color: "#7FC9F0" },
+            }}
           >
             Оплата и доставка
-          </Typography>
-
-          <Typography
-            sx={{ color: "#446B80", fontSize: "13px", cursor: "pointer" }}
+          </Box>
+          <Box
+            component={NavLink}
+            to="/contacts"
+            sx={{
+              color: "#446B80",
+              fontSize: "13px",
+              textDecoration: "none",
+              "&.active": { color: "#7FC9F0" },
+            }}
           >
             Контакты
-          </Typography>
+          </Box>
         </Box>
 
         <Box sx={{ display: "flex", alignItems: "center", gap: "6px" }}>
           <LocationOnOutlined sx={{ fontSize: "16px", color: "#A9C4D2" }} />
-
           <Typography sx={{ color: "#446B80", fontSize: "13px" }}>
             Город:
           </Typography>
-
           <Typography
             sx={{ color: "#7FC9F0", fontSize: "13px", cursor: "pointer" }}
           >
@@ -301,14 +324,15 @@ export default function Header({ user, onLogin, onLogout }) {
         </Box>
       </Box>
 
-      {/* Модалка Входа */}
+      {/* Фарёд кардани компоненти Каталог */}
+      {openCatalog && <CatalogDropdown onClose={() => setOpenCatalog(false)} />}
+
+      {/* Модалки */}
       <AuthModal
         open={openAuthModal}
         onClose={() => setOpenAuthModal(false)}
         onLogin={onLogin}
       />
-
-      {/* Модалка Меню Личного Кабинета */}
       <UserMenuModal
         open={openUserModal}
         onClose={() => setOpenUserModal(false)}
