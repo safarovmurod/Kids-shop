@@ -34,11 +34,30 @@ export default function HeaderNav() {
             component={NavLink}
             to={el.path}
             sx={{
+              position: "relative",
+              paddingTop: "12px",
+              paddingBottom: "12px",
               color: "#446B80",
               fontSize: "13px",
               textDecoration: "none",
               whiteSpace: "nowrap",
-              "&.active": { color: "#7FC9F0" },
+              transition: "color 0.25s ease",
+              // Хатчаи зери матн ҳангоми ховер ва саҳифаи фаъол
+              "&::after": {
+                content: '""',
+                position: "absolute",
+                left: 0,
+                bottom: "6px",
+                width: "0%",
+                height: "2px",
+                borderRadius: "2px",
+                backgroundColor: "#7FC9F0",
+                transition: "width 0.25s ease",
+              },
+              "&:hover": { color: "#7FC9F0" },
+              "&:hover::after": { width: "100%" },
+              "&.active": { color: "#7FC9F0", fontWeight: 600 },
+              "&.active::after": { width: "100%" },
             }}
           >
             {el.name}

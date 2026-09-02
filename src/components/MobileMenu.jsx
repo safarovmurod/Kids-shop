@@ -10,7 +10,7 @@ import { AppContext } from "../context/AppContext";
 import { menuLinks, userMenuLinks } from "../data/data";
 import MobileCatalog from "./MobileCatalog";
 
-export default function MobileMenu({ open, onClose }) {
+export default function MobileMenu({ open, onClose, onOpenAuth }) {
   const { state, logout } = useContext(AppContext);
   const [openCatalog, setOpenCatalog] = useState(false);
   const navigate = useNavigate();
@@ -122,7 +122,10 @@ export default function MobileMenu({ open, onClose }) {
           </Box>
         ) : (
           <Box
-            onClick={() => handleClick("/register")}
+            onClick={() => {
+              onClose();
+              onOpenAuth();
+            }}
             sx={{
               display: "flex",
               alignItems: "center",

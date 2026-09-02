@@ -36,6 +36,12 @@ export default function ProductCard({ item }) {
         borderRadius: "12px",
         border: "1px solid #F0F4F7",
         backgroundColor: "#FFFFFF",
+        transition: "transform 0.3s ease, box-shadow 0.3s ease",
+        "&:hover": {
+          transform: "translateY(-6px)",
+          boxShadow: "0px 12px 28px rgba(127, 201, 240, 0.25)",
+        },
+        "&:hover .card-image": { transform: "scale(1.06)" },
       }}
     >
       {item.isNew && (
@@ -89,6 +95,7 @@ export default function ProductCard({ item }) {
         >
           <Box
             component="img"
+            className="card-image"
             src={item.image}
             alt={item.name}
             sx={{
@@ -96,6 +103,7 @@ export default function ProductCard({ item }) {
               maxHeight: "100%",
               objectFit: "contain",
               display: "block",
+              transition: "transform 0.35s ease",
             }}
           />
         </Box>
@@ -162,6 +170,7 @@ export default function ProductCard({ item }) {
             color: "#FFFFFF",
             fontSize: { xs: "14px", lg: "13px" },
             textTransform: "none",
+            transition: "background-color 0.25s ease",
             "&:hover": { backgroundColor: "#52B4E8" },
           }}
         >

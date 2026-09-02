@@ -1,113 +1,120 @@
 import { useState } from "react";
-import { Box, Typography } from "@mui/material";
-import { NavLink } from "react-router";
-import { categories } from "../data/data";
+import { Box, Typography, Fade } from "@mui/material";
+import { NavLink, useParams } from "react-router";
+import { categories, getCategory } from "../data/data";
 
 export default function CatalogDropdown({ onClose }) {
-  const [activeCategory, setActiveCategory] = useState(categories[1]);
+  const { category } = useParams();
+
+  // Агар корбар дар ягон категория бошад, ҳамон категория кушода меистад
+  const current = getCategory(category);
+  const [activeCategory, setActiveCategory] = useState(current || categories[0]);
 
   return (
-    <Box
-      sx={{
-        position: "absolute",
-        top: "100%",
-        left: "50%",
-        transform: "translateX(-50%)",
-        width: "100%",
-        maxWidth: "1200px",
-        backgroundColor: "#FFFFFF",
-        boxShadow: "0px 15px 35px rgba(0, 0, 0, 0.15)",
-        display: "flex",
-        minHeight: "420px",
-        border: "1px solid #E5EEF3",
-        borderRadius: "0 0 12px 12px",
-        zIndex: 1100,
-      }}
-    >
-      {/* Левая панель категорий */}
+    <Fade in={true} timeout={250}>
       <Box
         sx={{
-          width: "320px",
-          backgroundColor: "#446B80",
-          py: "16px",
+          position: "absolute",
+          top: "100%",
+          left: "50%",
+          transform: "translateX(-50%)",
           display: "flex",
-          flexDirection: "column",
-          borderBottomLeftRadius: "12px",
+          width: "100%",
+          maxWidth: "1200px",
+          minHeight: "420px",
+          borderRadius: "0 0 12px 12px",
+          border: "1px solid #E5EEF3",
+          backgroundColor: "#FFFFFF",
+          boxShadow: "0px 15px 35px rgba(0, 0, 0, 0.15)",
+          zIndex: 1100,
         }}
       >
-        {categories.map((cat) => {
-          const isSelected = activeCategory.id === cat.id;
-          return (
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            width: "320px",
+            paddingTop: "16px",
+            paddingBottom: "16px",
+            borderBottomLeftRadius: "12px",
+            backgroundColor: "#446B80",
+          }}
+        >
+          {categories.map((el) => (
             <Box
-              key={cat.id}
-              onClick={() => setActiveCategory(cat)}
+              key={el.id}
+              onMouseEnter={() => setActiveCategory(el)}
+              onClick={() => setActiveCategory(el)}
               sx={{
-                px: "24px",
-                py: "12px",
-                cursor: "pointer",
-                backgroundColor: isSelected ? "#FFFFFF" : "transparent",
-                color: isSelected ? "#446B80" : "#FFFFFF",
-                fontWeight: isSelected ? 600 : 400,
+                paddingTop: "12px",
+                paddingBottom: "12px",
+                paddingLeft: "24px",
+                paddingRight: "24px",
+                color: activeCategory.id === el.id ? "#446B80" : "#FFFFFF",
                 fontSize: "14px",
-                transition: "all 0.2s ease",
+                fontWeight: activeCategory.id === el.id ? 600 : 400,
+                backgroundColor:
+                  activeCategory.id === el.id ? "#FFFFFF" : "transparent",
+                cursor: "pointer",
+                transition: "background-color 0.25s ease, color 0.25s ease",
                 "&:hover": {
-                  backgroundColor: isSelected
-                    ? "#FFFFFF"
-                    : "rgba(255, 255, 255, 0.1)",
+                  backgroundColor:
+                    activeCategory.id === el.id
+                      ? "#FFFFFF"
+                      : "rgba(255, 255, 255, 0.12)",
                 },
               }}
             >
-              {cat.name}
+              {el.name}
             </Box>
-          );
-        })}
-      </Box>
+          ))}
+        </Box>
 
-      {/* Правая панель подкатегорий */}
-      <Box
-        sx={{
-          flexGrow: 1,
-          p: "40px",
-          display: "flex",
-          flexDirection: "column",
-          gap: "16px",
-          backgroundColor: "#FFFFFF",
-        }}
-      >
-        <Typography
-          component={NavLink}
-          to={`/catalog/${activeCategory.slug}`}
-          onClick={onClose}
+        <Box
           sx={{
-            color: "#2B5674",
-            fontWeight: 700,
-            fontSize: "18px",
-            mb: "10px",
-            textDecoration: "none",
-            "&:hover": { color: "#7FC9F0" },
+            display: "flex",
+            flexDirection: "column",
+            gap: "16px",
+            flexGrow: 1,
+            padding: "40px",
           }}
         >
-          {activeCategory.name}
-        </Typography>
-
-        {activeCategory.subcategories.map((sub) => (
           <Typography
-            key={sub.id}
             component={NavLink}
-            to={`/catalog/${activeCategory.slug}/${sub.slug}`}
+            to={`/catalog/${activeCategory.slug}`}
             onClick={onClose}
             sx={{
-              color: "#446B80",
-              fontSize: "15px",
+              marginBottom: "10px",
+              color: "#2B5674",
+              fontSize: "18px",
+              fontWeight: 700,
               textDecoration: "none",
-              "&:hover": { color: "#7FC9F0", paddingLeft: "4px" },
-              transition: "all 0.2s ease",
+              transition: "color 0.2s ease",
+              "&:hover": { color: "#7FC9F0" },
             }}
           >
-            {sub.name}
+            {activeCategory.name}
           </Typography>
-        ))}
+
+          {activeCategory.subcategories.map((sub) => (
+            <Typography
+              key={sub.id}
+              component={NavLink}
+              to={`/catalog/${activeCategory.slug}/${sub.slug}`}
+              onClick={onClose}
+              sx={{
+                color: "#446B80",
+                fontSize: "15px",
+                textDecoration: "none",
+                transition: "color 0.2s ease, padding-left 0.2s ease",
+                "&:hover": { color: "#7FC9F0", paddingLeft: "6px" },
+              }}
+            >
+              {sub.name}
+            </Typography>
+          ))}
+        </Box>
       </Box>
-    </Box>
+    </Fade>
   );
 }

@@ -18,6 +18,12 @@ export default function CategoryCard({ item, index }) {
         padding: { xs: "20px", lg: "24px" },
         borderRadius: "8px",
         backgroundColor: colors[index],
+        transition: "transform 0.3s ease, box-shadow 0.3s ease",
+        "&:hover": {
+          transform: "translateY(-6px)",
+          boxShadow: "0px 12px 28px rgba(0, 0, 0, 0.08)",
+        },
+        "&:hover .cat-image": { transform: "scale(1.07)" },
       }}
     >
       <Box
@@ -86,9 +92,11 @@ export default function CategoryCard({ item, index }) {
       >
         <Box
           component="img"
+          className="cat-image"
           src={item.image}
           alt={item.name}
           sx={{
+            transition: "transform 0.35s ease",
             maxWidth: "100%",
             maxHeight: { xs: "170px", lg: "140px" },
             display: "block",
