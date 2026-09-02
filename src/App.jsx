@@ -17,6 +17,7 @@ const MyOrdersPage = lazy(() => import("./pages/MyOrdersPage"));
 const FavoritesPage = lazy(() => import("./pages/FavoritesPage"));
 const ProfileSettingsPage = lazy(() => import("./pages/ProfileSettingsPage"));
 const Contacts = lazy(() => import("./pages/Contacts"));
+const NotFound = lazy(() => import("./pages/NotFound"));
 
 const router = createBrowserRouter([
   {
@@ -140,6 +141,14 @@ const router = createBrowserRouter([
         element: (
           <Suspense fallback={null}>
             <Contacts />
+          </Suspense>
+        ),
+      },
+      {
+        path: "*",
+        element: (
+          <Suspense fallback={null}>
+            <NotFound />
           </Suspense>
         ),
       },

@@ -1,57 +1,54 @@
-import { Box, Typography, IconButton } from "@mui/material";
-import { ArrowBack, ArrowForward } from "@mui/icons-material";
-
+import { useState } from "react";
+import { Box, Typography } from "@mui/material";
+import Arrows from "./Arrows";
 import num1 from "../../assets/images/num1.png";
 import num2 from "../../assets/images/num2.png";
 import num3 from "../../assets/images/num3.png";
 import num4 from "../../assets/images/num4.png";
 import cybex from "../../assets/images/brand-cybex.png";
 import erbesi from "../../assets/images/brand-erbesi.png";
-const brends = [
-  {
-    id: 1,
-    image: cybex,
-  },
-  {
-    id: 2,
-    image: erbesi,
-  },
-  {
-    id: 3,
-    image: cybex,
-  },
-  {
-    id: 4,
-    image: erbesi,
-  },
-  {
-    id: 5,
-    image: cybex,
-  },
-  {
-    id: 6,
-    image: erbesi,
-  },
+
+const advantages = [
+  { id: 1, image: num1, text: "Все товары для детей в одном месте" },
+  { id: 2, image: num2, text: "Цены ниже, чем у конкурентов" },
+  { id: 3, image: num3, text: "Официальные дилеры мировых производителей" },
+  { id: 4, image: num4, text: "Собственное эко-производство" },
 ];
 
-export default function AboutShop({ items = [], brands = [] }) {
+const brands = [
+  { id: 1, image: cybex },
+  { id: 2, image: erbesi },
+  { id: 3, image: cybex },
+  { id: 4, image: erbesi },
+  { id: 5, image: cybex },
+  { id: 6, image: erbesi },
+];
+
+export default function AboutShop() {
+  const [page, setPage] = useState(1);
+
+  const start = (page - 1) * 3;
+  const current = brands.slice(start, start + 3);
+
   return (
     <Box
       sx={{
         width: "100%",
         maxWidth: "1200px",
-        mx: "auto",
-        px: { xs: "16px", lg: "20px" },
-        pt: { xs: "34px", lg: "70px" },
-        pb: { xs: "34px", lg: "60px" },
+        marginLeft: "auto",
+        marginRight: "auto",
+        paddingLeft: { xs: "16px", lg: "20px" },
+        paddingRight: { xs: "16px", lg: "20px" },
+        paddingTop: { xs: "50px", lg: "70px" },
+        paddingBottom: { xs: "40px", lg: "60px" },
       }}
     >
       <Typography
         sx={{
           color: "#446B80",
-          fontSize: { xs: "15px", lg: "26px" },
+          fontSize: { xs: "30px", lg: "26px" },
           fontWeight: 400,
-          lineHeight: { xs: "23px", lg: "38px" },
+          lineHeight: { xs: "40px", lg: "38px" },
           textAlign: "center",
         }}
       >
@@ -63,190 +60,81 @@ export default function AboutShop({ items = [], brands = [] }) {
         sx={{
           display: "grid",
           gridTemplateColumns: { xs: "1fr 1fr", lg: "repeat(4, 1fr)" },
-          gap: { xs: "12px", lg: "20px" },
-          mt: { xs: "20px", lg: "36px" },
+          gap: { xs: "20px", lg: "20px" },
+          marginTop: { xs: "34px", lg: "36px" },
         }}
       >
-        <Box
-          sx={{
-            height: { xs: "140px", lg: "150px" },
-            p: { xs: "14px", lg: "20px" },
-            borderRadius: "6px",
-            border: "1px solid #DFF2FB",
-            backgroundColor: "#FFFFFF",
-            display: "flex",
-            alignItems: "center",
-            flexDirection: "column",
-          }}
-        >
+        {advantages.map((el) => (
           <Box
-            component="img"
-            src={num1}
-            sx={{ width: "44px", height: "44px", display: "block" }}
-          />
-
-          <Typography
+            key={el.id}
             sx={{
-              mt: { xs: "14px", lg: "20px" },
-              color: "#446B80",
-              fontSize: { xs: "10px", lg: "11px" },
-              lineHeight: { xs: "15px", lg: "17px" },
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              height: { xs: "auto", lg: "150px" },
+              padding: { xs: "0px", lg: "20px" },
+              borderRadius: "6px",
+              border: { xs: "none", lg: "1px solid #DFF2FB" },
+              backgroundColor: "#FFFFFF",
             }}
           >
-            Все товары для детей в одном месте
-          </Typography>
-        </Box>
-        <Box
-          sx={{
-            height: { xs: "140px", lg: "150px" },
-            p: { xs: "14px", lg: "20px" },
-            borderRadius: "6px",
-            border: "1px solid #DFF2FB",
-            backgroundColor: "#FFFFFF",
-            display: "flex",
-            alignItems: "center",
-            flexDirection: "column",
-          }}
-        >
-          <Box
-            component="img"
-            src={num2}
-            sx={{ width: "44px", height: "44px", display: "block" }}
-          />
+            <Box
+              component="img"
+              src={el.image}
+              alt={el.text}
+              sx={{
+                width: { xs: "64px", lg: "44px" },
+                height: { xs: "64px", lg: "44px" },
+                display: "block",
+              }}
+            />
 
-          <Typography
-            sx={{
-              mt: { xs: "14px", lg: "20px" },
-              color: "#446B80",
-              fontSize: { xs: "10px", lg: "11px" },
-              lineHeight: { xs: "15px", lg: "17px" },
-            }}
-          >
-            Цены ниже, чем у конкурентов
-          </Typography>
-        </Box>
-        <Box
-          sx={{
-            height: { xs: "140px", lg: "150px" },
-            p: { xs: "14px", lg: "20px" },
-            borderRadius: "6px",
-            border: "1px solid #DFF2FB",
-            backgroundColor: "#FFFFFF",
-            display: "flex",
-            alignItems: "center",
-            textAlign: "center",
-            flexDirection: "column",
-          }}
-        >
-          <Box
-            component="img"
-            src={num3}
-            sx={{ width: "44px", height: "44px", display: "block" }}
-          />
-
-          <Typography
-            sx={{
-              mt: { xs: "14px", lg: "20px" },
-              color: "#446B80",
-              fontSize: { xs: "10px", lg: "11px" },
-              lineHeight: { xs: "15px", lg: "17px" },
-            }}
-          >
-            Официальные дилеры лучших мировых производителей
-          </Typography>
-        </Box>
-        <Box
-          sx={{
-            height: { xs: "140px", lg: "150px" },
-            p: { xs: "14px", lg: "20px" },
-            borderRadius: "6px",
-            border: "1px solid #DFF2FB",
-            backgroundColor: "#FFFFFF",
-            display: "flex",
-            alignItems: "center",
-            flexDirection: "column",
-            textAlign: "center",
-          }}
-        >
-          <Box
-            component="img"
-            src={num4}
-            sx={{ width: "44px", height: "44px", display: "block" }}
-          />
-
-          <Typography
-            sx={{
-              mt: { xs: "14px", lg: "20px" },
-              color: "#446B80",
-              fontSize: { xs: "10px", lg: "11px" },
-              lineHeight: { xs: "15px", lg: "17px" },
-              textAlign: "center",
-            }}
-          >
-            Собственное эко-производство
-          </Typography>
-        </Box>
+            <Typography
+              sx={{
+                marginTop: { xs: "16px", lg: "20px" },
+                color: "#446B80",
+                fontSize: { xs: "16px", lg: "11px" },
+                lineHeight: { xs: "24px", lg: "17px" },
+                textAlign: "center",
+              }}
+            >
+              {el.text}
+            </Typography>
+          </Box>
+        ))}
       </Box>
 
       <Box
         sx={{
           display: "flex",
           alignItems: "center",
-          justifyContent: "space-between",
+          justifyContent: "space-around",
           gap: { xs: "10px", lg: "20px" },
           width: "100%",
-          mt: { xs: "24px", lg: "40px" },
+          marginTop: { xs: "40px", lg: "50px" },
         }}
       >
-        <IconButton
-          sx={{
-            flexShrink: 0,
-            width: "32px",
-            height: "32px",
-            border: "1px solid #446B80",
-            color: "#446B80",
-            "&:hover": { backgroundColor: "transparent" },
-          }}
-        >
-          <ArrowBack sx={{ fontSize: "16px" }} />
-        </IconButton>
-
-        <Box
-          sx={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "space-around",
-            flexGrow: 1,
-            overflow: "hidden",
-          }}
-        >
-          {brends.map((item) => (
-            <Box
-              key={item.id}
-              component="img"
-              src={item.image}
-              sx={{
-                width: { xs: "72px", lg: "115px" },
-                height: { xs: "22px", lg: "30px" },
-                display: "block",
-              }}
-            />
-          ))}
-        </Box>
-
-        <IconButton
-          sx={{
-            flexShrink: 0,
-            width: "32px",
-            height: "32px",
-            border: "1px solid #446B80",
-            color: "#446B80",
-            "&:hover": { backgroundColor: "transparent" },
-          }}
-        >
-          <ArrowForward sx={{ fontSize: "16px" }} />
-        </IconButton>
+        {current.map((el) => (
+          <Box
+            key={el.id}
+            component="img"
+            src={el.image}
+            alt="Бренд"
+            sx={{
+              width: { xs: "90px", lg: "115px" },
+              height: { xs: "26px", lg: "30px" },
+              display: "block",
+            }}
+          />
+        ))}
       </Box>
+
+      <Arrows
+        onPrev={() => setPage(page > 1 ? page - 1 : 1)}
+        onNext={() => setPage(start + 3 < brands.length ? page + 1 : page)}
+        disabledPrev={page === 1}
+        disabledNext={start + 3 >= brands.length}
+      />
     </Box>
   );
 }

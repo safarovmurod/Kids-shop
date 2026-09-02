@@ -1,0 +1,64 @@
+import { Box, Typography } from "@mui/material";
+import { LocationOnOutlined } from "@mui/icons-material";
+import { NavLink } from "react-router";
+import { menuLinks } from "../data/data";
+
+export default function HeaderNav() {
+  return (
+    <Box
+      sx={{
+        display: { xs: "none", lg: "flex" },
+        alignItems: "center",
+        justifyContent: "space-between",
+        width: "100%",
+        maxWidth: "1200px",
+        height: "44px",
+        marginLeft: "auto",
+        marginRight: "auto",
+        paddingLeft: "20px",
+        paddingRight: "20px",
+      }}
+    >
+      <Box sx={{ display: "flex", alignItems: "center", gap: "28px" }}>
+        <Typography
+          sx={{ color: "#446B80", fontSize: "9px", lineHeight: "12px" }}
+        >
+          Онлайн гипермаркет
+          <br />
+          товаров для детей
+        </Typography>
+
+        {menuLinks.slice(1).map((el) => (
+          <Box
+            key={el.id}
+            component={NavLink}
+            to={el.path}
+            sx={{
+              color: "#446B80",
+              fontSize: "13px",
+              textDecoration: "none",
+              whiteSpace: "nowrap",
+              "&.active": { color: "#7FC9F0" },
+            }}
+          >
+            {el.name}
+          </Box>
+        ))}
+      </Box>
+
+      <Box sx={{ display: "flex", alignItems: "center", gap: "6px" }}>
+        <LocationOnOutlined sx={{ fontSize: "16px", color: "#A9C4D2" }} />
+
+        <Typography sx={{ color: "#446B80", fontSize: "13px" }}>
+          Город:
+        </Typography>
+
+        <Typography
+          sx={{ color: "#7FC9F0", fontSize: "13px", cursor: "pointer" }}
+        >
+          Москва
+        </Typography>
+      </Box>
+    </Box>
+  );
+}

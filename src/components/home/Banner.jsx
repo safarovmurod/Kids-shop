@@ -1,12 +1,17 @@
-import { Box, Typography, Button } from "@mui/material"
-import banner from "../../assets/images/banner.png"
+import { Box, Typography, Button } from "@mui/material";
+import banner from "../../assets/images/banner.png";
 
 export default function Banner() {
   return (
-    <Box sx={{ width: "100%", mt: { xs: "34px", lg: "70px" }, backgroundColor: "#FFFFFF" }}>
+    <Box
+      sx={{
+        width: "100%",
+        marginTop: { xs: "50px", lg: "70px" },
+        backgroundColor: "#FFFFFF",
+      }}
+    >
       <Box
         sx={{
-          position: "relative",
           display: "flex",
           flexDirection: { xs: "column", lg: "row" },
           alignItems: "center",
@@ -14,8 +19,10 @@ export default function Banner() {
           gap: { xs: "18px", lg: "20px" },
           width: "100%",
           maxWidth: "1200px",
-          mx: "auto",
-          px: { xs: "16px", lg: "20px" },
+          marginLeft: "auto",
+          marginRight: "auto",
+          paddingLeft: { xs: "16px", lg: "20px" },
+          paddingRight: { xs: "16px", lg: "20px" },
         }}
       >
         <Box
@@ -27,29 +34,13 @@ export default function Banner() {
           <Typography
             sx={{
               color: "#446B80",
-              fontSize: { xs: "19px", lg: "34px" },
+              fontSize: { xs: "30px", lg: "34px" },
               fontWeight: 400,
-              lineHeight: { xs: "28px", lg: "46px" },
+              lineHeight: { xs: "40px", lg: "46px" },
             }}
           >
             Все детские костюмы с акцией 10%
           </Typography>
-
-          <Button
-            sx={{
-              width: { xs: "100%", lg: "148px" },
-              height: { xs: "34px", lg: "32px" },
-              mt: { xs: "16px", lg: "26px" },
-              borderRadius: "4px",
-              backgroundColor: "#7FC9F0",
-              color: "#FFFFFF",
-              fontSize: "10px",
-              textTransform: "none",
-              "&:hover": { backgroundColor: "#7FC9F0" },
-            }}
-          >
-            Смотреть костюмы
-          </Button>
         </Box>
 
         <Box
@@ -58,16 +49,44 @@ export default function Banner() {
             alignItems: "center",
             justifyContent: { xs: "center", lg: "flex-end" },
             width: { xs: "100%", lg: "560px" },
-            height: { xs: "210px", lg: "330px" },
+            height: { xs: "300px", lg: "330px" },
           }}
         >
           <Box
             component="img"
             src={banner}
+            alt="Детские костюмы"
             sx={{ maxWidth: "100%", maxHeight: "100%", display: "block" }}
           />
         </Box>
       </Box>
+
+      <Box
+        sx={{
+          width: "100%",
+          maxWidth: "1200px",
+          marginLeft: "auto",
+          marginRight: "auto",
+          paddingLeft: { xs: "16px", lg: "20px" },
+          paddingRight: { xs: "16px", lg: "20px" },
+        }}
+      >
+        <Button
+          sx={{
+            width: { xs: "100%", lg: "148px" },
+            height: { xs: "58px", lg: "32px" },
+            marginTop: { xs: "20px", lg: "26px" },
+            borderRadius: { xs: "12px", lg: "4px" },
+            backgroundColor: "#7FC9F0",
+            color: "#FFFFFF",
+            fontSize: { xs: "20px", lg: "10px" },
+            textTransform: "none",
+            "&:hover": { backgroundColor: "#68B7DE" },
+          }}
+        >
+          Смотреть костюмы
+        </Button>
+      </Box>
     </Box>
-  )
+  );
 }

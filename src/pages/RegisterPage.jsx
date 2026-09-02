@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useContext, useReducer } from "react";
 import {
   Box,
   Typography,
@@ -7,216 +7,168 @@ import {
   Checkbox,
   FormControlLabel,
 } from "@mui/material";
-import { useNavigate, useOutletContext } from "react-router";
+import { useNavigate, NavLink } from "react-router";
+import { AppContext } from "../context/AppContext";
+
+const inputStyle = {
+  "& .MuiOutlinedInput-root": {
+    height: { xs: "64px", lg: "52px" },
+    borderRadius: "12px",
+    fontSize: { xs: "17px", lg: "14px" },
+    color: "#2B5674",
+  },
+};
+
+function reducer(state, action) {
+  switch (action.type) {
+    case "setName":
+      return { ...state, name: action.payload };
+
+    case "setEmail":
+      return { ...state, email: action.payload };
+
+    case "setPassword":
+      return { ...state, password: action.payload };
+
+    case "setRepeat":
+      return { ...state, repeat: action.payload };
+
+    case "setAgree":
+      return { ...state, agree: action.payload };
+
+    case "setError":
+      return { ...state, error: action.payload };
+
+    default:
+      return state;
+  }
+}
+
+const initialState = {
+  name: "",
+  email: "",
+  password: "",
+  repeat: "",
+  agree: false,
+  error: "",
+};
 
 export default function RegisterPage() {
-  const { login } = useOutletContext();
+  const { login } = useContext(AppContext);
+  const [state, dispatch] = useReducer(reducer, initialState);
   const navigate = useNavigate();
 
-  const [name, setName] = useState("Анна");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [agree, setAgree] = useState(false);
+  function handleSubmit() {
+    if (state.password !== state.repeat) {
+      dispatch({ type: "setError", payload: "Пароли не совпадают" });
+      return;
+    }
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    if (!agree) return;
+    if (!state.agree) {
+      dispatch({ type: "setError", payload: "Подтвердите согласие" });
+      return;
+    }
 
     login({
-      name: name || "Анна",
-      email: email,
+      id: Date.now(),
+      name: state.name,
+      email: state.email,
     });
 
     navigate("/");
-  };
+  }
 
   return (
     <Box
       sx={{
         width: "100%",
         maxWidth: "1200px",
-        mx: "auto",
-        px: { xs: "16px", lg: "20px" },
-        pt: "40px",
-        pb: "80px",
+        marginLeft: "auto",
+        marginRight: "auto",
+        paddingLeft: { xs: "16px", lg: "20px" },
+        paddingRight: { xs: "16px", lg: "20px" },
+        paddingTop: { xs: "20px", lg: "40px" },
+        paddingBottom: { xs: "40px", lg: "80px" },
       }}
     >
       <Typography
         sx={{
-          fontSize: "24px",
-          fontWeight: 500,
+          marginBottom: { xs: "30px", lg: "28px" },
           color: "#2B5674",
-          marginBottom: "28px",
-          letterSpacing: "-0.2px",
+          fontSize: { xs: "34px", lg: "30px" },
+          fontWeight: 600,
         }}
       >
         Регистрация
       </Typography>
 
       <Box
-        component="form"
-        onSubmit={handleSubmit}
         sx={{
-          maxWidth: "300px",
+          maxWidth: { xs: "100%", lg: "420px" },
           display: "flex",
           flexDirection: "column",
-          gap: "14px",
+          gap: { xs: "16px", lg: "14px" },
         }}
       >
-        <Box>
-          <Typography
-            sx={{
-              fontSize: "10px",
-              color: "#9BB3C1",
-              marginBottom: "4px",
-              lineHeight: 1,
-            }}
-          >
-            Имя
-          </Typography>
-          <TextField
-            fullWidth
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            variant="outlined"
-            sx={{
-              "& .MuiOutlinedInput-root": {
-                height: "40px",
-                borderRadius: "10px",
-                fontSize: "13px",
-                color: "#2B5674",
-                backgroundColor: "#FFFFFF",
-                "& fieldset": { borderColor: "#E5EEF3", borderWidth: "1px" },
-                "&:hover fieldset": { borderColor: "#7FC9F0" },
-                "&.Mui-focused fieldset": {
-                  borderColor: "#7FC9F0",
-                  borderWidth: "1px",
-                },
-              },
-            }}
-          />
-        </Box>
+        <TextField
+          fullWidth
+          label="Имя"
+          value={state.name}
+          onChange={(e) =>
+            dispatch({ type: "setName", payload: e.target.value })
+          }
+          sx={inputStyle}
+        />
 
         <TextField
           fullWidth
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
           placeholder="Электронный адрес"
-          variant="outlined"
-          sx={{
-            "& .MuiOutlinedInput-root": {
-              height: "40px",
-              borderRadius: "10px",
-              fontSize: "13px",
-              color: "#2B5674",
-              backgroundColor: "#FFFFFF",
-              "& fieldset": { borderColor: "#E5EEF3", borderWidth: "1px" },
-              "&:hover fieldset": { borderColor: "#7FC9F0" },
-              "&.Mui-focused fieldset": {
-                borderColor: "#7FC9F0",
-                borderWidth: "1px",
-              },
-            },
-            "& .MuiInputBase-input::placeholder": {
-              color: "#A9C4D2",
-              opacity: 1,
-            },
-          }}
+          value={state.email}
+          onChange={(e) =>
+            dispatch({ type: "setEmail", payload: e.target.value })
+          }
+          sx={inputStyle}
         />
 
         <TextField
           fullWidth
           type="password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
           placeholder="Пароль"
-          variant="outlined"
-          sx={{
-            "& .MuiOutlinedInput-root": {
-              height: "40px",
-              borderRadius: "10px",
-              fontSize: "13px",
-              color: "#2B5674",
-              backgroundColor: "#FFFFFF",
-              "& fieldset": { borderColor: "#E5EEF3", borderWidth: "1px" },
-              "&:hover fieldset": { borderColor: "#7FC9F0" },
-              "&.Mui-focused fieldset": {
-                borderColor: "#7FC9F0",
-                borderWidth: "1px",
-              },
-            },
-            "& .MuiInputBase-input::placeholder": {
-              color: "#A9C4D2",
-              opacity: 1,
-            },
-          }}
+          value={state.password}
+          onChange={(e) =>
+            dispatch({ type: "setPassword", payload: e.target.value })
+          }
+          sx={inputStyle}
         />
 
         <TextField
           fullWidth
           type="password"
           placeholder="Повторите пароль"
-          variant="outlined"
-          sx={{
-            "& .MuiOutlinedInput-root": {
-              height: "40px",
-              borderRadius: "10px",
-              fontSize: "13px",
-              color: "#2B5674",
-              backgroundColor: "#FFFFFF",
-              "& fieldset": { borderColor: "#E5EEF3", borderWidth: "1px" },
-              "&:hover fieldset": { borderColor: "#7FC9F0" },
-              "&.Mui-focused fieldset": {
-                borderColor: "#7FC9F0",
-                borderWidth: "1px",
-              },
-            },
-            "& .MuiInputBase-input::placeholder": {
-              color: "#A9C4D2",
-              opacity: 1,
-            },
-          }}
+          value={state.repeat}
+          onChange={(e) =>
+            dispatch({ type: "setRepeat", payload: e.target.value })
+          }
+          sx={inputStyle}
         />
-
-        <Box sx={{ width: "130px" }}>
-          <TextField
-            fullWidth
-            placeholder="Вставить каптчу"
-            variant="outlined"
-            sx={{
-              "& .MuiOutlinedInput-root": {
-                height: "36px",
-                borderRadius: "8px",
-                fontSize: "11px",
-                color: "#2B5674",
-                backgroundColor: "#FFFFFF",
-                "& fieldset": { borderColor: "#E5EEF3", borderWidth: "1px" },
-                "&:hover fieldset": { borderColor: "#7FC9F0" },
-              },
-              "& .MuiInputBase-input::placeholder": {
-                color: "#A9C4D2",
-                opacity: 1,
-              },
-            }}
-          />
-        </Box>
 
         <FormControlLabel
           control={
             <Checkbox
-              checked={agree}
-              onChange={(e) => setAgree(e.target.checked)}
-              sx={{
-                padding: "4px",
-                color: "#CBE1ED",
-                "&.Mui-checked": { color: "#7FC9F0" },
-                "& .MuiSvgIcon-root": { fontSize: "18px" },
-              }}
+              checked={state.agree}
+              onChange={(e) =>
+                dispatch({ type: "setAgree", payload: e.target.checked })
+              }
+              sx={{ color: "#7FC9F0", "&.Mui-checked": { color: "#7FC9F0" } }}
             />
           }
           label={
             <Typography
-              sx={{ fontSize: "11px", color: "#8EABC0", lineHeight: 1.3 }}
+              sx={{
+                color: "#2B5674",
+                fontSize: { xs: "16px", lg: "13px" },
+                lineHeight: 1.5,
+              }}
             >
               Согласие с{" "}
               <Box component="span" sx={{ color: "#7FC9F0" }}>
@@ -228,38 +180,43 @@ export default function RegisterPage() {
               </Box>
             </Typography>
           }
-          sx={{
-            alignItems: "flex-start",
-            margin: "4px 0 8px 0",
-            gap: "6px",
-          }}
+          sx={{ alignItems: "flex-start", marginTop: "10px" }}
         />
 
+        {state.error && (
+          <Typography sx={{ color: "#E53935", fontSize: "14px" }}>
+            {state.error}
+          </Typography>
+        )}
+
         <Button
-          type="submit"
-          variant="contained"
-          disableElevation
-          disabled={!agree}
+          onClick={handleSubmit}
           sx={{
-            height: "38px",
-            width: "fit-content",
-            px: "22px",
-            borderRadius: "10px",
+            width: "100%",
+            height: { xs: "62px", lg: "50px" },
+            borderRadius: "12px",
             backgroundColor: "#7FC9F0",
             color: "#FFFFFF",
-            fontSize: "12px",
-            textTransform: "none",
+            fontSize: { xs: "20px", lg: "15px" },
             fontWeight: 500,
-            boxShadow: "none",
-            "&:hover": { backgroundColor: "#68B7DE", boxShadow: "none" },
-            "&.Mui-disabled": {
-              backgroundColor: "#E5EEF3",
-              color: "#FFFFFF",
-            },
+            textTransform: "none",
+            "&:hover": { backgroundColor: "#68B7DE" },
           }}
         >
           Зарегистрироваться
         </Button>
+
+        <Typography
+          component={NavLink}
+          to="/forgot-password"
+          sx={{
+            color: "#7FC9F0",
+            fontSize: { xs: "16px", lg: "13px" },
+            textDecoration: "none",
+          }}
+        >
+          Забыли пароль?
+        </Typography>
       </Box>
     </Box>
   );

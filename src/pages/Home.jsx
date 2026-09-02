@@ -4,8 +4,6 @@ import WideCard from "../components/home/WideCard";
 import Categories from "../components/home/Categories";
 import NewProducts from "../components/home/NewProducts";
 import Banner from "../components/home/Banner";
-
-// import PopularProducts from "../components/home/PopularProducts";
 import AboutShop from "../components/home/AboutShop";
 
 export default function Home() {
@@ -14,10 +12,10 @@ export default function Home() {
       <Hero />
       <WideCard />
       <Categories />
-      <NewProducts />
+      <NewProducts title="Новинки" />
       <Banner />
-      <NewProducts isAkcii={"Выгодное предложение"} />
-      <NewProducts isAkcii={"Популярные товары"} />
+      <NewProducts title="Выгодное предложение" />
+      <NewProducts title="Популярные товары" />
       <AboutShop />
     </Box>
   );

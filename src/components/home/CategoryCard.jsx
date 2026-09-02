@@ -1,6 +1,11 @@
 import { Box, Typography, Button } from "@mui/material";
+import { useNavigate } from "react-router";
+
+const colors = ["#F8E5E2", "#FAF4EC", "#E9F4FB"];
 
 export default function CategoryCard({ item, index }) {
+  const navigate = useNavigate();
+
   return (
     <Box
       sx={{
@@ -9,24 +14,18 @@ export default function CategoryCard({ item, index }) {
         justifyContent: "space-between",
         gap: { xs: "12px", lg: "16px" },
         width: "100%",
-        height: { xs: "170px", lg: "210px" },
-        p: { xs: "16px", lg: "24px" },
+        height: { xs: "230px", lg: "210px" },
+        padding: { xs: "20px", lg: "24px" },
         borderRadius: "8px",
-        backgroundColor:
-          item.color ||
-          (index === 0
-            ? "#F8E5E2"
-            : index === 1
-            ? "#FAF4EC"
-            : "#E9F4FB"),
+        backgroundColor: colors[index],
       }}
     >
       <Box
         sx={{
-          width: "52%",
           display: "flex",
           flexDirection: "column",
           justifyContent: "space-between",
+          width: "52%",
           height: "100%",
         }}
       >
@@ -34,39 +33,36 @@ export default function CategoryCard({ item, index }) {
           <Typography
             sx={{
               color: "#3B637B",
-              fontSize: { xs: "14px", lg: "18px" },
+              fontSize: { xs: "22px", lg: "18px" },
               fontWeight: 700,
               lineHeight: 1.2,
             }}
           >
-            {item.name || item.title}
+            {item.name}
           </Typography>
 
           <Typography
             sx={{
-              mt: { xs: "6px", lg: "10px" },
+              marginTop: { xs: "12px", lg: "10px" },
               color: "#7E96A6",
-              fontSize: { xs: "10px", lg: "11px" },
+              fontSize: { xs: "16px", lg: "11px" },
               lineHeight: 1.4,
-              display: "-webkit-box",
-              WebkitLineClamp: 2,
-              WebkitBoxOrient: "vertical",
-              overflow: "hidden",
             }}
           >
-            {item.description || item.text}
+            {item.description}
           </Typography>
         </Box>
 
         <Button
+          onClick={() => navigate("/detskaya-mebel")}
           sx={{
-            width: "86px",
-            height: "28px",
-            borderRadius: "4px",
+            width: { xs: "130px", lg: "86px" },
+            height: { xs: "44px", lg: "28px" },
+            borderRadius: { xs: "10px", lg: "4px" },
             border: "1px solid #C4D3DC",
             backgroundColor: "#FFFFFF",
             color: "#3B637B",
-            fontSize: "11px",
+            fontSize: { xs: "16px", lg: "11px" },
             textTransform: "none",
             "&:hover": { backgroundColor: "#FFFFFF" },
           }}
@@ -87,7 +83,12 @@ export default function CategoryCard({ item, index }) {
         <Box
           component="img"
           src={item.image}
-          sx={{ maxWidth: "100%", maxHeight: { xs: "110px", lg: "140px" }, display: "block" }}
+          alt={item.name}
+          sx={{
+            maxWidth: "100%",
+            maxHeight: { xs: "170px", lg: "140px" },
+            display: "block",
+          }}
         />
       </Box>
     </Box>

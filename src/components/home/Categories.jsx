@@ -2,16 +2,16 @@ import { Box, Typography } from "@mui/material";
 import CategoryCard from "./CategoryCard";
 import { useEffect, useState } from "react";
 import axios from "axios";
+import { apiMebel } from "../../data/data";
 
-const api = "https://swagger-wheat.vercel.app/api/detskaya-mebel";
 export default function Categories() {
   const [data, setData] = useState([]);
 
   async function get() {
     try {
-      const { data } = await axios.get(api);
-      const list = (data.data || []).filter((c) => c.slug !== "akcii");
-      setData(list.length > 0 ? list : data.data || []);
+      const { data } = await axios.get(apiMebel);
+      const list = Array.isArray(data) ? data : data.data || [];
+      setData(list.filter((el) => el.slug !== "akcii"));
     } catch (error) {
       console.error(error);
     }
@@ -26,17 +26,19 @@ export default function Categories() {
       sx={{
         width: "100%",
         maxWidth: "1200px",
-        mx: "auto",
-        px: { xs: "16px", lg: "20px" },
-        pt: { xs: "34px", lg: "70px" },
+        marginLeft: "auto",
+        marginRight: "auto",
+        paddingLeft: { xs: "16px", lg: "20px" },
+        paddingRight: { xs: "16px", lg: "20px" },
+        paddingTop: { xs: "50px", lg: "70px" },
       }}
     >
       <Typography
         sx={{
           color: "#446B80",
-          fontSize: { xs: "19px", lg: "34px" },
+          fontSize: { xs: "30px", lg: "34px" },
           fontWeight: 400,
-          lineHeight: { xs: "26px", lg: "44px" },
+          lineHeight: { xs: "40px", lg: "44px" },
           textAlign: "center",
         }}
       >
@@ -47,8 +49,8 @@ export default function Categories() {
         sx={{
           display: "grid",
           gridTemplateColumns: { xs: "1fr", lg: "repeat(3, 1fr)" },
-          gap: { xs: "14px", lg: "20px" },
-          mt: { xs: "18px", lg: "34px" },
+          gap: { xs: "18px", lg: "20px" },
+          marginTop: { xs: "26px", lg: "34px" },
         }}
       >
         {data.slice(3, 6).map((item, index) => (

@@ -1,5 +1,5 @@
-import { Box, Typography, Button } from "@mui/material"
-import hero from "../../assets/images/hero.png"
+import { Box, Typography, Button } from "@mui/material";
+import hero from "../../assets/images/hero.png";
 
 export default function Hero() {
   return (
@@ -13,10 +13,12 @@ export default function Hero() {
           gap: { xs: "18px", lg: "30px" },
           width: "100%",
           maxWidth: "1200px",
-          mx: "auto",
-          px: { xs: "16px", lg: "20px" },
-          pt: { xs: "26px", lg: "50px" },
-          pb: { xs: "26px", lg: "40px" },
+          marginLeft: "auto",
+          marginRight: "auto",
+          paddingLeft: { xs: "16px", lg: "20px" },
+          paddingRight: { xs: "16px", lg: "20px" },
+          paddingTop: { xs: "30px", lg: "50px" },
+          paddingBottom: { xs: "0px", lg: "40px" },
         }}
       >
         <Box
@@ -28,9 +30,9 @@ export default function Hero() {
           <Typography
             sx={{
               color: "#446B80",
-              fontSize: { xs: "22px", lg: "40px" },
+              fontSize: { xs: "36px", lg: "40px" },
               fontWeight: 400,
-              lineHeight: { xs: "30px", lg: "52px" },
+              lineHeight: { xs: "46px", lg: "52px" },
             }}
           >
             Все самое необходимое для вашего ребенка
@@ -38,26 +40,28 @@ export default function Hero() {
 
           <Typography
             sx={{
-              mt: { xs: "14px", lg: "26px" },
+              marginTop: { xs: "22px", lg: "26px" },
               color: "#8FA6B3",
-              fontSize: { xs: "12px", lg: "14px" },
-              lineHeight: { xs: "18px", lg: "21px" },
+              fontSize: { xs: "17px", lg: "14px" },
+              lineHeight: { xs: "26px", lg: "21px" },
             }}
           >
-            Посмотрите нашу новую подборку<br />для ухода за вашим ребенком
+            Посмотрите нашу новую подборку
+            <br />
+            для ухода за вашим ребенком
           </Typography>
 
           <Button
             sx={{
               width: { xs: "100%", lg: "108px" },
-              height: { xs: "36px", lg: "32px" },
-              mt: { xs: "18px", lg: "30px" },
-              borderRadius: "16px",
+              height: { xs: "58px", lg: "32px" },
+              marginTop: { xs: "26px", lg: "30px" },
+              borderRadius: { xs: "12px", lg: "16px" },
               backgroundColor: "#7FC9F0",
               color: "#FFFFFF",
-              fontSize: "11px",
+              fontSize: { xs: "20px", lg: "11px" },
               textTransform: "none",
-              "&:hover": { backgroundColor: "#7FC9F0" },
+              "&:hover": { backgroundColor: "#68B7DE" },
             }}
           >
             Смотреть
@@ -70,16 +74,18 @@ export default function Hero() {
             alignItems: "center",
             justifyContent: { xs: "center", lg: "flex-end" },
             width: { xs: "100%", lg: "560px" },
-            height: { xs: "250px", lg: "400px" },
+            height: { xs: "300px", lg: "400px" },
+            marginTop: { xs: "26px", lg: "0px" },
           }}
         >
           <Box
             component="img"
             src={hero}
+            alt="Карапуз"
             sx={{ maxWidth: "100%", maxHeight: "100%", display: "block" }}
           />
         </Box>
       </Box>
     </Box>
-  )
+  );
 }

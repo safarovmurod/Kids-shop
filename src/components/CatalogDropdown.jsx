@@ -1,67 +1,10 @@
 import { useState } from "react";
 import { Box, Typography } from "@mui/material";
 import { NavLink } from "react-router";
-
-const categoriesData = [
-  {
-    id: 1,
-    name: "Акции",
-    path: "/akcii",
-    subcategories: ["Скидки недели", "Товары дня"],
-  },
-  {
-    id: 2,
-    name: "Детская мебель",
-    path: "/detskaya-mebel",
-    subcategories: [
-      "Кроватки",
-      "Колыбели",
-      "Люльки",
-      "Пеленальные комоды",
-      "Шкафы",
-      "Аксессуары",
-    ],
-  },
-  {
-    id: 3,
-    name: "Коляски",
-    path: "/catalog/kolyaski",
-    subcategories: ["Прогулочные коляски", "Коляски 2 в 1", "Коляски 3 в 1"],
-  },
-  {
-    id: 4,
-    name: "Автокресла",
-    path: "/catalog/avtokresla",
-    subcategories: ["Группа 0+ (0-13 кг)", "Группа 1-2-3 (9-36 кг)", "Бустеры"],
-  },
-  {
-    id: 5,
-    name: "Одежда",
-    path: "/catalog/odezhda",
-    subcategories: ["Для новорожденных", "Верхняя одежда", "Головные уборы"],
-  },
-  {
-    id: 6,
-    name: "Кормление",
-    path: "/catalog/kormlenie",
-    subcategories: ["Стульчики для кормления", "Посуда", "Стерилизаторы"],
-  },
-  {
-    id: 7,
-    name: "Гигиена и уход",
-    path: "/catalog/gigiena",
-    subcategories: ["Подгузники", "Косметика", "Ванночки"],
-  },
-  {
-    id: 8,
-    name: "Умные игрушки",
-    path: "/catalog/igrushki",
-    subcategories: ["Развивающие центры", "Конструкторы", "Мягкие игрушки"],
-  },
-];
+import { catalogCategories } from "../data/data";
 
 export default function CatalogDropdown({ onClose }) {
-  const [activeCategory, setActiveCategory] = useState(categoriesData[1]);
+  const [activeCategory, setActiveCategory] = useState(catalogCategories[1]);
 
   return (
     <Box
@@ -92,7 +35,7 @@ export default function CatalogDropdown({ onClose }) {
           borderBottomLeftRadius: "12px",
         }}
       >
-        {categoriesData.map((cat) => {
+        {catalogCategories.map((cat) => {
           const isSelected = activeCategory.id === cat.id;
           return (
             <Box
@@ -147,9 +90,9 @@ export default function CatalogDropdown({ onClose }) {
           {activeCategory.name}
         </Typography>
 
-        {activeCategory.subcategories.map((sub, idx) => (
+        {activeCategory.subcategories.map((sub) => (
           <Typography
-            key={idx}
+            key={sub}
             component={NavLink}
             to={activeCategory.path}
             onClick={onClose}

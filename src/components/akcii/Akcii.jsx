@@ -1,30 +1,30 @@
-import { Box, Typography, Button } from "@mui/material";
 import { useEffect, useState } from "react";
-import { useNavigate, NavLink } from "react-router";
+import { Box, Typography, Button, CircularProgress } from "@mui/material";
+import { NavLink } from "react-router";
 import axios from "axios";
-
-const api = "https://swagger-wheat.vercel.app/api/akcii";
+import AkciiCard from "./AkciiCard";
+import { apiAkcii } from "../../data/data";
 
 export default function Akcii() {
   const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(false);
-  const navigate = useNavigate();
+  const [visibleCount, setVisibleCount] = useState(6);
 
-  async function getAkcii() {
+  async function get() {
     try {
       setLoading(true);
-      const { data } = await axios.get(api);
+      const { data } = await axios.get(apiAkcii);
       const list = Array.isArray(data) ? data : data.data || [];
       setItems(list);
     } catch (error) {
-      console.error("Ошибка при получении акций:", error);
+      console.error(error);
     } finally {
       setLoading(false);
     }
   }
 
   useEffect(() => {
-    getAkcii();
+    get();
   }, []);
 
   return (
@@ -32,159 +32,92 @@ export default function Akcii() {
       sx={{
         width: "100%",
         maxWidth: "1200px",
-        mx: "auto",
-        px: { xs: "16px", lg: "20px" },
-        pt: { xs: "20px", lg: "30px" },
-        pb: { xs: "34px", lg: "60px" },
+        marginLeft: "auto",
+        marginRight: "auto",
+        paddingLeft: { xs: "16px", lg: "20px" },
+        paddingRight: { xs: "16px", lg: "20px" },
+        paddingTop: { xs: "20px", lg: "30px" },
+        paddingBottom: { xs: "40px", lg: "60px" },
       }}
     >
-      {/* Breadcrumbs */}
-      <Box sx={{ display: "flex", alignItems: "center", gap: "8px" }}>
+      <Box
+        sx={{
+          display: { xs: "none", lg: "flex" },
+          alignItems: "center",
+          gap: "8px",
+        }}
+      >
         <Typography
           component={NavLink}
           to="/"
-          sx={{
-            color: "#A9B7C0",
-            fontSize: { xs: "10px", lg: "11px" },
-            textDecoration: "none",
-            "&:hover": { color: "#7FC9F0" },
-          }}
+          sx={{ color: "#A9B7C0", fontSize: "11px", textDecoration: "none" }}
         >
           Главная
         </Typography>
 
-        <Typography
-          sx={{ color: "#A9B7C0", fontSize: { xs: "10px", lg: "11px" } }}
-        >
-          /
-        </Typography>
+        <Typography sx={{ color: "#A9B7C0", fontSize: "11px" }}>/</Typography>
 
-        <Typography
-          sx={{ color: "#446B80", fontSize: { xs: "10px", lg: "11px" } }}
-        >
+        <Typography sx={{ color: "#446B80", fontSize: "11px" }}>
           Акции
         </Typography>
       </Box>
 
-      {/* Заголовок */}
       <Typography
         sx={{
-          mt: { xs: "10px", lg: "14px" },
+          marginTop: { xs: "0px", lg: "14px" },
           color: "#446B80",
-          fontSize: { xs: "22px", lg: "34px" },
+          fontSize: { xs: "34px", lg: "34px" },
           fontWeight: 400,
-          lineHeight: { xs: "30px", lg: "44px" },
+          lineHeight: { xs: "44px", lg: "44px" },
         }}
       >
         Акции
       </Typography>
 
-      {/* Сетка акций (2 колонки) */}
       <Box
         sx={{
           display: "grid",
           gridTemplateColumns: { xs: "1fr", lg: "repeat(2, 1fr)" },
-          columnGap: { xs: "0px", lg: "20px" },
-          rowGap: { xs: "26px", lg: "32px" },
-          mt: { xs: "18px", lg: "26px" },
+          columnGap: "20px",
+          rowGap: { xs: "34px", lg: "32px" },
+          marginTop: { xs: "26px", lg: "26px" },
         }}
       >
-        {items.map((item, index) => {
-          const id = item.id || item._id || index + 1;
-          const title =
-            item.name ||
-            item.title ||
-            "Вкусные скидки до -25% на все детское питание";
-          const image =
-            item.image ||
-            item.img ||
-            "https://swagger-wheat.vercel.app/assets/products/tovar-nedeli-nuovita-day-offer-1.jpg";
-          const date = item.date || item.createdAt || "25.05.2020";
-
-          return (
-            <Box
-              key={id}
-              onClick={() => navigate(`/akcii/${id}`)}
-              sx={{
-                display: "flex",
-                flexDirection: "column",
-                width: "100%",
-                cursor: "pointer",
-                backgroundColor: "#FFFFFF",
-                "&:hover img": { transform: "scale(1.02)" },
-              }}
-            >
-              <Box
-                sx={{
-                  width: "100%",
-                  height: { xs: "160px", lg: "240px" },
-                  borderRadius: "8px",
-                  overflow: "hidden",
-                }}
-              >
-                <Box
-                  component="img"
-                  src={image}
-                  alt={title}
-                  sx={{
-                    width: "100%",
-                    height: "100%",
-                    objectFit: "cover",
-                    display: "block",
-                    transition: "transform 0.3s ease",
-                  }}
-                />
-              </Box>
-
-              <Typography
-                sx={{
-                  mt: { xs: "12px", lg: "16px" },
-                  color: "#A9B7C0",
-                  fontSize: "11px",
-                  lineHeight: "15px",
-                }}
-              >
-                {date}
-              </Typography>
-
-              <Typography
-                sx={{
-                  mt: { xs: "6px", lg: "10px" },
-                  color: "#446B80",
-                  fontSize: { xs: "13px", lg: "15px" },
-                  fontWeight: 500,
-                  lineHeight: { xs: "18px", lg: "22px" },
-                  "&:hover": { color: "#7FC9F0" },
-                }}
-              >
-                {title}
-              </Typography>
-            </Box>
-          );
-        })}
+        {items.slice(0, visibleCount).map((el) => (
+          <AkciiCard key={el.id} item={el} />
+        ))}
       </Box>
 
-      {/* Кнопка Показать еще */}
-      <Button
-        disabled={loading}
-        sx={{
-          display: "flex",
-          mx: "auto",
-          width: { xs: "100%", lg: "220px" },
-          height: "40px",
-          mt: "40px",
-          borderRadius: "20px",
-          border: "1px solid #7FC9F0",
-          backgroundColor: "#FFFFFF",
-          color: "#7FC9F0",
-          fontSize: "13px",
-          textTransform: "none",
-          fontWeight: 500,
-          "&:hover": { backgroundColor: "#7FC9F0", color: "#FFFFFF" },
-        }}
-      >
-        Показать еще
-      </Button>
+      {loading && (
+        <Box
+          sx={{ display: "flex", justifyContent: "center", marginTop: "30px" }}
+        >
+          <CircularProgress sx={{ color: "#7FC9F0" }} />
+        </Box>
+      )}
+
+      {visibleCount < items.length && (
+        <Button
+          onClick={() => setVisibleCount(visibleCount + 6)}
+          sx={{
+            display: "flex",
+            width: { xs: "100%", lg: "220px" },
+            height: "46px",
+            marginTop: "40px",
+            marginLeft: "auto",
+            marginRight: "auto",
+            borderRadius: "23px",
+            border: "1px solid #7FC9F0",
+            color: "#7FC9F0",
+            fontSize: "14px",
+            fontWeight: 500,
+            textTransform: "none",
+            "&:hover": { backgroundColor: "#7FC9F0", color: "#FFFFFF" },
+          }}
+        >
+          Показать еще
+        </Button>
+      )}
     </Box>
   );
 }

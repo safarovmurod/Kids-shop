@@ -1,36 +1,29 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useParams } from "react-router";
-import { Box, CircularProgress } from "@mui/material";
+import { Box, Typography, CircularProgress } from "@mui/material";
 import axios from "axios";
 import AkciiInfo from "../components/akcii/AkciiInfo";
+import { apiAkcii } from "../data/data";
 
 export default function AkciiDetailsPage() {
   const { id } = useParams();
   const [item, setItem] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    async function getAkciiDetails() {
-      try {
-        setLoading(true);
-        const res = await axios.get(
-          `https://swagger-wheat.vercel.app/api/akcii/${id}`,
-        );
-        setItem(res.data);
-      } catch (error) {
-        console.error("Ошибка при получении детали акции:", error);
-      } finally {
-        setLoading(false);
-      }
-    }
-
-    if (id && id !== "undefined") {
-      getAkciiDetails();
-    } else {
+  async function get() {
+    try {
+      setLoading(true);
+      const { data } = await axios.get(`${apiAkcii}/${id}`);
+      setItem(data.data || data);
+    } catch (error) {
+      console.error(error);
+    } finally {
       setLoading(false);
     }
+  }
 
-    window.scrollTo({ top: 0, behavior: "smooth" });
+  useEffect(() => {
+    get();
   }, [id]);
 
   if (loading) {
@@ -38,8 +31,8 @@ export default function AkciiDetailsPage() {
       <Box
         sx={{
           display: "flex",
-          justifyContent: "center",
           alignItems: "center",
+          justifyContent: "center",
           minHeight: "400px",
         }}
       >
@@ -48,5 +41,21 @@ export default function AkciiDetailsPage() {
     );
   }
 
-  return <AkciiInfo item={item || {}} blocks={item?.blocks || []} />;
+  if (!item) {
+    return (
+      <Typography
+        sx={{
+          paddingTop: "60px",
+          paddingBottom: "60px",
+          color: "#446B80",
+          fontSize: "16px",
+          textAlign: "center",
+        }}
+      >
+        Акция не найдена
+      </Typography>
+    );
+  }
+
+  return <AkciiInfo item={item} />;
 }

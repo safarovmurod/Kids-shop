@@ -1,101 +1,151 @@
-import { Box, Typography, Button, Card, CardMedia } from "@mui/material";
-import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
+import { useContext } from "react";
+import { Box, Typography, Button, Card, CardMedia, IconButton } from "@mui/material";
+import { FavoriteBorder, Favorite } from "@mui/icons-material";
+import { AppContext } from "../../context/AppContext";
 
-export default function ProductCard({ item, index, navigate }) {
-  const productId = item.id || index + 1;
+export default function ProductCard({ item }) {
+  const { state, dispatch } = useContext(AppContext);
+
+  const isFavorite = state.favorites.find((el) => el.id === item.id);
+
+  function handleAdd() {
+    dispatch({
+      type: "add",
+      payload: {
+        id: item.id,
+        name: item.name,
+        price: item.price,
+        image: item.image,
+      },
+    });
+  }
+
+  function handleFavorite() {
+    dispatch({
+      type: "favorite",
+      payload: {
+        id: item.id,
+        name: item.name,
+        price: item.price,
+        image: item.image,
+      },
+    });
+  }
+
   return (
     <Card
       elevation={0}
       sx={{
+        position: "relative",
         height: "100%",
         display: "flex",
         flexDirection: "column",
         justifyContent: "space-between",
+        padding: { xs: "12px", lg: "16px" },
         borderRadius: "12px",
         border: "1px solid #F0F4F7",
-        p: "16px",
-        position: "relative",
       }}
     >
-      <FavoriteBorderIcon
+      <IconButton
+        onClick={handleFavorite}
         sx={{
           position: "absolute",
-          top: 16,
-          right: 16,
-          color: "#A9C4D2",
-          cursor: "pointer",
+          top: "8px",
+          right: "8px",
+          color: "#7FC9F0",
+          "&:hover": { backgroundColor: "transparent" },
         }}
-      />
+      >
+        {isFavorite ? (
+          <Favorite sx={{ fontSize: "20px" }} />
+        ) : (
+          <FavoriteBorder sx={{ fontSize: "20px" }} />
+        )}
+      </IconButton>
+
       <Box>
         <CardMedia
           component="img"
-          height="160"
-          image={item.image || "https://via.placeholder.com/200"}
-          sx={{ borderRadius: "8px", objectFit: "cover", mb: "12px" }}
+          image={item.image}
+          alt={item.name}
+          sx={{
+            width: "100%",
+            height: { xs: "140px", lg: "170px" },
+            marginTop: "16px",
+            marginBottom: "12px",
+            borderRadius: "8px",
+            objectFit: "contain",
+          }}
         />
+
         <Typography
           sx={{
-            fontSize: "13px",
-            fontWeight: 500,
+            marginBottom: "8px",
             color: "#446B80",
-            mb: "8px",
-            height: "40px",
-            overflow: "hidden",
+            fontSize: { xs: "12px", lg: "13px" },
+            fontWeight: 500,
+            lineHeight: "18px",
+            minHeight: "36px",
           }}
         >
           {item.name}
         </Typography>
+
         <Box
           sx={{
             display: "flex",
             alignItems: "baseline",
             gap: "8px",
-            mb: "12px",
+            marginBottom: "12px",
           }}
         >
           <Typography
-            sx={{ fontSize: "15px", fontWeight: 700, color: "#7FC9F0" }}
+            sx={{
+              color: "#7FC9F0",
+              fontSize: { xs: "16px", lg: "17px" },
+              fontWeight: 700,
+            }}
           >
-            {item.price} ₽
+            {item.price.toLocaleString("ru-RU")} ₽
           </Typography>
+
           {item.oldPrice && (
             <Typography
               sx={{
-                fontSize: "12px",
                 color: "#A9C4D2",
+                fontSize: "13px",
                 textDecoration: "line-through",
               }}
             >
-              {item.oldPrice} ₽
+              {item.oldPrice.toLocaleString("ru-RU")} ₽
             </Typography>
           )}
         </Box>
       </Box>
+
       <Box sx={{ display: "flex", flexDirection: "column", gap: "8px" }}>
         <Button
-          variant="contained"
+          onClick={handleAdd}
           sx={{
+            height: { xs: "40px", lg: "36px" },
+            borderRadius: "8px",
             backgroundColor: "#7FC9F0",
             color: "#FFFFFF",
-            fontSize: "12px",
+            fontSize: { xs: "14px", lg: "13px" },
             textTransform: "none",
-            borderRadius: "6px",
-            boxShadow: "none",
             "&:hover": { backgroundColor: "#52B4E8" },
           }}
         >
           В корзину
         </Button>
+
         <Button
-          onClick={() => navigate(`/product/${productId}`)}
+          onClick={handleAdd}
           sx={{
             color: "#7FC9F0",
-            fontSize: "11px",
+            fontSize: { xs: "13px", lg: "12px" },
             textTransform: "none",
-            "&:hover": {
-              backgroundColor: "transparent",
-              textDecoration: "underline",
-            },
+            "&:hover": { backgroundColor: "transparent" },
           }}
         >
           Купить в один клик

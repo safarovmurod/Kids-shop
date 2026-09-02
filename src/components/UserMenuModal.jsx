@@ -1,12 +1,20 @@
+import { useContext } from "react";
 import { Box, Typography, Avatar, Divider } from "@mui/material";
 import Inventory2OutlinedIcon from "@mui/icons-material/Inventory2Outlined";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import SettingsOutlinedIcon from "@mui/icons-material/SettingsOutlined";
 import LogoutIcon from "@mui/icons-material/Logout";
 import { NavLink } from "react-router";
+import { AppContext } from "../context/AppContext";
 
-export default function UserMenuModal({ open, onClose, user, onLogout }) {
-  if (!open || !user) return null;
+export default function UserMenuModal({ open, onClose }) {
+  const { state, logout } = useContext(AppContext);
+
+  const user = state.user;
+
+  if (!open || !user) {
+    return null;
+  }
 
   return (
     <Box
@@ -48,7 +56,7 @@ export default function UserMenuModal({ open, onClose, user, onLogout }) {
               lineHeight: 1.2,
             }}
           >
-            {user.name || "Анна"}
+            {user.name}
           </Typography>
           <Typography
             sx={{
@@ -60,7 +68,7 @@ export default function UserMenuModal({ open, onClose, user, onLogout }) {
               mt: "2px",
             }}
           >
-            {user.email || "annannnanana@gmail.com"}
+            {user.email}
           </Typography>
         </Box>
       </Box>
@@ -131,7 +139,7 @@ export default function UserMenuModal({ open, onClose, user, onLogout }) {
       {/* Выйти */}
       <Box
         onClick={() => {
-          onLogout();
+          logout();
           onClose();
         }}
         sx={{

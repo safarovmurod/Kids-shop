@@ -1,38 +1,28 @@
-import React, { useEffect, useState } from "react";
-import { useParams, useNavigate, NavLink } from "react-router";
+import { useEffect, useState } from "react";
+import { useParams, NavLink } from "react-router";
 import { Box, Typography, CircularProgress } from "@mui/material";
-import FormatQuoteIcon from "@mui/icons-material/FormatQuote";
-import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import axios from "axios";
+import { apiBlog } from "../data/data";
 
 export default function BlogDetailsPage() {
   const { id } = useParams();
-  const navigate = useNavigate();
   const [post, setPost] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    async function getPostDetails() {
-      try {
-        setLoading(true);
-        const res = await axios.get(
-          `https://swagger-wheat.vercel.app/api/blog/${id}`,
-        );
-        setPost(res.data);
-      } catch (error) {
-        console.error("Ошибка при запросе статьи:", error);
-      } finally {
-        setLoading(false);
-      }
-    }
-
-    if (id && id !== "undefined") {
-      getPostDetails();
-    } else {
+  async function get() {
+    try {
+      setLoading(true);
+      const { data } = await axios.get(`${apiBlog}/${id}`);
+      setPost(data.data || data);
+    } catch (error) {
+      console.error(error);
+    } finally {
       setLoading(false);
     }
+  }
 
-    window.scrollTo({ top: 0, behavior: "smooth" });
+  useEffect(() => {
+    get();
   }, [id]);
 
   if (loading) {
@@ -40,8 +30,8 @@ export default function BlogDetailsPage() {
       <Box
         sx={{
           display: "flex",
-          justifyContent: "center",
           alignItems: "center",
+          justifyContent: "center",
           minHeight: "400px",
         }}
       >
@@ -50,211 +40,126 @@ export default function BlogDetailsPage() {
     );
   }
 
-  // Данные по умолчанию (если API вернет частичный объект)
-  const title = post?.title || "Питание в I триместре";
-  const date = post?.date || post?.createdAt || "25.05.2020";
-  const image1 =
-    post?.image ||
-    "https://swagger-wheat.vercel.app/api/images/post-pitanie-v-pervom-trimestre.svg";
-  const image2 =
-    post?.images?.[1] ||
-    "https://swagger-wheat.vercel.app/api/images/post-pitanie-v-pervom-trimestre.svg?variant=2";
-  const excerpt =
-    post?.excerpt ||
-    post?.description ||
-    "В 1-м триместре беременности рацион женщины существенно не отличается от ее меню до беременности, могут лишь поменяться вкусы беременной. Но уже сейчас нужно начать придерживаться принципов правильного питания, чтобы избежать токсикоза и заложить основу правильного развития эмбриона.";
-  const quote =
-    post?.quote ||
-    "В 1-м триместре беременности рацион женщины существенно не отличается от ее меню до беременности, могут лишь поменяться вкусы беременной.";
-
-  const nextId = Number(id) ? Number(id) + 1 : 1;
+  if (!post) {
+    return (
+      <Typography
+        sx={{
+          paddingTop: "60px",
+          paddingBottom: "60px",
+          color: "#446B80",
+          fontSize: "16px",
+          textAlign: "center",
+        }}
+      >
+        Статья не найдена
+      </Typography>
+    );
+  }
 
   return (
     <Box
       sx={{
         width: "100%",
         maxWidth: "840px",
-        mx: "auto",
-        px: { xs: "16px", lg: "20px" },
-        pt: "20px",
-        pb: "80px",
+        marginLeft: "auto",
+        marginRight: "auto",
+        paddingLeft: { xs: "16px", lg: "20px" },
+        paddingRight: { xs: "16px", lg: "20px" },
+        paddingTop: "20px",
+        paddingBottom: { xs: "40px", lg: "80px" },
       }}
     >
-      {/* Хлебные крошки */}
       <Box
         sx={{
-          display: "flex",
+          display: { xs: "none", lg: "flex" },
           alignItems: "center",
           gap: "8px",
-          mb: "24px",
-          flexWrap: "wrap",
+          marginBottom: "24px",
         }}
       >
         <Typography
           component={NavLink}
           to="/"
-          sx={{
-            fontSize: "11px",
-            color: "#A9B7C0",
-            textDecoration: "none",
-            "&:hover": { color: "#7FC9F0" },
-          }}
+          sx={{ color: "#A9B7C0", fontSize: "11px", textDecoration: "none" }}
         >
           Главная
         </Typography>
-        <Typography sx={{ fontSize: "11px", color: "#A9B7C0" }}>/</Typography>
+
+        <Typography sx={{ color: "#A9B7C0", fontSize: "11px" }}>/</Typography>
+
         <Typography
           component={NavLink}
           to="/blog"
-          sx={{
-            fontSize: "11px",
-            color: "#A9B7C0",
-            textDecoration: "none",
-            "&:hover": { color: "#7FC9F0" },
-          }}
+          sx={{ color: "#A9B7C0", fontSize: "11px", textDecoration: "none" }}
         >
           Блог
         </Typography>
-        <Typography sx={{ fontSize: "11px", color: "#A9B7C0" }}>/</Typography>
-        <Typography sx={{ fontSize: "11px", color: "#446B80" }}>
-          {title}
+
+        <Typography sx={{ color: "#A9B7C0", fontSize: "11px" }}>/</Typography>
+
+        <Typography sx={{ color: "#446B80", fontSize: "11px" }}>
+          {post.title}
         </Typography>
       </Box>
 
-      {/* Первое изображение */}
       <Box
         component="img"
-        src={image1}
-        alt={title}
+        src={post.image}
+        alt={post.title}
         sx={{
           width: "100%",
-          maxHeight: "410px",
-          objectFit: "cover",
+          maxHeight: { xs: "260px", lg: "410px" },
+          marginBottom: "24px",
           borderRadius: "16px",
-          mb: "24px",
+          objectFit: "cover",
+          display: "block",
         }}
       />
 
-      {/* Заголовок и Дата */}
       <Typography
         sx={{
-          fontSize: { xs: "22px", lg: "30px" },
-          fontWeight: 600,
+          marginBottom: "10px",
           color: "#446B80",
+          fontSize: { xs: "26px", lg: "30px" },
+          fontWeight: 600,
           lineHeight: 1.3,
-          mb: "8px",
         }}
       >
-        {title}
+        {post.title}
       </Typography>
 
-      <Typography
-        sx={{ fontSize: "11px", color: "#A9B7C0", marginBottom: "24px" }}
-      >
-        {date}
-      </Typography>
-
-      {/* Основной текст */}
       <Typography
         sx={{
-          fontSize: "13px",
+          marginBottom: "24px",
+          color: "#A9B7C0",
+          fontSize: { xs: "16px", lg: "12px" },
+        }}
+      >
+        {post.createdAt}
+      </Typography>
+
+      <Typography
+        sx={{
           color: "#8FA6B3",
+          fontSize: { xs: "17px", lg: "14px" },
           lineHeight: 1.6,
-          mb: "16px",
         }}
       >
-        {excerpt}
+        {post.description}
       </Typography>
 
-      <Typography
-        sx={{
-          fontSize: "13px",
-          color: "#8FA6B3",
-          lineHeight: 1.6,
-          mb: "28px",
-        }}
-      >
-        Постарайтесь включить в меню ежедневно зеленые салаты с растительным
-        маслом и морскую рыбу. Важно начать прием препаратов фолиевой кислоты,
-        йода и витамина E, принимать на протяжении всей беременности.
-      </Typography>
-
-      {/* Второе изображение */}
-      <Box
-        component="img"
-        src={image2}
-        alt="Детали"
-        sx={{
-          width: "100%",
-          maxHeight: "410px",
-          objectFit: "cover",
-          borderRadius: "16px",
-          mb: "28px",
-        }}
-      />
-
-      {/* Цитата */}
-      <Box
-        sx={{
-          display: "flex",
-          gap: "16px",
-          alignItems: "flex-start",
-          mb: "28px",
-        }}
-      >
-        <FormatQuoteIcon
-          sx={{
-            fontSize: "48px",
-            color: "#D0DADF",
-            transform: "scaleX(-1)",
-            flexShrink: 0,
-          }}
-        />
+      {post.content && (
         <Typography
           sx={{
-            fontSize: "13px",
+            marginTop: "16px",
             color: "#8FA6B3",
+            fontSize: { xs: "17px", lg: "14px" },
             lineHeight: 1.6,
           }}
         >
-          {quote}
+          {post.content}
         </Typography>
-      </Box>
-
-      {/* Заключительный текст */}
-      <Typography
-        sx={{
-          fontSize: "13px",
-          color: "#8FA6B3",
-          lineHeight: 1.6,
-          mb: "40px",
-        }}
-      >
-        За время беременности организм должен получать достаточно железа, чтобы
-        предотвратить анемию у матери и плода, а также запастись железом на
-        время грудного вскармливания.
-      </Typography>
-
-      {/* Переход к следующей статье */}
-      <Box
-        onClick={() => {
-          navigate(`/blog/${nextId}`);
-          window.scrollTo({ top: 0, behavior: "smooth" });
-        }}
-        sx={{
-          display: "inline-flex",
-          alignItems: "center",
-          gap: "8px",
-          color: "#7FC9F0",
-          cursor: "pointer",
-          fontSize: "13px",
-          fontWeight: 500,
-          "&:hover": { textDecoration: "underline" },
-        }}
-      >
-        <span>Читать следующую статью</span>
-        <ArrowForwardIcon sx={{ fontSize: "16px" }} />
-      </Box>
+      )}
     </Box>
   );
 }

@@ -1,7 +1,37 @@
+import { useContext } from "react";
 import { Box, Typography, Button, IconButton } from "@mui/material";
-import { FavoriteBorder } from "@mui/icons-material";
+import { FavoriteBorder, Favorite } from "@mui/icons-material";
+import { AppContext } from "../../context/AppContext";
 
 export default function ProductCard({ item }) {
+  const { state, dispatch } = useContext(AppContext);
+
+  const isFavorite = state.favorites.find((el) => el.id === item.id);
+
+  function handleAdd() {
+    dispatch({
+      type: "add",
+      payload: {
+        id: item.id,
+        name: item.name,
+        price: item.price,
+        image: item.image,
+      },
+    });
+  }
+
+  function handleFavorite() {
+    dispatch({
+      type: "favorite",
+      payload: {
+        id: item.id,
+        name: item.name,
+        price: item.price,
+        image: item.image,
+      },
+    });
+  }
+
   return (
     <Box
       sx={{
@@ -11,10 +41,11 @@ export default function ProductCard({ item }) {
         alignItems: "center",
         justifyContent: "space-between",
         width: "100%",
-        minHeight: { xs: "280px", lg: "330px" },
-        px: { xs: "12px", lg: "16px" },
-        pt: { xs: "14px", lg: "18px" },
-        pb: { xs: "14px", lg: "18px" },
+        minHeight: { xs: "300px", lg: "330px" },
+        paddingLeft: { xs: "12px", lg: "16px" },
+        paddingRight: { xs: "12px", lg: "16px" },
+        paddingTop: { xs: "14px", lg: "18px" },
+        paddingBottom: { xs: "14px", lg: "18px" },
         borderRadius: "8px",
         border: "1px solid #F1F1F1",
         backgroundColor: "#FFFFFF",
@@ -25,8 +56,10 @@ export default function ProductCard({ item }) {
           position: "absolute",
           top: "12px",
           left: "12px",
-          px: "6px",
-          py: "2px",
+          paddingLeft: "8px",
+          paddingRight: "8px",
+          paddingTop: "3px",
+          paddingBottom: "3px",
           borderRadius: "3px",
           backgroundColor: "#DFF2FB",
           color: "#7FC9F0",
@@ -38,6 +71,7 @@ export default function ProductCard({ item }) {
       </Typography>
 
       <IconButton
+        onClick={handleFavorite}
         sx={{
           position: "absolute",
           top: "6px",
@@ -46,7 +80,11 @@ export default function ProductCard({ item }) {
           "&:hover": { backgroundColor: "transparent" },
         }}
       >
-        <FavoriteBorder sx={{ fontSize: "18px" }} />
+        {isFavorite ? (
+          <Favorite sx={{ fontSize: "20px" }} />
+        ) : (
+          <FavoriteBorder sx={{ fontSize: "20px" }} />
+        )}
       </IconButton>
 
       <Box
@@ -56,12 +94,13 @@ export default function ProductCard({ item }) {
           justifyContent: "center",
           width: "100%",
           height: { xs: "120px", lg: "145px" },
-          mt: "14px",
+          marginTop: "20px",
         }}
       >
         <Box
           component="img"
           src={item.image}
+          alt={item.name}
           sx={{ maxWidth: "100%", maxHeight: "100%", display: "block" }}
         />
       </Box>
@@ -69,55 +108,68 @@ export default function ProductCard({ item }) {
       <Typography
         sx={{
           width: "100%",
-          mt: { xs: "10px", lg: "14px" },
+          marginTop: { xs: "10px", lg: "14px" },
           color: "#446B80",
-          fontSize: { xs: "10px", lg: "12px" },
+          fontSize: { xs: "12px", lg: "13px" },
           fontWeight: 500,
-          lineHeight: { xs: "14px", lg: "16px" },
+          lineHeight: { xs: "16px", lg: "18px" },
           textAlign: "center",
-          minHeight: { xs: "28px", lg: "32px" },
-          display: "-webkit-box",
-          WebkitLineClamp: 2,
-          WebkitBoxOrient: "vertical",
-          overflow: "hidden",
+          minHeight: { xs: "32px", lg: "36px" },
         }}
       >
-        {item.name || item.title}
+        {item.name}
       </Typography>
 
       <Typography
         sx={{
-          mt: { xs: "6px", lg: "8px" },
+          marginTop: { xs: "8px", lg: "10px" },
           color: "#7FC9F0",
-          fontSize: { xs: "14px", lg: "16px" },
+          fontSize: { xs: "16px", lg: "18px" },
           fontWeight: 600,
           textAlign: "center",
         }}
       >
-        {item.price} ₽
+        {item.price.toLocaleString("ru-RU")} ₽
       </Typography>
 
+      {item.oldPrice && (
+        <Typography
+          sx={{
+            marginTop: "4px",
+            color: "#A9B7C0",
+            fontSize: { xs: "13px", lg: "14px" },
+            textDecoration: "line-through",
+            textAlign: "center",
+          }}
+        >
+          {item.oldPrice.toLocaleString("ru-RU")} ₽
+        </Typography>
+      )}
+
       <Button
+        onClick={handleAdd}
         sx={{
-          width: { xs: "90px", lg: "110px" },
-          height: { xs: "26px", lg: "30px" },
-          mt: { xs: "10px", lg: "12px" },
-          borderRadius: "4px",
+          width: "100%",
+          height: { xs: "38px", lg: "34px" },
+          marginTop: { xs: "12px", lg: "14px" },
+          borderRadius: "8px",
           backgroundColor: "#7FC9F0",
           color: "#FFFFFF",
-          fontSize: { xs: "10px", lg: "11px" },
+          fontSize: { xs: "14px", lg: "12px" },
           textTransform: "none",
-          "&:hover": { backgroundColor: "#7FC9F0" },
+          "&:hover": { backgroundColor: "#68B7DE" },
         }}
       >
         В корзину
       </Button>
 
       <Typography
+        onClick={handleAdd}
         sx={{
-          mt: { xs: "6px", lg: "8px" },
+          marginTop: { xs: "10px", lg: "8px" },
           color: "#7FC9F0",
-          fontSize: { xs: "9px", lg: "10px" },
+          fontSize: { xs: "13px", lg: "11px" },
+          lineHeight: "17px",
           textAlign: "center",
           cursor: "pointer",
         }}

@@ -1,25 +1,29 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { Box, Typography, Button, IconButton, TextField } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import { NavLink } from "react-router";
+import { AppContext } from "../context/AppContext";
 
-export default function AuthModal({ open, onClose, onLogin }) {
+export default function AuthModal({ open, onClose }) {
+  const { login } = useContext(AppContext);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  if (!open) return null;
+  if (!open) {
+    return null;
+  }
 
-  const handleLoginSubmit = (e) => {
+  function handleLoginSubmit(e) {
     e.preventDefault();
-    if (onLogin) {
-      // Интиқоли маълумоти корбар ва ворид шудан ба система
-      onLogin({
-        name: email ? email.split("@")[0] : "Анна",
-        email: email || "annannnanana@gmail.com",
-      });
-    }
+
+    login({
+      id: Date.now(),
+      name: email.split("@")[0],
+      email: email,
+    });
+
     onClose();
-  };
+  }
 
   return (
     <Box
