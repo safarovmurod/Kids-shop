@@ -53,6 +53,8 @@ export default function ProfileSettingsPage() {
       address: state.address,
     });
 
+    // Пароль дар localStorage нигоҳ дошта намешавад
+    dispatch({ type: "setPassword", payload: "" });
     dispatch({ type: "saved", payload: true });
   }
 

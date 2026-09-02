@@ -4,14 +4,12 @@ import {
   Typography,
   Button,
   IconButton,
-  InputBase,
   Avatar,
   Badge,
 } from "@mui/material";
 import {
   Menu as MenuIcon,
   Close as CloseIcon,
-  Search,
   ShoppingCartOutlined,
   PersonOutlined,
 } from "@mui/icons-material";
@@ -22,7 +20,7 @@ import UserMenuModal from "./UserMenuModal";
 import CatalogDropdown from "./CatalogDropdown";
 import HeaderNav from "./HeaderNav";
 import MobileMenu from "./MobileMenu";
-import MobileSearch from "./MobileSearch";
+import SearchBar from "./SearchBar";
 import { AppContext } from "../context/AppContext";
 
 export default function Header() {
@@ -131,46 +129,7 @@ export default function Header() {
           Каталог товаров
         </Button>
 
-        {/* Ҷустуҷӯ танҳо дар ПК */}
-        <Box
-          sx={{
-            display: { xs: "none", lg: "flex" },
-            alignItems: "center",
-            flexGrow: 1,
-            height: "36px",
-            paddingLeft: "12px",
-            borderRadius: "18px",
-            border: "1px solid #E5EEF3",
-          }}
-        >
-          <Search sx={{ fontSize: "18px", color: "#A9C4D2" }} />
-
-          <InputBase
-            placeholder="Я хочу купить..."
-            sx={{
-              flexGrow: 1,
-              marginLeft: "8px",
-              fontSize: "13px",
-              color: "#446B80",
-            }}
-          />
-
-          <Button
-            sx={{
-              height: "36px",
-              paddingLeft: "22px",
-              paddingRight: "22px",
-              borderRadius: "18px",
-              backgroundColor: "#7FC9F0",
-              color: "#FFFFFF",
-              fontSize: "13px",
-              textTransform: "none",
-              "&:hover": { backgroundColor: "#68B7DE" },
-            }}
-          >
-            Найти
-          </Button>
-        </Box>
+        <SearchBar />
 
         {user ? (
           <Box
@@ -256,7 +215,7 @@ export default function Header() {
         </Button>
       </Box>
 
-      <MobileSearch />
+      <SearchBar mobile />
 
       <HeaderNav />
 

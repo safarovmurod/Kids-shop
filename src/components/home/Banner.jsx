@@ -1,7 +1,10 @@
 import { Box, Typography, Button } from "@mui/material";
+import { useNavigate } from "react-router";
 import banner from "../../assets/images/banner.png";
 
 export default function Banner() {
+  const navigate = useNavigate();
+
   return (
     <Box
       sx={{
@@ -72,6 +75,7 @@ export default function Banner() {
         }}
       >
         <Button
+          onClick={() => navigate("/akcii")}
           sx={{
             width: { xs: "100%", lg: "148px" },
             height: { xs: "58px", lg: "32px" },

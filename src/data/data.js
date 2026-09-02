@@ -151,3 +151,19 @@ export const orders = [
     deliveryCost: "Бесплатно",
   },
 ];
+
+export const promoCodes = [
+  { id: 1, code: "KARAPUZ10", percent: 10 },
+  { id: 2, code: "BABY5", percent: 5 },
+];
+
+// Аз рӯи промокод маблағи тахфифро мебарорад
+export function getDiscount(promo, total) {
+  const found = promoCodes.find((el) => el.code === promo.toUpperCase());
+
+  if (!found) {
+    return 0;
+  }
+
+  return Math.round((total * found.percent) / 100);
+}

@@ -45,8 +45,14 @@ export function getOptions(products) {
   return { brands, colors, materials, mayatnik, yashik };
 }
 
-export function filterProducts(products, state) {
+export function filterProducts(products, state, search) {
   return products.filter((item) => {
+    if (search) {
+      if (!item.name.toLowerCase().includes(search.toLowerCase())) {
+        return false;
+      }
+    }
+
     if (state.priceFrom && item.price < Number(state.priceFrom)) {
       return false;
     }

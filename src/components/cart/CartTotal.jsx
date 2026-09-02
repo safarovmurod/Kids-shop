@@ -3,10 +3,12 @@ import { Box, Typography, Button, TextField } from "@mui/material";
 import { LocalShippingOutlined } from "@mui/icons-material";
 import { NavLink } from "react-router";
 import { AppContext } from "../../context/AppContext";
+import { getDiscount } from "../../data/data";
 
 export default function CartTotal() {
   const { state } = useContext(AppContext);
   const [promo, setPromo] = useState("");
+  const [applied, setApplied] = useState("");
 
   let totalCount = 0;
   let totalPrice = 0;
@@ -15,6 +17,8 @@ export default function CartTotal() {
     totalCount = totalCount + el.count;
     totalPrice = totalPrice + el.price * el.count;
   });
+
+  const discount = getDiscount(applied, totalPrice);
 
   return (
     <Box
@@ -56,6 +60,7 @@ export default function CartTotal() {
         />
 
         <Button
+          onClick={() => setApplied(promo)}
           sx={{
             paddingLeft: "20px",
             paddingRight: "20px",
@@ -104,9 +109,17 @@ export default function CartTotal() {
         <Typography
           sx={{ color: "#708090", fontSize: "14px", fontWeight: 500 }}
         >
-          0 ₽
+          {discount.toLocaleString("ru-RU")} ₽
         </Typography>
       </Box>
+
+      {applied && discount === 0 && (
+        <Typography
+          sx={{ marginTop: "8px", color: "#E53935", fontSize: "13px" }}
+        >
+          Промокод не найден
+        </Typography>
+      )}
 
       <Box
         sx={{
@@ -126,7 +139,7 @@ export default function CartTotal() {
         <Typography
           sx={{ color: "#2B5674", fontSize: "20px", fontWeight: 700 }}
         >
-          {totalPrice.toLocaleString("ru-RU")} ₽
+          {(totalPrice - discount).toLocaleString("ru-RU")} ₽
         </Typography>
       </Box>
 

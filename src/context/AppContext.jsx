@@ -1,13 +1,15 @@
-import { createContext, useReducer } from "react";
+import { createContext, useEffect, useReducer } from "react";
 
 export const AppContext = createContext();
 
 const savedUser = localStorage.getItem("user");
+const savedCart = localStorage.getItem("cart");
+const savedFavorites = localStorage.getItem("favorites");
 
 const initialState = {
   user: savedUser ? JSON.parse(savedUser) : null,
-  cart: [],
-  favorites: [],
+  cart: savedCart ? JSON.parse(savedCart) : [],
+  favorites: savedFavorites ? JSON.parse(savedFavorites) : [],
   // Маҳсулоте, ки дар Dialog нишон дода мешавад (агар null бошад, Dialog пӯшида аст)
   dialogItem: null,
 };
@@ -123,6 +125,15 @@ function reducer(state, action) {
 
 export function AppProvider({ children }) {
   const [state, dispatch] = useReducer(reducer, initialState);
+
+  // Корзина ва избранное пас аз F5 намепаранд
+  useEffect(() => {
+    localStorage.setItem("cart", JSON.stringify(state.cart));
+  }, [state.cart]);
+
+  useEffect(() => {
+    localStorage.setItem("favorites", JSON.stringify(state.favorites));
+  }, [state.favorites]);
 
   function login(userData) {
     dispatch({ type: "login", payload: userData });

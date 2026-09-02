@@ -39,6 +39,9 @@ function reducer(state, action) {
     case "setPromo":
       return { ...state, promo: action.payload };
 
+    case "applyPromo":
+      return { ...state, applied: state.promo };
+
     default:
       return state;
   }
@@ -55,6 +58,7 @@ const initialState = {
   comment: "",
   subscribe: false,
   promo: "",
+  applied: "",
 };
 
 export default function CheckoutPage() {

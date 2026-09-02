@@ -1,7 +1,10 @@
 import { Box, Typography, Button } from "@mui/material";
+import { useNavigate } from "react-router";
 import hero from "../../assets/images/hero.png";
 
 export default function Hero() {
+  const navigate = useNavigate();
+
   return (
     <Box sx={{ width: "100%", backgroundColor: "#FCF6F5" }}>
       <Box
@@ -52,6 +55,7 @@ export default function Hero() {
           </Typography>
 
           <Button
+            onClick={() => navigate("/detskaya-mebel")}
             sx={{
               width: { xs: "100%", lg: "108px" },
               height: { xs: "58px", lg: "32px" },

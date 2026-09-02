@@ -8,7 +8,7 @@ import {
   Skeleton,
 } from "@mui/material";
 import { FilterListOutlined } from "@mui/icons-material";
-import { NavLink } from "react-router";
+import { NavLink, useSearchParams } from "react-router";
 import { fetchProductsByEndpoint } from "../components/detskaya-mebel/api";
 import ProductCard from "../components/detskaya-mebel/ProductCard";
 import Filters from "../components/detskaya-mebel/Filters";
@@ -26,6 +26,9 @@ import { sortOptions } from "../data/data";
 export default function DetskayaMebelPage() {
   const [state, dispatch] = useReducer(reducer, initialState);
   const [openFilters, setOpenFilters] = useState(false);
+  const [searchParams] = useSearchParams();
+
+  const search = searchParams.get("search") || "";
 
   async function get() {
     dispatch({ type: "setLoading", payload: true });
@@ -41,8 +44,9 @@ export default function DetskayaMebelPage() {
   const options = useMemo(() => getOptions(state.products), [state.products]);
 
   const products = useMemo(() => {
-    return sortProducts(filterProducts(state.products, state), state.sortValue);
-  }, [state]);
+    const list = filterProducts(state.products, state, search);
+    return sortProducts(list, state.sortValue);
+  }, [state, search]);
 
   const shown = products.slice(0, state.visibleCount);
 
@@ -90,7 +94,7 @@ export default function DetskayaMebelPage() {
           fontWeight: 600,
         }}
       >
-        {state.sub.name}
+        {search ? `Поиск: ${search}` : state.sub.name}
       </Typography>
 
       <Box sx={{ display: { xs: "block", lg: "none" }, marginBottom: "20px" }}>

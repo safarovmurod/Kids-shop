@@ -2,6 +2,7 @@ import { useContext } from "react";
 import { Box, Typography, Button, TextField } from "@mui/material";
 import { NavLink } from "react-router";
 import { AppContext } from "../../context/AppContext";
+import { getDiscount } from "../../data/data";
 
 export default function OrderTotal({ state, dispatch }) {
   const { state: appState } = useContext(AppContext);
@@ -15,6 +16,7 @@ export default function OrderTotal({ state, dispatch }) {
   });
 
   const delivery = state.delivery === "tk" ? 120 : 0;
+  const discount = getDiscount(state.applied, totalPrice);
 
   return (
     <Box
@@ -66,6 +68,7 @@ export default function OrderTotal({ state, dispatch }) {
         />
 
         <Button
+          onClick={() => dispatch({ type: "applyPromo" })}
           sx={{
             paddingLeft: "20px",
             paddingRight: "20px",
@@ -132,7 +135,7 @@ export default function OrderTotal({ state, dispatch }) {
         <Typography
           sx={{ color: "#708090", fontSize: "14px", fontWeight: 500 }}
         >
-          0 ₽
+          {discount.toLocaleString("ru-RU")} ₽
         </Typography>
       </Box>
 
@@ -153,7 +156,7 @@ export default function OrderTotal({ state, dispatch }) {
         <Typography
           sx={{ color: "#2B5674", fontSize: "20px", fontWeight: 700 }}
         >
-          {(totalPrice + delivery).toLocaleString("ru-RU")} ₽
+          {(totalPrice + delivery - discount).toLocaleString("ru-RU")} ₽
         </Typography>
       </Box>
     </Box>
