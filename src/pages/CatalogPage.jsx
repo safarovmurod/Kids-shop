@@ -8,47 +8,80 @@ import {
   Skeleton,
 } from "@mui/material";
 import { FilterListOutlined } from "@mui/icons-material";
-import { NavLink, useSearchParams } from "react-router";
-import { fetchProductsByEndpoint } from "../components/detskaya-mebel/api";
-import ProductCard from "../components/detskaya-mebel/ProductCard";
-import Filters from "../components/detskaya-mebel/Filters";
-import FiltersDialog from "../components/detskaya-mebel/FiltersDialog";
-import SubCategories from "../components/detskaya-mebel/SubCategories";
-import SimilarProducts from "../components/detskaya-mebel/SimilarProducts";
+import { NavLink, useParams, useSearchParams } from "react-router";
+import { getList } from "../api/api";
+import ProductCard from "../components/ProductCard";
+import CatalogFilters from "../components/catalog/CatalogFilters";
+import FiltersDialog from "../components/catalog/FiltersDialog";
+import SubCategories from "../components/catalog/SubCategories";
 import {
   getOptions,
   filterProducts,
   sortProducts,
-} from "../components/detskaya-mebel/filter";
-import { reducer, initialState } from "../components/detskaya-mebel/reducer";
-import { sortOptions } from "../data/data";
+} from "../components/catalog/filter";
+import { reducer, initialState } from "../components/catalog/catalogReducer";
+import { getCategory, getSubcategory, sortOptions } from "../data/data";
+import NotFound from "./NotFound";
 
-export default function DetskayaMebelPage() {
+export default function CatalogPage() {
+  const { category, subcategory } = useParams();
   const [state, dispatch] = useReducer(reducer, initialState);
   const [openFilters, setOpenFilters] = useState(false);
   const [searchParams] = useSearchParams();
 
   const search = searchParams.get("search") || "";
 
+  const currentCategory = getCategory(category);
+  const currentSub = getSubcategory(currentCategory, subcategory);
+
   async function get() {
     dispatch({ type: "setLoading", payload: true });
-    const data = await fetchProductsByEndpoint(state.sub.endpoint);
-    dispatch({ type: "setProducts", payload: data });
+
+    let answer = null;
+
+    if (search) {
+      answer = await getList("search", { search, pageSize: 60 });
+    } else if (subcategory) {
+      answer = await getList("subcategory", {
+        category,
+        subcategory,
+        pageSize: 60,
+      });
+    } else {
+      answer = await getList("category", { category, pageSize: 60 });
+    }
+
+    dispatch({ type: "setProducts", payload: answer.list });
     dispatch({ type: "setLoading", payload: false });
   }
 
   useEffect(() => {
-    get();
-  }, [state.sub]);
+    if (currentCategory) {
+      get();
+    }
+  }, [category, subcategory, search]);
 
   const options = useMemo(() => getOptions(state.products), [state.products]);
 
   const products = useMemo(() => {
-    const list = filterProducts(state.products, state, search);
-    return sortProducts(list, state.sortValue);
-  }, [state, search]);
+    return sortProducts(filterProducts(state.products, state), state.sortValue);
+  }, [state]);
+
+  if (!currentCategory) {
+    return <NotFound />;
+  }
 
   const shown = products.slice(0, state.visibleCount);
+
+  let title = currentCategory.name;
+
+  if (currentSub) {
+    title = currentSub.name;
+  }
+
+  if (search) {
+    title = `Поиск: ${search}`;
+  }
 
   return (
     <Box
@@ -67,47 +100,60 @@ export default function DetskayaMebelPage() {
         sx={{
           display: { xs: "none", lg: "flex" },
           alignItems: "center",
-          gap: "8px",
+          gap: "10px",
           marginBottom: "20px",
         }}
       >
         <Typography
           component={NavLink}
           to="/"
-          sx={{ color: "#A9B7C0", fontSize: "11px", textDecoration: "none" }}
+          sx={{ color: "#A9B7C0", fontSize: "12px", textDecoration: "none" }}
         >
           Главная
         </Typography>
 
-        <Typography sx={{ color: "#A9B7C0", fontSize: "11px" }}>/</Typography>
+        <Typography sx={{ color: "#A9B7C0", fontSize: "12px" }}>›</Typography>
 
-        <Typography sx={{ color: "#446B80", fontSize: "11px" }}>
-          {state.sub.name}
+        <Typography
+          component={NavLink}
+          to={`/catalog/${currentCategory.slug}`}
+          sx={{ color: "#A9B7C0", fontSize: "12px", textDecoration: "none" }}
+        >
+          {currentCategory.name}
         </Typography>
+
+        {currentSub && (
+          <>
+            <Typography sx={{ color: "#A9B7C0", fontSize: "12px" }}>
+              ›
+            </Typography>
+
+            <Typography sx={{ color: "#446B80", fontSize: "12px" }}>
+              {currentSub.name}
+            </Typography>
+          </>
+        )}
       </Box>
 
       <Typography
         sx={{
           marginBottom: "20px",
           color: "#446B80",
-          fontSize: { xs: "28px", lg: "32px" },
+          fontSize: { xs: "30px", lg: "32px" },
           fontWeight: 600,
         }}
       >
-        {search ? `Поиск: ${search}` : state.sub.name}
+        {title}
       </Typography>
 
       <Box sx={{ display: { xs: "block", lg: "none" }, marginBottom: "20px" }}>
-        <SubCategories
-          active={state.sub}
-          onChange={(el) => dispatch({ type: "setSub", payload: el })}
-        />
+        <SubCategories category={currentCategory} activeSlug={subcategory} />
       </Box>
 
       <Box
         sx={{
           display: "grid",
-          gridTemplateColumns: { xs: "1fr", lg: "321px 1fr" },
+          gridTemplateColumns: { xs: "1fr", lg: "300px 1fr" },
           gap: "30px",
           alignItems: "start",
         }}
@@ -119,12 +165,13 @@ export default function DetskayaMebelPage() {
             gap: "24px",
           }}
         >
-          <SubCategories
-            active={state.sub}
-            onChange={(el) => dispatch({ type: "setSub", payload: el })}
-          />
+          <SubCategories category={currentCategory} activeSlug={subcategory} />
 
-          <Filters state={state} dispatch={dispatch} options={options} />
+          <CatalogFilters
+            state={state}
+            dispatch={dispatch}
+            options={options}
+          />
         </Box>
 
         <Box>
@@ -184,10 +231,12 @@ export default function DetskayaMebelPage() {
                 gap: { xs: "12px", lg: "24px" },
               }}
             >
-              <Skeleton variant="rectangular" height={280} />
-              <Skeleton variant="rectangular" height={280} />
-              <Skeleton variant="rectangular" height={280} />
-              <Skeleton variant="rectangular" height={280} />
+              <Skeleton variant="rectangular" height={320} />
+              <Skeleton variant="rectangular" height={320} />
+              <Skeleton variant="rectangular" height={320} />
+              <Skeleton variant="rectangular" height={320} />
+              <Skeleton variant="rectangular" height={320} />
+              <Skeleton variant="rectangular" height={320} />
             </Box>
           ) : (
             <Box
@@ -197,8 +246,8 @@ export default function DetskayaMebelPage() {
                 gap: { xs: "12px", lg: "24px" },
               }}
             >
-              {shown.map((item) => (
-                <ProductCard key={item.id} item={item} />
+              {shown.map((el) => (
+                <ProductCard key={el.id} item={el} />
               ))}
             </Box>
           )}
@@ -227,9 +276,9 @@ export default function DetskayaMebelPage() {
               <Button
                 onClick={() => dispatch({ type: "more" })}
                 sx={{
-                  width: { xs: "100%", lg: "220px" },
-                  height: "44px",
-                  borderRadius: "22px",
+                  width: { xs: "100%", lg: "240px" },
+                  height: "46px",
+                  borderRadius: "23px",
                   border: "1px solid #7FC9F0",
                   color: "#7FC9F0",
                   fontSize: "14px",
@@ -243,8 +292,6 @@ export default function DetskayaMebelPage() {
           )}
         </Box>
       </Box>
-
-      <SimilarProducts />
 
       <FiltersDialog
         open={openFilters}

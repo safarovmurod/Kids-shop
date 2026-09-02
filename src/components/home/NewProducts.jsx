@@ -1,9 +1,8 @@
 import { useEffect, useState } from "react";
 import { Box, Typography } from "@mui/material";
-import axios from "axios";
-import ProductCard from "./ProductCard";
+import ProductCard from "../ProductCard";
 import Arrows from "./Arrows";
-import { apiMebel } from "../../data/data";
+import { getList } from "../../api/api";
 
 export default function NewProducts({ title }) {
   const [data, setData] = useState([]);
@@ -11,13 +10,9 @@ export default function NewProducts({ title }) {
   const [totalPages, setTotalPages] = useState(1);
 
   async function get() {
-    try {
-      const { data } = await axios.get(`${apiMebel}?page=${page}&pageSize=4`);
-      setData(data.data || []);
-      setTotalPages(data.totalPages || 1);
-    } catch (error) {
-      console.error(error);
-    }
+    const answer = await getList("products", { page, pageSize: 4 });
+    setData(answer.list);
+    setTotalPages(answer.totalPages);
   }
 
   useEffect(() => {

@@ -1,12 +1,11 @@
 import { Box, Typography, Button } from "@mui/material";
 import { NavLink, useLocation } from "react-router";
-import { menuLinks, catalogCategories } from "../data/data";
+import { menuLinks } from "../data/data";
 
 export default function InfoPage() {
   const location = useLocation();
 
-  const all = [...menuLinks, ...catalogCategories];
-  const page = all.find((el) => el.path === location.pathname);
+  const page = menuLinks.find((el) => el.path === location.pathname);
 
   return (
     <Box
@@ -44,7 +43,7 @@ export default function InfoPage() {
 
       <Button
         component={NavLink}
-        to="/detskaya-mebel"
+        to="/catalog/detskaya-mebel"
         sx={{
           width: { xs: "100%", lg: "220px" },
           height: "48px",

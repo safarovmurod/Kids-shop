@@ -1,20 +1,28 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { Box, Typography, CircularProgress } from "@mui/material";
 import { NavLink, useParams } from "react-router";
-import { fetchProductById } from "../components/detskaya-mebel/api";
+import { getData } from "../api/api";
+import { AppContext } from "../context/AppContext";
+import ProductHead from "../components/product/ProductHead";
+import ProductGallery from "../components/product/ProductGallery";
 import ProductInfo from "../components/product/ProductInfo";
-import ProductCharacteristics from "../components/product/ProductCharacteristics";
-import SimilarProducts from "../components/detskaya-mebel/SimilarProducts";
+import ProductTabs from "../components/product/ProductTabs";
+import AlsoBuy from "../components/cart/AlsoBuy";
 
 export default function ProductPage() {
   const { id } = useParams();
+  const { state, dispatch } = useContext(AppContext);
   const [item, setItem] = useState(null);
+  const [reviews, setReviews] = useState([]);
   const [loading, setLoading] = useState(true);
 
   async function get() {
     setLoading(true);
-    const data = await fetchProductById(id);
-    setItem(data);
+    const answer = await getData("product", { id });
+    const product = answer.data;
+
+    setItem(product);
+    setReviews(product && product.reviews ? product.reviews : []);
     setLoading(false);
   }
 
@@ -53,6 +61,24 @@ export default function ProductPage() {
     );
   }
 
+  const isFavorite = state.favorites.find((el) => el.id === item.id);
+
+  function handleFavorite() {
+    dispatch({
+      type: "favorite",
+      payload: {
+        id: item.id,
+        name: item.name,
+        price: item.price,
+        image: item.image,
+      },
+    });
+  }
+
+  function handleAddReview(review) {
+    setReviews([review, ...reviews]);
+  }
+
   return (
     <Box
       sx={{
@@ -66,35 +92,36 @@ export default function ProductPage() {
         paddingBottom: { xs: "40px", lg: "80px" },
       }}
     >
+      {/* Детская мебель / Кроватки / Название товара */}
       <Box
         sx={{
           display: { xs: "none", lg: "flex" },
           alignItems: "center",
-          gap: "8px",
+          gap: "10px",
           marginBottom: "24px",
         }}
       >
         <Typography
           component={NavLink}
-          to="/"
-          sx={{ color: "#A9B7C0", fontSize: "11px", textDecoration: "none" }}
+          to={`/catalog/${item.categorySlug}`}
+          sx={{ color: "#A9B7C0", fontSize: "12px", textDecoration: "none" }}
         >
-          Главная
+          {item.categoryName}
         </Typography>
 
-        <Typography sx={{ color: "#A9B7C0", fontSize: "11px" }}>/</Typography>
+        <Typography sx={{ color: "#A9B7C0", fontSize: "12px" }}>›</Typography>
 
         <Typography
           component={NavLink}
-          to="/detskaya-mebel"
-          sx={{ color: "#A9B7C0", fontSize: "11px", textDecoration: "none" }}
+          to={`/catalog/${item.categorySlug}/${item.subcategorySlug}`}
+          sx={{ color: "#A9B7C0", fontSize: "12px", textDecoration: "none" }}
         >
-          Детская мебель
+          {item.subcategoryName}
         </Typography>
 
-        <Typography sx={{ color: "#A9B7C0", fontSize: "11px" }}>/</Typography>
+        <Typography sx={{ color: "#A9B7C0", fontSize: "12px" }}>›</Typography>
 
-        <Typography sx={{ color: "#446B80", fontSize: "11px" }}>
+        <Typography sx={{ color: "#446B80", fontSize: "12px" }}>
           {item.name}
         </Typography>
       </Box>
@@ -103,41 +130,35 @@ export default function ProductPage() {
         sx={{
           display: "grid",
           gridTemplateColumns: { xs: "1fr", lg: "1fr 1fr" },
-          gap: { xs: "24px", lg: "60px" },
+          columnGap: "60px",
+          rowGap: "20px",
           alignItems: "start",
         }}
       >
-        <Box
-          sx={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            width: "100%",
-            height: { xs: "320px", lg: "480px" },
-            borderRadius: "12px",
-            border: "1px solid #F0F4F7",
-            backgroundColor: "#FFFFFF",
-          }}
-        >
-          <Box
-            component="img"
-            src={item.image}
-            alt={item.name}
-            sx={{
-              maxWidth: "80%",
-              maxHeight: "80%",
-              objectFit: "contain",
-              display: "block",
-            }}
+        <Box sx={{ gridColumn: { lg: "2" }, gridRow: { lg: "1" } }}>
+          <ProductHead item={item} reviewCount={reviews.length} />
+        </Box>
+
+        <Box sx={{ gridColumn: { lg: "1" }, gridRow: { lg: "1 / 3" } }}>
+          <ProductGallery
+            item={item}
+            isFavorite={isFavorite}
+            onFavorite={handleFavorite}
           />
         </Box>
 
-        <ProductInfo item={item} />
+        <Box sx={{ gridColumn: { lg: "2" }, gridRow: { lg: "2" } }}>
+          <ProductInfo item={item} />
+        </Box>
       </Box>
 
-      <ProductCharacteristics item={item} />
+      <ProductTabs
+        item={item}
+        reviews={reviews}
+        onAddReview={handleAddReview}
+      />
 
-      <SimilarProducts />
+      <AlsoBuy items={item.similar} />
     </Box>
   );
 }

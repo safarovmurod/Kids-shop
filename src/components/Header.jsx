@@ -32,7 +32,11 @@ export default function Header() {
   const navigate = useNavigate();
 
   const user = state.user;
-  const cartCount = state.cart.length;
+  let cartCount = 0;
+
+  state.cart.forEach((el) => {
+    cartCount = cartCount + el.count;
+  });
 
   return (
     <Box
@@ -104,6 +108,7 @@ export default function Header() {
 
         {/* Тугмаи Каталог танҳо дар ПК */}
         <Button
+          onMouseEnter={() => setOpenCatalog(true)}
           onClick={() => setOpenCatalog(!openCatalog)}
           endIcon={
             openCatalog ? (
@@ -219,7 +224,11 @@ export default function Header() {
 
       <HeaderNav />
 
-      {openCatalog && <CatalogDropdown onClose={() => setOpenCatalog(false)} />}
+      {openCatalog && (
+        <Box onMouseLeave={() => setOpenCatalog(false)}>
+          <CatalogDropdown onClose={() => setOpenCatalog(false)} />
+        </Box>
+      )}
 
       <MobileMenu
         open={openMobileMenu}

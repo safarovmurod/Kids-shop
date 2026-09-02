@@ -10,6 +10,8 @@ const initialState = {
   user: savedUser ? JSON.parse(savedUser) : null,
   cart: savedCart ? JSON.parse(savedCart) : [],
   favorites: savedFavorites ? JSON.parse(savedFavorites) : [],
+  // Маҳсулоти нест кардашуда, то ки корбар "Отменить" карда тавонад
+  deleted: [],
   // Маҳсулоте, ки дар Dialog нишон дода мешавад (агар null бошад, Dialog пӯшида аст)
   dialogItem: null,
 };
@@ -77,16 +79,34 @@ function reducer(state, action) {
         }),
       };
 
-    case "remove":
+    case "remove": {
+      const item = state.cart.find((el) => el.id === action.payload);
+
       return {
         ...state,
         cart: state.cart.filter((el) => el.id !== action.payload),
+        deleted: item ? [...state.deleted, item] : state.deleted,
+      };
+    }
+
+    case "restore":
+      return {
+        ...state,
+        cart: [...state.cart, action.payload],
+        deleted: state.deleted.filter((el) => el.id !== action.payload.id),
+      };
+
+    case "hideDeleted":
+      return {
+        ...state,
+        deleted: state.deleted.filter((el) => el.id !== action.payload),
       };
 
     case "clear":
       return {
         ...state,
         cart: [],
+        deleted: [],
       };
 
     case "favorite": {

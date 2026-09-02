@@ -10,14 +10,8 @@ import {
 import { Search } from "@mui/icons-material";
 import CheckboxList from "./CheckboxList";
 
-export default function Filters({ state, dispatch, options }) {
-  const chips = [
-    ...state.brands,
-    ...state.colors,
-    ...state.materials,
-    ...state.mayatnik,
-    ...state.yashik,
-  ];
+export default function CatalogFilters({ state, dispatch, options }) {
+  const chips = [...state.brands, ...state.colors, ...state.materials];
 
   const brands = options.brands.filter((el) =>
     el.toLowerCase().includes(state.brandSearch.toLowerCase()),
@@ -97,7 +91,7 @@ export default function Filters({ state, dispatch, options }) {
 
       <Box sx={{ display: "flex", gap: "8px", marginBottom: "12px" }}>
         <TextField
-          placeholder="от 8000"
+          placeholder="от"
           size="small"
           value={state.priceFrom}
           onChange={(e) =>
@@ -107,7 +101,7 @@ export default function Filters({ state, dispatch, options }) {
         />
 
         <TextField
-          placeholder="до 999900"
+          placeholder="до"
           size="small"
           value={state.priceTo}
           onChange={(e) =>
@@ -186,20 +180,6 @@ export default function Filters({ state, dispatch, options }) {
         items={options.materials}
         selected={state.materials}
         onToggle={(el) => dispatch({ type: "toggleMaterial", payload: el })}
-      />
-
-      <CheckboxList
-        title="Маятник"
-        items={options.mayatnik}
-        selected={state.mayatnik}
-        onToggle={(el) => dispatch({ type: "toggleMayatnik", payload: el })}
-      />
-
-      <CheckboxList
-        title="Ящик для белья"
-        items={options.yashik}
-        selected={state.yashik}
-        onToggle={(el) => dispatch({ type: "toggleYashik", payload: el })}
       />
     </Box>
   );

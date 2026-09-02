@@ -1,21 +1,15 @@
 import { useEffect, useState } from "react";
 import { Box } from "@mui/material";
-import axios from "axios";
 import OfferCard from "./OfferCard";
-import { apiAkcii } from "../../data/data";
+import { getList } from "../../api/api";
 
 export default function WideCard() {
   const [data, setData] = useState([]);
   const [active, setActive] = useState(0);
 
   async function get() {
-    try {
-      const { data } = await axios.get(apiAkcii);
-      const list = Array.isArray(data) ? data : data.data || [];
-      setData(list.slice(0, 2));
-    } catch (error) {
-      console.error(error);
-    }
+    const answer = await getList("category", { category: "akcii", pageSize: 2 });
+    setData(answer.list);
   }
 
   useEffect(() => {

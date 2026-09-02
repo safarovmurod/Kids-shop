@@ -9,7 +9,7 @@ import {
   DialogActions,
 } from "@mui/material";
 import { Close as CloseIcon } from "@mui/icons-material";
-import Filters from "./Filters";
+import CatalogFilters from "./CatalogFilters";
 
 export default function FiltersDialog({
   open,
@@ -42,7 +42,7 @@ export default function FiltersDialog({
       </DialogTitle>
 
       <DialogContent sx={{ paddingLeft: "16px", paddingRight: "16px" }}>
-        <Filters state={state} dispatch={dispatch} options={options} />
+        <CatalogFilters state={state} dispatch={dispatch} options={options} />
       </DialogContent>
 
       <DialogActions sx={{ padding: "16px" }}>

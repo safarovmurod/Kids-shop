@@ -1,8 +1,7 @@
 import { useEffect, useState } from "react";
 import { Box, Button, Typography, CircularProgress } from "@mui/material";
-import axios from "axios";
 import Blog from "../components/blog/Blog";
-import { apiBlog } from "../data/data";
+import { getList } from "../api/api";
 
 export default function BlogPage() {
   const [posts, setPosts] = useState([]);
@@ -11,25 +10,20 @@ export default function BlogPage() {
   const [hasMore, setHasMore] = useState(true);
 
   async function get() {
-    try {
-      setLoading(true);
-      const { data } = await axios.get(`${apiBlog}?page=${page}&pageSize=12`);
-      const list = Array.isArray(data) ? data : data.data || [];
+    setLoading(true);
+    const answer = await getList("blog", { page, pageSize: 12 });
 
-      if (list.length < 12) {
-        setHasMore(false);
-      }
-
-      if (page === 1) {
-        setPosts(list);
-      } else {
-        setPosts((prev) => [...prev, ...list]);
-      }
-    } catch (error) {
-      console.error(error);
-    } finally {
-      setLoading(false);
+    if (page >= answer.totalPages) {
+      setHasMore(false);
     }
+
+    if (page === 1) {
+      setPosts(answer.list);
+    } else {
+      setPosts((prev) => [...prev, ...answer.list]);
+    }
+
+    setLoading(false);
   }
 
   useEffect(() => {

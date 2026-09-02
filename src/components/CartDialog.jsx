@@ -8,6 +8,8 @@ import {
   DialogTitle,
   DialogContent,
   DialogActions,
+  Snackbar,
+  Alert,
 } from "@mui/material";
 import {
   Close as CloseIcon,
@@ -157,6 +159,23 @@ export default function CartDialog() {
           </IconButton>
         </Box>
       </DialogContent>
+
+      <Snackbar
+        open={true}
+        autoHideDuration={2500}
+        anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+      >
+        <Alert
+          severity="success"
+          sx={{
+            backgroundColor: "#7FC9F0",
+            color: "#FFFFFF",
+            "& .MuiAlert-icon": { color: "#FFFFFF" },
+          }}
+        >
+          Товар в корзине: {count} шт
+        </Alert>
+      </Snackbar>
 
       <DialogActions sx={{ padding: "10px 20px 20px 20px" }}>
         <Button

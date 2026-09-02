@@ -1,37 +1,16 @@
-import { useContext, useReducer } from "react";
-import { Box, Typography, Button, IconButton } from "@mui/material";
-import {
-  FavoriteBorder,
-  Favorite,
-  Add as AddIcon,
-  Remove as RemoveIcon,
-} from "@mui/icons-material";
-import { useNavigate } from "react-router";
+import { useContext, useState } from "react";
+import { Box, Typography, Button } from "@mui/material";
+import { useNavigate, NavLink } from "react-router";
 import { AppContext } from "../../context/AppContext";
-
-function reducer(state, action) {
-  switch (action.type) {
-    case "increment":
-      return state + 1;
-
-    case "decrement":
-      if (state > 1) {
-        return state - 1;
-      }
-
-      return state;
-
-    default:
-      return state;
-  }
-}
+import CheaperDialog from "./CheaperDialog";
 
 export default function ProductInfo({ item }) {
-  const { state, dispatch } = useContext(AppContext);
-  const [count, countDispatch] = useReducer(reducer, 1);
+  const { dispatch } = useContext(AppContext);
+  const [color, setColor] = useState(0);
+  const [openCheaper, setOpenCheaper] = useState(false);
   const navigate = useNavigate();
 
-  const isFavorite = state.favorites.find((el) => el.id === item.id);
+  const colors = item.colorOptions || [];
 
   const product = {
     id: item.id,
@@ -41,74 +20,82 @@ export default function ProductInfo({ item }) {
   };
 
   function handleAdd() {
-    // Маҳсулот ба шумораи интихобшуда ба корзина илова мешавад
-    for (let i = 0; i < count; i++) {
-      dispatch({ type: "add", payload: product });
-    }
+    dispatch({ type: "add", payload: product });
   }
 
-  function handleBuy() {
-    handleAdd();
+  function handleFastOrder() {
+    dispatch({ type: "add", payload: product });
+    dispatch({ type: "closeDialog" });
     navigate("/checkout");
   }
 
   return (
     <Box>
-      <Box
-        sx={{
-          display: "flex",
-          alignItems: "flex-start",
-          justifyContent: "space-between",
-          gap: "16px",
-        }}
-      >
-        <Typography
-          sx={{
-            color: "#446B80",
-            fontSize: { xs: "22px", lg: "24px" },
-            fontWeight: 600,
-            lineHeight: 1.4,
-          }}
-        >
-          {item.name}
-        </Typography>
+      {colors.length > 0 && (
+        <Box sx={{ marginBottom: "20px" }}>
+          <Box sx={{ display: "flex", alignItems: "center", gap: "12px" }}>
+            <Typography
+              sx={{ color: "#8FA6B3", fontSize: { xs: "17px", lg: "14px" } }}
+            >
+              Цвет товара:
+            </Typography>
 
-        <IconButton
-          onClick={() => dispatch({ type: "favorite", payload: product })}
-          sx={{ padding: 0, color: "#7FC9F0" }}
-        >
-          {isFavorite ? (
-            <Favorite sx={{ fontSize: "26px" }} />
-          ) : (
-            <FavoriteBorder sx={{ fontSize: "26px" }} />
-          )}
-        </IconButton>
-      </Box>
+            <Typography
+              sx={{ color: "#446B80", fontSize: { xs: "17px", lg: "14px" } }}
+            >
+              {colors[color]}
+            </Typography>
+          </Box>
 
-      <Typography
-        sx={{
-          marginTop: "16px",
-          color: "#52A5E0",
-          fontSize: "14px",
-          fontWeight: 500,
-        }}
-      >
-        В наличии
-      </Typography>
+          <Box sx={{ display: "flex", gap: "12px", marginTop: "12px" }}>
+            {colors.map((el, index) => (
+              <Box
+                key={el}
+                onClick={() => setColor(index)}
+                sx={{
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  width: "72px",
+                  height: "72px",
+                  padding: "6px",
+                  borderRadius: "8px",
+                  border:
+                    color === index
+                      ? "1px solid #7FC9F0"
+                      : "1px solid #E5EEF3",
+                  cursor: "pointer",
+                }}
+              >
+                <Box
+                  component="img"
+                  src={item.image}
+                  alt={el}
+                  sx={{
+                    maxWidth: "100%",
+                    maxHeight: "100%",
+                    objectFit: "contain",
+                  }}
+                />
+              </Box>
+            ))}
+          </Box>
+        </Box>
+      )}
 
       <Box
         sx={{
           display: "flex",
           alignItems: "baseline",
-          gap: "12px",
-          marginTop: "16px",
+          gap: "14px",
+          marginBottom: "24px",
         }}
       >
         <Typography
           sx={{
-            color: "#7FC9F0",
-            fontSize: { xs: "28px", lg: "30px" },
-            fontWeight: 700,
+            color: "#446B80",
+            fontSize: { xs: "34px", lg: "30px" },
+            fontWeight: 600,
           }}
         >
           {item.price.toLocaleString("ru-RU")} ₽
@@ -118,7 +105,7 @@ export default function ProductInfo({ item }) {
           <Typography
             sx={{
               color: "#A9B7C0",
-              fontSize: "18px",
+              fontSize: { xs: "20px", lg: "18px" },
               textDecoration: "line-through",
             }}
           >
@@ -127,72 +114,82 @@ export default function ProductInfo({ item }) {
         )}
       </Box>
 
-      <Box
-        sx={{
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "space-between",
-          width: "130px",
-          height: "48px",
-          marginTop: "24px",
-          paddingLeft: "12px",
-          paddingRight: "12px",
-          borderRadius: "12px",
-          border: "1px solid #B2CAD6",
-        }}
-      >
-        <IconButton
-          onClick={() => countDispatch({ type: "decrement" })}
-          sx={{ padding: 0, color: "#52A5E0" }}
+      <Box sx={{ display: "flex", alignItems: "center", gap: "24px" }}>
+        <Button
+          onClick={handleFastOrder}
+          sx={{
+            width: { xs: "auto", lg: "180px" },
+            height: { xs: "62px", lg: "46px" },
+            paddingLeft: { xs: "30px", lg: "0px" },
+            paddingRight: { xs: "30px", lg: "0px" },
+            borderRadius: "10px",
+            backgroundColor: "#7FC9F0",
+            color: "#FFFFFF",
+            fontSize: { xs: "20px", lg: "15px" },
+            textTransform: "none",
+            "&:hover": { backgroundColor: "#68B7DE" },
+          }}
         >
-          <RemoveIcon sx={{ fontSize: "20px" }} />
-        </IconButton>
+          Быстрый заказ
+        </Button>
 
         <Typography
-          sx={{ color: "#2B5674", fontSize: "16px", fontWeight: 500 }}
+          onClick={handleAdd}
+          sx={{
+            color: "#7FC9F0",
+            fontSize: { xs: "20px", lg: "15px" },
+            cursor: "pointer",
+          }}
         >
-          {count}
+          В корзину
         </Typography>
-
-        <IconButton
-          onClick={() => countDispatch({ type: "increment" })}
-          sx={{ padding: 0, color: "#52A5E0" }}
-        >
-          <AddIcon sx={{ fontSize: "20px" }} />
-        </IconButton>
       </Box>
 
-      <Button
-        onClick={handleAdd}
-        sx={{
-          width: { xs: "100%", lg: "260px" },
-          height: { xs: "56px", lg: "50px" },
-          marginTop: "24px",
-          borderRadius: "10px",
-          backgroundColor: "#7FC9F0",
-          color: "#FFFFFF",
-          fontSize: { xs: "18px", lg: "15px" },
-          fontWeight: 600,
-          textTransform: "none",
-          "&:hover": { backgroundColor: "#68B7DE" },
-        }}
-      >
-        В корзину
-      </Button>
+      <Box sx={{ display: "flex", alignItems: "center", gap: "10px", marginTop: "30px" }}>
+        <Typography
+          sx={{ color: "#8FA6B3", fontSize: { xs: "17px", lg: "14px" } }}
+        >
+          Ваш город:
+        </Typography>
+
+        <Typography
+          sx={{ color: "#446B80", fontSize: { xs: "17px", lg: "14px" } }}
+        >
+          Москва
+        </Typography>
+      </Box>
 
       <Typography
-        onClick={handleBuy}
+        component={NavLink}
+        to="/delivery"
         sx={{
-          width: { xs: "100%", lg: "260px" },
-          marginTop: "16px",
+          display: "block",
+          marginTop: "10px",
           color: "#7FC9F0",
-          fontSize: { xs: "16px", lg: "14px" },
-          textAlign: "center",
+          fontSize: { xs: "17px", lg: "14px" },
+          textDecoration: "none",
+        }}
+      >
+        Подробнее о доставке
+      </Typography>
+
+      <Typography
+        onClick={() => setOpenCheaper(true)}
+        sx={{
+          display: { xs: "none", lg: "block" },
+          marginTop: "26px",
+          color: "#446B80",
+          fontSize: "14px",
           cursor: "pointer",
         }}
       >
-        Купить в один клик
+        Нашли дешевле?
       </Typography>
+
+      <CheaperDialog
+        open={openCheaper}
+        onClose={() => setOpenCheaper(false)}
+      />
     </Box>
   );
 }

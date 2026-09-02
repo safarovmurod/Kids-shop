@@ -1,7 +1,7 @@
 import { Box, Typography, IconButton, Drawer } from "@mui/material";
 import { Close as CloseIcon } from "@mui/icons-material";
 import { useNavigate } from "react-router";
-import { catalogCategories } from "../data/data";
+import { categories } from "../data/data";
 
 export default function MobileCatalog({ open, onClose }) {
   const navigate = useNavigate();
@@ -42,10 +42,10 @@ export default function MobileCatalog({ open, onClose }) {
           marginTop: "16px",
         }}
       >
-        {catalogCategories.map((el) => (
+        {categories.map((el) => (
           <Typography
             key={el.id}
-            onClick={() => handleClick(el.path)}
+            onClick={() => handleClick(`/catalog/${el.slug}`)}
             sx={{
               paddingTop: "12px",
               paddingBottom: "12px",

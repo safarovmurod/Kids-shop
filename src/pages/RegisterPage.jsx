@@ -9,6 +9,7 @@ import {
 } from "@mui/material";
 import { useNavigate, NavLink } from "react-router";
 import { AppContext } from "../context/AppContext";
+import { saveUser } from "../api/api";
 
 const inputStyle = {
   "& .MuiOutlinedInput-root": {
@@ -39,6 +40,12 @@ function reducer(state, action) {
     case "setError":
       return { ...state, error: action.payload };
 
+    case "setPhone":
+      return { ...state, phone: action.payload };
+
+    case "setLoading":
+      return { ...state, loading: action.payload };
+
     default:
       return state;
   }
@@ -46,11 +53,13 @@ function reducer(state, action) {
 
 const initialState = {
   name: "",
+  phone: "",
   email: "",
   password: "",
   repeat: "",
   agree: false,
   error: "",
+  loading: false,
 };
 
 export default function RegisterPage() {
@@ -58,7 +67,7 @@ export default function RegisterPage() {
   const [state, dispatch] = useReducer(reducer, initialState);
   const navigate = useNavigate();
 
-  function handleSubmit() {
+  async function handleSubmit() {
     if (state.password !== state.repeat) {
       dispatch({ type: "setError", payload: "Пароли не совпадают" });
       return;
@@ -69,12 +78,25 @@ export default function RegisterPage() {
       return;
     }
 
-    login({
-      id: Date.now(),
-      name: state.name,
+    dispatch({ type: "setError", payload: "" });
+    dispatch({ type: "setLoading", payload: true });
+
+    // Корбар дар сервер сабт мешавад: POST /api/users
+    const user = await saveUser({
+      fullName: state.name,
+      tel: state.phone,
       email: state.email,
+      address: "",
     });
 
+    dispatch({ type: "setLoading", payload: false });
+
+    if (!user) {
+      dispatch({ type: "setError", payload: "Не удалось зарегистрироваться" });
+      return;
+    }
+
+    login(user);
     navigate("/");
   }
 
@@ -116,6 +138,16 @@ export default function RegisterPage() {
           value={state.name}
           onChange={(e) =>
             dispatch({ type: "setName", payload: e.target.value })
+          }
+          sx={inputStyle}
+        />
+
+        <TextField
+          fullWidth
+          placeholder="Телефон"
+          value={state.phone}
+          onChange={(e) =>
+            dispatch({ type: "setPhone", payload: e.target.value })
           }
           sx={inputStyle}
         />
@@ -191,6 +223,7 @@ export default function RegisterPage() {
 
         <Button
           onClick={handleSubmit}
+          disabled={state.loading}
           sx={{
             width: "100%",
             height: { xs: "62px", lg: "50px" },
@@ -203,7 +236,7 @@ export default function RegisterPage() {
             "&:hover": { backgroundColor: "#68B7DE" },
           }}
         >
-          Зарегистрироваться
+          {state.loading ? "Отправляем..." : "Зарегистрироваться"}
         </Button>
 
         <Typography

@@ -8,7 +8,7 @@ export default function SearchBar({ mobile }) {
   const navigate = useNavigate();
 
   function handleSearch() {
-    navigate(`/detskaya-mebel?search=${text}`);
+    navigate(`/catalog/detskaya-mebel?search=${text}`);
   }
 
   function handleKeyDown(e) {

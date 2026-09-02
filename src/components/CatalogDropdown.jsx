@@ -1,10 +1,10 @@
 import { useState } from "react";
 import { Box, Typography } from "@mui/material";
 import { NavLink } from "react-router";
-import { catalogCategories } from "../data/data";
+import { categories } from "../data/data";
 
 export default function CatalogDropdown({ onClose }) {
-  const [activeCategory, setActiveCategory] = useState(catalogCategories[1]);
+  const [activeCategory, setActiveCategory] = useState(categories[1]);
 
   return (
     <Box
@@ -35,7 +35,7 @@ export default function CatalogDropdown({ onClose }) {
           borderBottomLeftRadius: "12px",
         }}
       >
-        {catalogCategories.map((cat) => {
+        {categories.map((cat) => {
           const isSelected = activeCategory.id === cat.id;
           return (
             <Box
@@ -76,7 +76,7 @@ export default function CatalogDropdown({ onClose }) {
       >
         <Typography
           component={NavLink}
-          to={activeCategory.path}
+          to={`/catalog/${activeCategory.slug}`}
           onClick={onClose}
           sx={{
             color: "#2B5674",
@@ -92,9 +92,9 @@ export default function CatalogDropdown({ onClose }) {
 
         {activeCategory.subcategories.map((sub) => (
           <Typography
-            key={sub}
+            key={sub.id}
             component={NavLink}
-            to={activeCategory.path}
+            to={`/catalog/${activeCategory.slug}/${sub.slug}`}
             onClick={onClose}
             sx={{
               color: "#446B80",
@@ -104,7 +104,7 @@ export default function CatalogDropdown({ onClose }) {
               transition: "all 0.2s ease",
             }}
           >
-            {sub}
+            {sub.name}
           </Typography>
         ))}
       </Box>

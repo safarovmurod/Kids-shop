@@ -3,14 +3,10 @@ export function getOptions(products) {
   const brands = [];
   const colors = [];
   const materials = [];
-  const mayatnik = [];
-  const yashik = [];
 
   products.forEach((item) => {
-    const brand = item.brand || item.characteristics?.["Бренд"];
-
-    if (brand && !brands.includes(brand)) {
-      brands.push(brand);
+    if (item.brand && !brands.includes(item.brand)) {
+      brands.push(item.brand);
     }
 
     if (item.colorOptions) {
@@ -28,31 +24,13 @@ export function getOptions(products) {
         }
       });
     }
-
-    const swing = item.characteristics?.["Маятник"];
-
-    if (swing && !mayatnik.includes(swing)) {
-      mayatnik.push(swing);
-    }
-
-    const box = item.characteristics?.["Ящик для белья"];
-
-    if (box && !yashik.includes(box)) {
-      yashik.push(box);
-    }
   });
 
-  return { brands, colors, materials, mayatnik, yashik };
+  return { brands, colors, materials };
 }
 
-export function filterProducts(products, state, search) {
+export function filterProducts(products, state) {
   return products.filter((item) => {
-    if (search) {
-      if (!item.name.toLowerCase().includes(search.toLowerCase())) {
-        return false;
-      }
-    }
-
     if (state.priceFrom && item.price < Number(state.priceFrom)) {
       return false;
     }
@@ -61,16 +39,12 @@ export function filterProducts(products, state, search) {
       return false;
     }
 
-    if (state.onlyPromo && !item.oldPrice) {
+    if (state.onlyPromo && !item.isPromo) {
       return false;
     }
 
-    if (state.brands.length > 0) {
-      const brand = item.brand || item.characteristics?.["Бренд"];
-
-      if (!state.brands.includes(brand)) {
-        return false;
-      }
+    if (state.brands.length > 0 && !state.brands.includes(item.brand)) {
+      return false;
     }
 
     if (state.colors.length > 0) {
@@ -89,18 +63,6 @@ export function filterProducts(products, state, search) {
       }
     }
 
-    if (state.mayatnik.length > 0) {
-      if (!state.mayatnik.includes(item.characteristics?.["Маятник"])) {
-        return false;
-      }
-    }
-
-    if (state.yashik.length > 0) {
-      if (!state.yashik.includes(item.characteristics?.["Ящик для белья"])) {
-        return false;
-      }
-    }
-
     return true;
   });
 }
@@ -109,19 +71,19 @@ export function sortProducts(products, sortValue) {
   const list = [...products];
 
   list.sort((a, b) => {
-    if (sortValue === "by price") {
+    if (sortValue === "price") {
       return a.price - b.price;
     }
 
-    if (sortValue === "by rating") {
-      return (b.rating || 0) - (a.rating || 0);
+    if (sortValue === "rating") {
+      return b.rating - a.rating;
     }
 
-    if (sortValue === "by name") {
+    if (sortValue === "name") {
       return a.name.localeCompare(b.name);
     }
 
-    if (sortValue === "by discount") {
+    if (sortValue === "discount") {
       return (b.discount || 0) - (a.discount || 0);
     }
 

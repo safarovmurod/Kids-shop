@@ -1,6 +1,6 @@
 import { useContext } from "react";
 import { Box, Typography } from "@mui/material";
-import ProductCard from "../components/detskaya-mebel/ProductCard";
+import ProductCard from "../components/ProductCard";
 import { AppContext } from "../context/AppContext";
 
 export default function FavoritesPage() {

@@ -55,7 +55,7 @@ export default function Hero() {
           </Typography>
 
           <Button
-            onClick={() => navigate("/detskaya-mebel")}
+            onClick={() => navigate("/catalog/detskaya-mebel")}
             sx={{
               width: { xs: "100%", lg: "108px" },
               height: { xs: "58px", lg: "32px" },

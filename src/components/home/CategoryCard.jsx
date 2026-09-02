@@ -47,6 +47,10 @@ export default function CategoryCard({ item, index }) {
               color: "#7E96A6",
               fontSize: { xs: "16px", lg: "11px" },
               lineHeight: 1.4,
+              display: "-webkit-box",
+              WebkitLineClamp: 3,
+              WebkitBoxOrient: "vertical",
+              overflow: "hidden",
             }}
           >
             {item.description}
@@ -54,7 +58,7 @@ export default function CategoryCard({ item, index }) {
         </Box>
 
         <Button
-          onClick={() => navigate("/detskaya-mebel")}
+          onClick={() => navigate(`/catalog/${item.slug}`)}
           sx={{
             width: { xs: "130px", lg: "86px" },
             height: { xs: "44px", lg: "28px" },

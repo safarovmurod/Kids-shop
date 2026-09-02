@@ -1,20 +1,14 @@
 import { Box, Typography } from "@mui/material";
 import CategoryCard from "./CategoryCard";
 import { useEffect, useState } from "react";
-import axios from "axios";
-import { apiMebel } from "../../data/data";
+import { getList } from "../../api/api";
 
 export default function Categories() {
   const [data, setData] = useState([]);
 
   async function get() {
-    try {
-      const { data } = await axios.get(apiMebel);
-      const list = Array.isArray(data) ? data : data.data || [];
-      setData(list.filter((el) => el.slug !== "akcii"));
-    } catch (error) {
-      console.error(error);
-    }
+    const answer = await getList("categories");
+    setData(answer.list.filter((el) => el.slug !== "akcii"));
   }
 
   useEffect(() => {
@@ -53,7 +47,7 @@ export default function Categories() {
           marginTop: { xs: "26px", lg: "34px" },
         }}
       >
-        {data.slice(3, 6).map((item, index) => (
+        {data.slice(0, 3).map((item, index) => (
           <CategoryCard key={item.id} item={item} index={index} />
         ))}
       </Box>

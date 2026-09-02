@@ -1,9 +1,8 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router";
 import { Box, Typography, CircularProgress } from "@mui/material";
-import axios from "axios";
 import AkciiInfo from "../components/akcii/AkciiInfo";
-import { apiAkcii } from "../data/data";
+import { getData } from "../api/api";
 
 export default function AkciiDetailsPage() {
   const { id } = useParams();
@@ -11,15 +10,10 @@ export default function AkciiDetailsPage() {
   const [loading, setLoading] = useState(true);
 
   async function get() {
-    try {
-      setLoading(true);
-      const { data } = await axios.get(`${apiAkcii}/${id}`);
-      setItem(data.data || data);
-    } catch (error) {
-      console.error(error);
-    } finally {
-      setLoading(false);
-    }
+    setLoading(true);
+    const answer = await getData("promotion", { id });
+    setItem(answer.data);
+    setLoading(false);
   }
 
   useEffect(() => {

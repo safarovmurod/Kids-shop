@@ -1,9 +1,8 @@
 import { useEffect, useState } from "react";
 import { Box, Typography, Button, CircularProgress } from "@mui/material";
 import { NavLink } from "react-router";
-import axios from "axios";
 import AkciiCard from "./AkciiCard";
-import { apiAkcii } from "../../data/data";
+import { getList } from "../../api/api";
 
 export default function Akcii() {
   const [items, setItems] = useState([]);
@@ -11,16 +10,10 @@ export default function Akcii() {
   const [visibleCount, setVisibleCount] = useState(6);
 
   async function get() {
-    try {
-      setLoading(true);
-      const { data } = await axios.get(apiAkcii);
-      const list = Array.isArray(data) ? data : data.data || [];
-      setItems(list);
-    } catch (error) {
-      console.error(error);
-    } finally {
-      setLoading(false);
-    }
+    setLoading(true);
+    const answer = await getList("promotions", { pageSize: 20 });
+    setItems(answer.list);
+    setLoading(false);
   }
 
   useEffect(() => {

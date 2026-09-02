@@ -2,6 +2,7 @@ import { useContext } from "react";
 import { Box, Typography, Button } from "@mui/material";
 import { NavLink } from "react-router";
 import CartItem from "../components/cart/CartItem";
+import DeletedItems from "../components/cart/DeletedItems";
 import CartTotal from "../components/cart/CartTotal";
 import AlsoBuy from "../components/cart/AlsoBuy";
 import { AppContext } from "../context/AppContext";
@@ -39,6 +40,8 @@ export default function CartPage() {
         В корзине {totalCount} товара
       </Typography>
 
+      <DeletedItems />
+
       {state.cart.length === 0 ? (
         <Box sx={{ paddingTop: "40px", paddingBottom: "40px" }}>
           <Typography sx={{ color: "#708090", fontSize: "15px" }}>
@@ -47,7 +50,7 @@ export default function CartPage() {
 
           <Button
             component={NavLink}
-            to="/detskaya-mebel"
+            to="/catalog/detskaya-mebel"
             sx={{
               width: { xs: "100%", lg: "220px" },
               height: "44px",

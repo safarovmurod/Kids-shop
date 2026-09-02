@@ -6,8 +6,11 @@ import {
   TextField,
   Button,
   Divider,
+  IconButton,
 } from "@mui/material";
+import { PhotoCamera } from "@mui/icons-material";
 import { AppContext } from "../context/AppContext";
+import { saveUser, getAvatarUrl } from "../api/api";
 
 function reducer(state, action) {
   switch (action.type) {
@@ -17,11 +20,17 @@ function reducer(state, action) {
     case "setPhone":
       return { ...state, phone: action.payload };
 
+    case "setEmail":
+      return { ...state, email: action.payload };
+
     case "setAddress":
       return { ...state, address: action.payload };
 
-    case "setPassword":
-      return { ...state, password: action.payload };
+    case "setAvatar":
+      return { ...state, avatar: action.payload };
+
+    case "setLoading":
+      return { ...state, loading: action.payload };
 
     case "saved":
       return { ...state, saved: action.payload };
@@ -37,25 +46,34 @@ export default function ProfileSettingsPage() {
   const user = appState.user;
 
   const [state, dispatch] = useReducer(reducer, {
-    name: user ? user.name : "",
-    phone: user ? user.phone : "",
+    name: user ? user.fullName : "",
+    phone: user ? user.tel : "",
+    email: user ? user.email : "",
     address: user ? user.address : "",
-    password: "",
+    avatar: null,
+    loading: false,
     saved: false,
   });
 
-  function handleSave() {
-    login({
-      id: user ? user.id : Date.now(),
-      name: state.name,
-      email: user ? user.email : "",
-      phone: state.phone,
+  async function handleSave() {
+    dispatch({ type: "setLoading", payload: true });
+
+    // Ҳамон POST /api/users, вале бо id — маълумот нав карда мешавад
+    const answer = await saveUser({
+      id: user ? user.id : "",
+      fullName: state.name,
+      tel: state.phone,
+      email: state.email,
       address: state.address,
+      avatar: state.avatar,
     });
 
-    // Пароль дар localStorage нигоҳ дошта намешавад
-    dispatch({ type: "setPassword", payload: "" });
-    dispatch({ type: "saved", payload: true });
+    dispatch({ type: "setLoading", payload: false });
+
+    if (answer) {
+      login(answer);
+      dispatch({ type: "saved", payload: true });
+    }
   }
 
   return (
@@ -91,18 +109,46 @@ export default function ProfileSettingsPage() {
         }}
       >
         <Box sx={{ display: "flex", alignItems: "center", gap: "16px" }}>
-          <Avatar
-            sx={{
-              width: { xs: 64, lg: 56 },
-              height: { xs: 64, lg: 56 },
-              backgroundColor: "#EBF6FC",
-              color: "#7FC9F0",
-              fontSize: "24px",
-              fontWeight: 600,
-            }}
-          >
-            {state.name ? state.name[0].toUpperCase() : "А"}
-          </Avatar>
+          <Box sx={{ position: "relative" }}>
+            <Avatar
+              src={user && user.id ? getAvatarUrl(user.id) : ""}
+              sx={{
+                width: { xs: 72, lg: 64 },
+                height: { xs: 72, lg: 64 },
+                backgroundColor: "#EBF6FC",
+                color: "#7FC9F0",
+                fontSize: "26px",
+                fontWeight: 600,
+              }}
+            >
+              {state.name ? state.name[0].toUpperCase() : "А"}
+            </Avatar>
+
+            <IconButton
+              component="label"
+              sx={{
+                position: "absolute",
+                right: "-6px",
+                bottom: "-6px",
+                padding: "6px",
+                backgroundColor: "#7FC9F0",
+                color: "#FFFFFF",
+                "&:hover": { backgroundColor: "#68B7DE" },
+              }}
+            >
+              <PhotoCamera sx={{ fontSize: "16px" }} />
+
+              <Box
+                component="input"
+                type="file"
+                accept="image/*"
+                hidden
+                onChange={(e) =>
+                  dispatch({ type: "setAvatar", payload: e.target.files[0] })
+                }
+              />
+            </IconButton>
+          </Box>
 
           <Typography
             sx={{
@@ -111,7 +157,7 @@ export default function ProfileSettingsPage() {
               wordBreak: "break-all",
             }}
           >
-            {user ? user.email : ""}
+            {state.email}
           </Typography>
         </Box>
 
@@ -206,40 +252,9 @@ export default function ProfileSettingsPage() {
           />
         </Box>
 
-        <Divider sx={{ borderColor: "#F0F4F7" }} />
-
-        <Box>
-          <Typography
-            sx={{
-              marginBottom: "10px",
-              color: "#8EABC0",
-              fontSize: { xs: "17px", lg: "14px" },
-            }}
-          >
-            Пароль
-          </Typography>
-
-          <TextField
-            fullWidth
-            type="password"
-            placeholder="************"
-            value={state.password}
-            onChange={(e) =>
-              dispatch({ type: "setPassword", payload: e.target.value })
-            }
-            sx={{
-              "& .MuiOutlinedInput-root": {
-                height: "56px",
-                borderRadius: "10px",
-                fontSize: { xs: "17px", lg: "14px" },
-                color: "#2B5674",
-              },
-            }}
-          />
-        </Box>
-
         <Button
           onClick={handleSave}
+          disabled={state.loading}
           sx={{
             width: { xs: "100%", lg: "260px" },
             height: { xs: "52px", lg: "44px" },
@@ -252,7 +267,7 @@ export default function ProfileSettingsPage() {
             "&:hover": { backgroundColor: "#68B7DE" },
           }}
         >
-          Сохранить изменения
+          {state.loading ? "Сохраняем..." : "Сохранить изменения"}
         </Button>
 
         {state.saved && (

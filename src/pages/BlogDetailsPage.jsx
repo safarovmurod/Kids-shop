@@ -1,8 +1,7 @@
 import { useEffect, useState } from "react";
 import { useParams, NavLink } from "react-router";
 import { Box, Typography, CircularProgress } from "@mui/material";
-import axios from "axios";
-import { apiBlog } from "../data/data";
+import { getData } from "../api/api";
 
 export default function BlogDetailsPage() {
   const { id } = useParams();
@@ -10,15 +9,10 @@ export default function BlogDetailsPage() {
   const [loading, setLoading] = useState(true);
 
   async function get() {
-    try {
-      setLoading(true);
-      const { data } = await axios.get(`${apiBlog}/${id}`);
-      setPost(data.data || data);
-    } catch (error) {
-      console.error(error);
-    } finally {
-      setLoading(false);
-    }
+    setLoading(true);
+    const answer = await getData("blogItem", { id });
+    setPost(answer.data);
+    setLoading(false);
   }
 
   useEffect(() => {
