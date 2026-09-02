@@ -154,7 +154,7 @@ export default function Header({ user, onLogin, onLogout }) {
             }}
           >
             <Avatar
-              src={user.avatar ? user.avatar : undefined}
+              src={user.avatar}
               sx={{
                 width: 36,
                 height: 36,
@@ -164,9 +164,15 @@ export default function Header({ user, onLogin, onLogout }) {
                 fontWeight: 600,
               }}
             >
-              {!user.avatar && (user.name ? user.name[0].toUpperCase() : "А")}
+              {user.fullName.slice(0, 1).toUpperCase()}
             </Avatar>
             <Typography
+              component={NavLink}
+              to="/profile-settings"
+              onClick={(event) => {
+                event.stopPropagation();
+                setOpenUserModal(false);
+              }}
               sx={{ color: "#446B80", fontSize: "13px", fontWeight: 500 }}
             >
               Личный кабинет
@@ -187,6 +193,17 @@ export default function Header({ user, onLogin, onLogout }) {
             Войти в личный кабинет
           </Button>
         )}
+
+        <IconButton
+          aria-label={user ? "Личный кабинет" : "Войти в личный кабинет"}
+          onClick={() => {
+            if (user) setOpenUserModal((prev) => !prev);
+            else setOpenAuthModal((prev) => !prev);
+          }}
+          sx={{ display: { xs: "inline-flex", lg: "none" }, color: "#7FC9F0" }}
+        >
+          {user ? <Avatar src={user.avatar}>{user.fullName.slice(0, 1)}</Avatar> : <PersonOutlined />}
+        </IconButton>
 
         <Button
           component={NavLink}

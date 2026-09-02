@@ -1,25 +1,22 @@
-import { useState, useEffect, Suspense } from "react";
+import { useState, Suspense } from "react";
 import { Outlet } from "react-router";
 import { Box } from "@mui/material";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 
 export default function Layout() {
-  // Аз localStorage хондани маълумоти корбар
-  const [user, setUser] = useState(() => {
-    const savedUser = localStorage.getItem("user");
-    return savedUser ? JSON.parse(savedUser) : null;
-  });
+  const [user, setUser] = useState(null);
+  const [token, setToken] = useState("");
 
-  const login = (userData) => {
+  function login(userData, userToken) {
     setUser(userData);
-    localStorage.setItem("user", JSON.stringify(userData));
-  };
+    if (userToken) setToken(userToken);
+  }
 
-  const logout = () => {
+  function logout() {
     setUser(null);
-    localStorage.removeItem("user");
-  };
+    setToken("");
+  }
 
   return (
     <Box
@@ -34,7 +31,7 @@ export default function Layout() {
 
       <Box component="main" sx={{ flex: 1 }}>
         <Suspense fallback={null}>
-          <Outlet context={{ user, login, logout }} />
+          <Outlet context={{ user, token, login, logout }} />
         </Suspense>
       </Box>
 

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   Box,
   Typography,
@@ -9,51 +9,73 @@ import {
 } from "@mui/material";
 import PhotoCameraIcon from "@mui/icons-material/PhotoCamera";
 import { useOutletContext } from "react-router";
+import axios from "axios";
+
+const api = "https://swagger-wheat.vercel.app/api/users";
 
 export default function ProfileSettingsPage() {
-  const { user, login } = useOutletContext();
+  const { user, token, login } = useOutletContext();
 
-  const [name, setName] = useState(user?.name || "Анна");
-  const [email, setEmail] = useState(user?.email || "annaanananana@gmail.com");
-  const [phone, setPhone] = useState(user?.phone || "+7 919 919 99 99");
-  const [address, setAddress] = useState(
-    user?.address || "Москва, ул. Московская 25-45",
-  );
+  const [name, setName] = useState(user?.fullName || "");
+  const [phone, setPhone] = useState(user?.tel || "");
+  const [address, setAddress] = useState(user?.address || "");
   const [avatar, setAvatar] = useState(user?.avatar || "");
+  const [avatarFile, setAvatarFile] = useState(null);
   const [isSaved, setIsSaved] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+
+  useEffect(() => {
+    setName(user?.fullName || "");
+    setPhone(user?.tel || "");
+    setAddress(user?.address || "");
+    setAvatar(user?.avatar || "");
+    setAvatarFile(null);
+  }, [user]);
 
   // Хондани сурат аз файл (Base64)
-  const handleAvatarChange = (event) => {
+  function handleAvatarChange(event) {
     const file = event.target.files[0];
     if (file) {
+      setAvatarFile(file);
       const reader = new FileReader();
       reader.onloadend = () => {
         setAvatar(reader.result);
       };
       reader.readAsDataURL(file);
     }
-  };
+  }
 
-  // Функцияи сабткунии ҳамаи маълумот
-  const handleSaveProfile = (e) => {
+  async function handleSaveProfile(e) {
     e.preventDefault();
+    const formData = new FormData();
+    formData.append("fullName", name.trim());
+    formData.append("tel", phone);
+    formData.append("address", address);
+    if (avatarFile) formData.append("avatar", avatarFile);
+    setError("");
+    setIsSaved(false);
+    setLoading(true);
+    try {
+      const { data } = await axios.post(`${api}/${user.id}`, formData, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      login(data.data);
+      setIsSaved(true);
+    } catch (error) {
+      setError(error.response?.data.message || "Не удалось сохранить изменения.");
+    } finally {
+      setLoading(false);
+    }
+  }
 
-    const updatedUserData = {
-      id: user?.id || Date.now(),
-      name,
-      email,
-      phone,
-      address,
-      avatar,
-    };
-
-    // Обновить кардани context ва localStorage
-    login(updatedUserData);
-
-    // Нишон додани паёми сабт шуд
-    setIsSaved(true);
-    setTimeout(() => setIsSaved(false), 3000);
-  };
+  if (!user) {
+    return (
+      <Box sx={{ padding: "40px 20px", textAlign: "center" }}>
+        <Typography>Войдите в аккаунт через кнопку входа вверху страницы.</Typography>
+      </Box>
+    );
+  }
 
   return (
     <Box
@@ -101,11 +123,12 @@ export default function ProfileSettingsPage() {
                 fontWeight: 600,
               }}
             >
-              {name ? name[0].toUpperCase() : "А"}
+              {name.slice(0, 1).toUpperCase()}
             </Avatar>
 
             <IconButton
               component="label"
+              aria-label="Загрузить фото"
               sx={{
                 position: "absolute",
                 bottom: -4,
@@ -117,7 +140,8 @@ export default function ProfileSettingsPage() {
               }}
             >
               <PhotoCameraIcon sx={{ fontSize: "14px" }} />
-              <input
+              <Box
+                component="input"
                 type="file"
                 hidden
                 accept="image/*"
@@ -133,7 +157,7 @@ export default function ProfileSettingsPage() {
               {name}
             </Typography>
             <Typography sx={{ fontSize: "12px", color: "#A9C4D2" }}>
-              {email}
+              {user.email}
             </Typography>
           </Box>
         </Box>
@@ -153,6 +177,7 @@ export default function ProfileSettingsPage() {
           </Typography>
           <TextField
             value={name}
+            required
             onChange={(e) => setName(e.target.value)}
             variant="standard"
             InputProps={{ disableUnderline: true }}
@@ -225,10 +250,16 @@ export default function ProfileSettingsPage() {
           />
         </Box>
 
+        {error && (
+          <Typography role="alert" sx={{ color: "#D32F2F", fontSize: "12px" }}>
+            {error}
+          </Typography>
+        )}
         {/* Тугма ва паёми муваффақият */}
         <Box sx={{ display: "flex", alignItems: "center", gap: "16px" }}>
           <Button
             type="submit"
+            disabled={loading}
             variant="contained"
             disableElevation
             sx={{
@@ -243,7 +274,7 @@ export default function ProfileSettingsPage() {
               "&:hover": { backgroundColor: "#68B7DE" },
             }}
           >
-            Сохранить изменения
+            {loading ? "Сохранение..." : "Сохранить изменения"}
           </Button>
 
           {isSaved && (

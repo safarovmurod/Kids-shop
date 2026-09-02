@@ -28,6 +28,7 @@ export default function UserMenuModal({ open, onClose, user, onLogout }) {
     >
       <Box sx={{ display: "flex", alignItems: "center", gap: "12px" }}>
         <Avatar
+          src={user.avatar}
           sx={{
             width: 40,
             height: 40,
@@ -37,7 +38,7 @@ export default function UserMenuModal({ open, onClose, user, onLogout }) {
             fontWeight: 600,
           }}
         >
-          {user.name ? user.name[0].toUpperCase() : "А"}
+          {user.fullName.slice(0, 1).toUpperCase()}
         </Avatar>
         <Box sx={{ overflow: "hidden" }}>
           <Typography
@@ -48,7 +49,7 @@ export default function UserMenuModal({ open, onClose, user, onLogout }) {
               lineHeight: 1.2,
             }}
           >
-            {user.name || "Анна"}
+            {user.fullName}
           </Typography>
           <Typography
             sx={{
@@ -60,7 +61,7 @@ export default function UserMenuModal({ open, onClose, user, onLogout }) {
               mt: "2px",
             }}
           >
-            {user.email || "annannnanana@gmail.com"}
+            {user.email}
           </Typography>
         </Box>
       </Box>
