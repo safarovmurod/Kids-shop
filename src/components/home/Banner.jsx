@@ -1,6 +1,7 @@
 import { Box, Typography, Button } from "@mui/material";
 import { useNavigate } from "react-router";
-import banner from "../../assets/images/banner.png";
+import baby from "../../assets/images/baby-suit.png";
+import background from "../../assets/images/banner-background.svg";
 
 export default function Banner() {
   const navigate = useNavigate();
@@ -9,17 +10,18 @@ export default function Banner() {
     <Box
       sx={{
         width: "100%",
-        marginTop: { xs: "50px", lg: "70px" },
+        marginTop: { xs: "60px", lg: "110px" },
         backgroundColor: "#FFFFFF",
+        boxShadow: "0px 0px 28px #0000000A",
       }}
     >
       <Box
         sx={{
+          position: "relative",
           display: "flex",
           flexDirection: { xs: "column", lg: "row" },
           alignItems: "center",
-          justifyContent: "space-between",
-          gap: { xs: "18px", lg: "20px" },
+          minHeight: { xs: "auto", lg: "400px" },
           width: "100%",
           maxWidth: "1200px",
           marginLeft: "auto",
@@ -30,66 +32,69 @@ export default function Banner() {
       >
         <Box
           sx={{
-            width: { xs: "100%", lg: "440px" },
-            textAlign: { xs: "center", lg: "left" },
+            position: "relative",
+            zIndex: 1,
+            width: { xs: "100%", lg: "620px" },
+            paddingTop: { xs: "28px", lg: "0px" },
           }}
         >
           <Typography
             sx={{
               color: "#446B80",
-              fontSize: { xs: "30px", lg: "34px" },
+              fontSize: { xs: "30px", lg: "46px" },
               fontWeight: 400,
-              lineHeight: { xs: "40px", lg: "46px" },
+              lineHeight: { xs: "40px", lg: "56px" },
             }}
           >
-            Все детские костюмы с акцией 10%
+            Все детские костюмы
+            <br />с акцией 10%
           </Typography>
+          <Button
+            onClick={() => navigate("/catalog/odezhda")}
+            sx={{
+              width: "180px",
+              height: "38px",
+              marginTop: "32px",
+              borderRadius: "8px",
+              backgroundColor: "#7FC9F0",
+              color: "#FFFFFF",
+              fontSize: "12px",
+              textTransform: "none",
+              whiteSpace: "nowrap",
+              "&:hover": { backgroundColor: "#68B7DE" },
+            }}
+          >
+            Смотреть костюмы
+          </Button>
         </Box>
-
         <Box
           sx={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: { xs: "center", lg: "flex-end" },
-            width: { xs: "100%", lg: "560px" },
-            height: { xs: "300px", lg: "330px" },
+            position: { xs: "relative", lg: "absolute" },
+            right: { xs: "auto", lg: "0px" },
+            bottom: "0px",
+            width: { xs: "100%", lg: "790px" },
+            height: { xs: "340px", sm: "420px", lg: "475px" },
+            marginTop: { xs: "20px", lg: "0px" },
+            backgroundImage: `url("${background}")`,
+            backgroundSize: "100% 100%",
+            backgroundRepeat: "no-repeat",
+            overflow: "hidden",
           }}
         >
           <Box
             component="img"
-            src={banner}
-            alt="Детские костюмы"
-            sx={{ maxWidth: "100%", maxHeight: "100%", display: "block" }}
+            src={baby}
+            alt="Малыш в тёплом костюме с ушками"
+            sx={{
+              position: "absolute",
+              right: { xs: "10px", lg: "125px" },
+              bottom: "-38px",
+              height: { xs: "345px", sm: "425px", lg: "460px" },
+              width: "auto",
+              display: "block",
+            }}
           />
         </Box>
-      </Box>
-
-      <Box
-        sx={{
-          width: "100%",
-          maxWidth: "1200px",
-          marginLeft: "auto",
-          marginRight: "auto",
-          paddingLeft: { xs: "16px", lg: "20px" },
-          paddingRight: { xs: "16px", lg: "20px" },
-        }}
-      >
-        <Button
-          onClick={() => navigate("/akcii")}
-          sx={{
-            width: { xs: "100%", lg: "148px" },
-            height: { xs: "58px", lg: "32px" },
-            marginTop: { xs: "20px", lg: "26px" },
-            borderRadius: { xs: "12px", lg: "4px" },
-            backgroundColor: "#7FC9F0",
-            color: "#FFFFFF",
-            fontSize: { xs: "20px", lg: "10px" },
-            textTransform: "none",
-            "&:hover": { backgroundColor: "#68B7DE" },
-          }}
-        >
-          Смотреть костюмы
-        </Button>
       </Box>
     </Box>
   );

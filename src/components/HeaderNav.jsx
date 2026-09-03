@@ -3,7 +3,7 @@ import { LocationOnOutlined } from "@mui/icons-material";
 import { NavLink } from "react-router";
 import { menuLinks } from "../data/data";
 
-export default function HeaderNav() {
+export default function HeaderNav({ onNavigate }) {
   return (
     <Box
       sx={{
@@ -33,6 +33,7 @@ export default function HeaderNav() {
             key={el.id}
             component={NavLink}
             to={el.path}
+            onClick={onNavigate}
             sx={{
               position: "relative",
               paddingTop: "12px",

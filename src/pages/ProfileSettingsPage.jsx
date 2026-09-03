@@ -16,7 +16,14 @@ import { api } from "../data/data";
 function reducer(state, action) {
   switch (action.type) {
     case "loadUser":
-      return { ...state, name: action.payload.fullName, phone: action.payload.tel, email: action.payload.email, address: action.payload.address, avatar: null, saved: false };
+      return {
+        ...state,
+        name: action.payload.fullName,
+        phone: action.payload.tel,
+        email: action.payload.email,
+        address: action.payload.address,
+        avatar: null,
+      };
 
     case "setError":
       return { ...state, error: action.payload };
@@ -85,14 +92,22 @@ export default function ProfileSettingsPage() {
       login(data.data);
       dispatch({ type: "saved", payload: true });
     } catch (error) {
-      dispatch({ type: "setError", payload: error.response?.data.message || "Не удалось сохранить изменения" });
+      dispatch({
+        type: "setError",
+        payload:
+          error.response?.data.message || "Не удалось сохранить изменения",
+      });
     } finally {
       dispatch({ type: "setLoading", payload: false });
     }
   }
 
   if (!user) {
-    return <Box sx={{ padding: "40px 20px" }}>Войдите в аккаунт через кнопку входа вверху страницы.</Box>;
+    return (
+      <Box sx={{ padding: "40px 20px" }}>
+        Войдите в аккаунт через кнопку входа вверху страницы.
+      </Box>
+    );
   }
 
   return (
@@ -292,7 +307,11 @@ export default function ProfileSettingsPage() {
           {state.loading ? "Сохраняем..." : "Сохранить изменения"}
         </Button>
 
-        {state.error && <Typography role="alert" sx={{ color: "#E53935" }}>{state.error}</Typography>}
+        {state.error && (
+          <Typography role="alert" sx={{ color: "#E53935" }}>
+            {state.error}
+          </Typography>
+        )}
 
         {state.saved && (
           <Typography sx={{ color: "#4CAF50", fontSize: "14px" }}>

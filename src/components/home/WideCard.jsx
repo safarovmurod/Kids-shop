@@ -20,7 +20,7 @@ export default function WideCard() {
     <Box
       sx={{
         width: "100%",
-        maxWidth: "1464px",
+        maxWidth: "1200px",
         marginLeft: "auto",
         marginRight: "auto",
         paddingLeft: { xs: "16px", lg: "20px" },

@@ -1,7 +1,7 @@
-@import url("https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=Gilda+Display&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Balsamiq+Sans:wght@400;700&display=swap");
 
 :root {
-  font-family: "DM Sans", sans-serif;
+  font-family: "Balsamiq Sans", sans-serif;
   color: #446b80;
   background: #ffffff;
   font-synthesis: none;
@@ -15,11 +15,14 @@ html {
   scroll-behavior: smooth;
 }
 body {
+  font-family: "Balsamiq Sans", sans-serif;
   margin: 0;
   min-width: 320px;
 }
 button,
-input {
+input,
+textarea,
+select {
   font: inherit;
 }
 a {

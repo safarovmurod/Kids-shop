@@ -28,7 +28,9 @@ export default function AuthModal({ open, onClose }) {
       setPassword("");
       onClose();
     } catch (error) {
-      setError(error.response?.data.message || "Не удалось войти. Попробуйте ещё раз.");
+      setError(
+        error.response?.data.message || "Не удалось войти. Попробуйте ещё раз.",
+      );
     } finally {
       setLoading(false);
     }

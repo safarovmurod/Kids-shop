@@ -94,7 +94,11 @@ export default function RegisterPage() {
       login(data.data.user, data.data.token);
       navigate("/");
     } catch (error) {
-      dispatch({ type: "setError", payload: error.response?.data.message || "Не удалось зарегистрироваться" });
+      dispatch({
+        type: "setError",
+        payload:
+          error.response?.data.message || "Не удалось зарегистрироваться",
+      });
     } finally {
       dispatch({ type: "setLoading", payload: false });
     }

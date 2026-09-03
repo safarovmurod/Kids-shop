@@ -13,7 +13,7 @@ import {
   ShoppingCartOutlined,
   PersonOutlined,
 } from "@mui/icons-material";
-import { NavLink, useNavigate } from "react-router";
+import { NavLink, useNavigate, useLocation } from "react-router";
 import logo from "../assets/images/logo.png";
 import AuthModal from "./AuthModal";
 import UserMenuModal from "./UserMenuModal";
@@ -30,6 +30,7 @@ export default function Header() {
   const [openCatalog, setOpenCatalog] = useState(false);
   const [openMobileMenu, setOpenMobileMenu] = useState(false);
   const navigate = useNavigate();
+  const { pathname } = useLocation();
 
   const user = state.user;
   let cartCount = 0;
@@ -230,9 +231,9 @@ export default function Header() {
 
       <SearchBar mobile />
 
-      <HeaderNav />
+      <HeaderNav onNavigate={() => setOpenCatalog(false)} />
 
-      {openCatalog && <CatalogDropdown onClose={() => setOpenCatalog(false)} />}
+      {openCatalog && <CatalogDropdown key={pathname} onClose={() => setOpenCatalog(false)} />}
 
       <MobileMenu
         open={openMobileMenu}
