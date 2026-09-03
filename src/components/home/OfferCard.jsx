@@ -8,9 +8,10 @@ export default function OfferCard({ item }) {
 
   const isFavorite = state.favorites.find((el) => el.id === item.id);
 
-  function handleAdd() {
+  function handleAdd(event) {
     dispatch({
       type: "add",
+      anchorEl: event.currentTarget,
       payload: {
         id: item.id,
         name: item.name,

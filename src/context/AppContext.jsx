@@ -8,16 +8,21 @@ const savedFavorites = localStorage.getItem("favorites");
 const initialState = {
   user: null,
   token: "",
+  guestProfile: { fullName: "", tel: "", email: "", address: "", avatar: null },
   cart: savedCart ? JSON.parse(savedCart) : [],
   favorites: savedFavorites ? JSON.parse(savedFavorites) : [],
   // Маҳсулоти нест кардашуда, то ки корбар "Отменить" карда тавонад
   deleted: [],
   // Маҳсулоте, ки дар Dialog нишон дода мешавад (агар null бошад, Dialog пӯшида аст)
   dialogItem: null,
+  dialogAnchor: null,
 };
 
 function reducer(state, action) {
   switch (action.type) {
+    case "saveGuestProfile":
+      return { ...state, guestProfile: action.payload };
+
     case "login":
       return {
         ...state,
@@ -47,6 +52,7 @@ function reducer(state, action) {
             return el;
           }),
           dialogItem: item,
+          dialogAnchor: action.anchorEl,
         };
       }
 
@@ -54,6 +60,7 @@ function reducer(state, action) {
         ...state,
         cart: [...state.cart, { ...item, count: 1 }],
         dialogItem: item,
+        dialogAnchor: action.anchorEl,
       };
     }
 
@@ -132,12 +139,14 @@ function reducer(state, action) {
       return {
         ...state,
         dialogItem: action.payload,
+        dialogAnchor: action.anchorEl,
       };
 
     case "closeDialog":
       return {
         ...state,
         dialogItem: null,
+        dialogAnchor: null,
       };
 
     default:

@@ -19,8 +19,8 @@ export default function ProductInfo({ item }) {
     image: item.image,
   };
 
-  function handleAdd() {
-    dispatch({ type: "add", payload: product });
+  function handleAdd(event) {
+    dispatch({ type: "add", payload: product, anchorEl: event.currentTarget });
   }
 
   function handleFastOrder() {

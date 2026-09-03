@@ -162,7 +162,7 @@ export default function ProductCard({ item }) {
         }}
       >
         <Button
-          onClick={() => dispatch({ type: "add", payload: product })}
+          onClick={(event) => dispatch({ type: "add", payload: product, anchorEl: event.currentTarget })}
           sx={{
             height: { xs: "40px", lg: "38px" },
             borderRadius: "8px",

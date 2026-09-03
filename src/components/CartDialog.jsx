@@ -1,35 +1,30 @@
-import { useContext } from "react";
-import {
-  Box,
-  Typography,
-  Button,
-  IconButton,
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogActions,
-  Snackbar,
-  Alert,
-} from "@mui/material";
-import {
-  Close as CloseIcon,
-  Add as AddIcon,
-  Remove as RemoveIcon,
-} from "@mui/icons-material";
-import { useNavigate } from "react-router";
+import { useContext, useEffect } from "react";
+import { Box, Typography, Button, IconButton, Popper, Paper, ClickAwayListener } from "@mui/material";
+import { Close, Add, Remove } from "@mui/icons-material";
+import { useLocation, useNavigate } from "react-router";
 import { AppContext } from "../context/AppContext";
 
 export default function CartDialog() {
   const { state, dispatch } = useContext(AppContext);
   const navigate = useNavigate();
-
+  const { pathname } = useLocation();
   const item = state.dialogItem;
+  const anchor = state.dialogAnchor;
 
-  if (!item) {
-    return null;
-  }
+  useEffect(() => {
+    dispatch({ type: "closeDialog" });
+  }, [pathname, dispatch]);
 
-  // Шумораи ҳамин маҳсулот дар корзина
+  useEffect(() => {
+    if (!item) return;
+    function handleKeyDown(event) {
+      if (event.key === "Escape") dispatch({ type: "closeDialog" });
+    }
+    document.addEventListener("keydown", handleKeyDown);
+    return () => document.removeEventListener("keydown", handleKeyDown);
+  }, [item, dispatch]);
+
+  if (!item || !anchor?.isConnected) return null;
   const cartItem = state.cart.find((el) => el.id === item.id);
   const count = cartItem ? cartItem.count : 1;
 
@@ -37,165 +32,59 @@ export default function CartDialog() {
     dispatch({ type: "closeDialog" });
   }
 
-  function handleGoToCart() {
-    dispatch({ type: "closeDialog" });
-    navigate("/cart");
-  }
-
   return (
-    <Dialog
-      open={true}
-      onClose={handleClose}
-      fullWidth
-      maxWidth="xs"
-      slotProps={{
-        paper: {
-          sx: {
-            borderRadius: "16px",
-            margin: "16px",
-            width: { xs: "100%", md: "420px" },
-          },
-        },
-      }}
+    <Popper
+      open
+      anchorEl={anchor}
+      placement="right-end"
+      modifiers={[
+        { name: "offset", options: { offset: [0, 10] } },
+        { name: "flip", options: { fallbackPlacements: ["left-end", "top-end", "bottom-end"], padding: 12 } },
+        { name: "preventOverflow", options: { padding: 12 } },
+      ]}
+      sx={{ zIndex: 1200, width: "360px", maxWidth: "calc(100vw - 24px)" }}
     >
-      <DialogTitle
-        sx={{
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "space-between",
-          gap: "10px",
-          padding: "20px 20px 10px 20px",
-        }}
-      >
-        <Typography
-          sx={{
-            color: "#2B5674",
-            fontSize: { xs: "16px", md: "18px" },
-            fontWeight: 600,
-          }}
+      <ClickAwayListener mouseEvent="onMouseDown" touchEvent="onTouchStart" onClickAway={handleClose}>
+        <Paper
+          role="region"
+          aria-label="Товар добавлен в корзину"
+          elevation={0}
+          sx={{ padding: "16px", borderRadius: "4px", border: "1px solid #E5EEF3", boxShadow: "0px 4px 20px #446B8026", backgroundColor: "#FFFFFF" }}
         >
-          Товар добавлен в корзину
-        </Typography>
-
-        <IconButton onClick={handleClose} sx={{ padding: 0, color: "#2B5674" }}>
-          <CloseIcon sx={{ fontSize: "20px" }} />
-        </IconButton>
-      </DialogTitle>
-
-      <DialogContent sx={{ padding: "10px 20px" }}>
-        <Box
-          sx={{
-            display: "flex",
-            alignItems: "center",
-            gap: { xs: "12px", md: "16px" },
-          }}
-        >
-          <Box
-            component="img"
-            src={item.image}
-            alt={item.name}
-            sx={{
-              width: { xs: "64px", md: "80px" },
-              height: { xs: "64px", md: "80px" },
-              objectFit: "contain",
-              flexShrink: 0,
-            }}
-          />
-
-          <Box sx={{ flexGrow: 1 }}>
-            <Typography
-              sx={{
-                color: "#708090",
-                fontSize: { xs: "10px", md: "11px" },
-                lineHeight: 1.4,
-                marginBottom: "8px",
-              }}
-            >
-              {item.name}
+          <Box sx={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: "8px", marginBottom: "12px" }}>
+            <Typography aria-live="polite" sx={{ color: "#446B80", fontSize: "14px" }}>
+              Товар добавлен в корзину
             </Typography>
-
-            <Typography
-              sx={{
-                color: "#52A5E0",
-                fontSize: { xs: "16px", md: "18px" },
-                fontWeight: 700,
-              }}
-            >
-              {item.price.toLocaleString("ru-RU")} ₽
-            </Typography>
+            <IconButton onClick={handleClose} aria-label="Закрыть уведомление" size="small" sx={{ padding: "2px", color: "#446B80" }}>
+              <Close sx={{ fontSize: "16px" }} />
+            </IconButton>
           </Box>
-        </Box>
 
-        <Box
-          sx={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "space-between",
-            width: "110px",
-            marginTop: "16px",
-            padding: "2px 10px",
-            borderRadius: "12px",
-            border: "1px solid #B2CAD6",
-          }}
-        >
-          <IconButton
-            onClick={() => dispatch({ type: "decrement", payload: item.id })}
-            sx={{ padding: 0, color: "#52A5E0" }}
-          >
-            <RemoveIcon sx={{ fontSize: "18px" }} />
-          </IconButton>
+          <Box sx={{ display: "flex", alignItems: "center", gap: "10px" }}>
+            <Box component="img" src={item.image} alt={item.name} sx={{ width: "50px", height: "64px", objectFit: "contain" }} />
+            <Box sx={{ flex: 1, minWidth: "0px" }}>
+              <Typography sx={{ color: "#446B80", fontSize: "11px", lineHeight: "16px" }}>{item.name}</Typography>
+              <Typography sx={{ marginTop: "5px", color: "#7FC9F0", fontSize: "15px" }}>
+                {item.price.toLocaleString("ru-RU")} ₽
+              </Typography>
+            </Box>
+            <Box sx={{ display: "flex", alignItems: "center", flexShrink: 0, border: "1px solid #B2CAD6", borderRadius: "6px" }}>
+              <IconButton aria-label="Уменьшить количество" disabled={count === 1} onClick={() => dispatch({ type: "decrement", payload: item.id })} sx={{ padding: "4px", color: "#7FC9F0" }}>
+                <Remove sx={{ fontSize: "14px" }} />
+              </IconButton>
+              <Typography aria-live="polite" sx={{ minWidth: "20px", textAlign: "center", color: "#446B80", fontSize: "12px" }}>{count}</Typography>
+              <IconButton aria-label="Увеличить количество" onClick={() => dispatch({ type: "increment", payload: item.id })} sx={{ padding: "4px", color: "#7FC9F0" }}>
+                <Add sx={{ fontSize: "14px" }} />
+              </IconButton>
+            </Box>
+          </Box>
 
-          <Typography
-            sx={{ color: "#2B5674", fontSize: "14px", fontWeight: 500 }}
-          >
-            {count}
-          </Typography>
-
-          <IconButton
-            onClick={() => dispatch({ type: "increment", payload: item.id })}
-            sx={{ padding: 0, color: "#52A5E0" }}
-          >
-            <AddIcon sx={{ fontSize: "18px" }} />
-          </IconButton>
-        </Box>
-      </DialogContent>
-
-      <Snackbar
-        open={true}
-        autoHideDuration={2500}
-        anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
-      >
-        <Alert
-          severity="success"
-          sx={{
-            backgroundColor: "#7FC9F0",
-            color: "#FFFFFF",
-            "& .MuiAlert-icon": { color: "#FFFFFF" },
-          }}
-        >
-          Товар в корзине: {count} шт
-        </Alert>
-      </Snackbar>
-
-      <DialogActions sx={{ padding: "10px 20px 20px 20px" }}>
-        <Button
-          onClick={handleGoToCart}
-          fullWidth
-          sx={{
-            height: "42px",
-            borderRadius: "10px",
-            border: "1px solid #2B5674",
-            backgroundColor: "#FFFFFF",
-            color: "#2B5674",
-            fontSize: "14px",
-            fontWeight: 500,
-            textTransform: "none",
-            "&:hover": { backgroundColor: "#F3F8FB" },
-          }}
-        >
-          Перейти в корзину
-        </Button>
-      </DialogActions>
-    </Dialog>
+          <Button fullWidth variant="outlined" onClick={() => { handleClose(); navigate("/cart"); }}
+            sx={{ height: "32px", marginTop: "14px", borderRadius: "4px", borderColor: "#B2CAD6", color: "#446B80", fontSize: "11px", textTransform: "none" }}>
+            Перейти в корзину
+          </Button>
+        </Paper>
+      </ClickAwayListener>
+    </Popper>
   );
 }

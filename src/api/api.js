@@ -20,7 +20,7 @@ export function getUrl(type, options) {
       return `${api}/products/${options.id}/reviews`;
 
     case "search":
-      return `${api}/products/search?search=${options.search}&page=${page}&pageSize=${size}`;
+      return `${api}/products/search?search=${encodeURIComponent(options.search)}&page=${page}&pageSize=${size}`;
 
     case "products":
       return `${api}/products?page=${page}&pageSize=${size}`;

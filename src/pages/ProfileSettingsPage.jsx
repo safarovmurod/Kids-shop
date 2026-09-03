@@ -22,7 +22,7 @@ function reducer(state, action) {
         phone: action.payload.tel,
         email: action.payload.email,
         address: action.payload.address,
-        avatar: null,
+        avatar: action.payload.avatar instanceof File ? action.payload.avatar : null,
       };
 
     case "setError":
@@ -43,6 +43,9 @@ function reducer(state, action) {
     case "setAvatar":
       return { ...state, avatar: action.payload };
 
+    case "setAvatarPreview":
+      return { ...state, avatarPreview: action.payload };
+
     case "setLoading":
       return { ...state, loading: action.payload };
 
@@ -55,27 +58,52 @@ function reducer(state, action) {
 }
 
 export default function ProfileSettingsPage() {
-  const { state: appState, login } = useContext(AppContext);
+  const { state: appState, dispatch: appDispatch, login } = useContext(AppContext);
 
   const user = appState.user;
+  const profile = user || appState.guestProfile;
 
   const [state, dispatch] = useReducer(reducer, {
-    name: user ? user.fullName : "",
-    phone: user ? user.tel : "",
-    email: user ? user.email : "",
-    address: user ? user.address : "",
-    avatar: null,
+    name: profile.fullName,
+    phone: profile.tel,
+    email: profile.email,
+    address: profile.address,
+    avatar: profile.avatar instanceof File ? profile.avatar : null,
+    avatarPreview: "",
     loading: false,
     saved: false,
     error: "",
   });
 
   useEffect(() => {
-    if (user) dispatch({ type: "loadUser", payload: user });
-  }, [user]);
+    dispatch({ type: "loadUser", payload: profile });
+  }, [profile]);
+
+  useEffect(() => {
+    dispatch({ type: "saved", payload: false });
+    dispatch({ type: "setError", payload: "" });
+  }, [user?.id]);
+
+  useEffect(() => {
+    if (!state.avatar) {
+      dispatch({ type: "setAvatarPreview", payload: "" });
+      return;
+    }
+    const url = URL.createObjectURL(state.avatar);
+    dispatch({ type: "setAvatarPreview", payload: url });
+    return () => URL.revokeObjectURL(url);
+  }, [state.avatar]);
 
   async function handleSave(event) {
     event.preventDefault();
+    if (!user) {
+      appDispatch({
+        type: "saveGuestProfile",
+        payload: { fullName: state.name.trim(), tel: state.phone, email: "", address: state.address, avatar: state.avatar },
+      });
+      dispatch({ type: "saved", payload: true });
+      return;
+    }
     dispatch({ type: "setLoading", payload: true });
     dispatch({ type: "setError", payload: "" });
     dispatch({ type: "saved", payload: false });
@@ -100,14 +128,6 @@ export default function ProfileSettingsPage() {
     } finally {
       dispatch({ type: "setLoading", payload: false });
     }
-  }
-
-  if (!user) {
-    return (
-      <Box sx={{ padding: "40px 20px" }}>
-        Войдите в аккаунт через кнопку входа вверху страницы.
-      </Box>
-    );
   }
 
   return (
@@ -147,7 +167,7 @@ export default function ProfileSettingsPage() {
         <Box sx={{ display: "flex", alignItems: "center", gap: "16px" }}>
           <Box sx={{ position: "relative" }}>
             <Avatar
-              src={user.avatar}
+              src={state.avatarPreview || user?.avatar}
               sx={{
                 width: { xs: 72, lg: 64 },
                 height: { xs: 72, lg: 64 },
@@ -157,7 +177,7 @@ export default function ProfileSettingsPage() {
                 fontWeight: 600,
               }}
             >
-              {state.name ? state.name[0].toUpperCase() : "А"}
+              {state.name ? state.name[0].toUpperCase() : null}
             </Avatar>
 
             <IconButton
@@ -315,7 +335,7 @@ export default function ProfileSettingsPage() {
 
         {state.saved && (
           <Typography sx={{ color: "#4CAF50", fontSize: "14px" }}>
-            Сохранено!
+            {user ? "Сохранено!" : "Данные сохранены до обновления страницы. Войдите в аккаунт, чтобы сохранить их на сервере."}
           </Typography>
         )}
       </Box>
