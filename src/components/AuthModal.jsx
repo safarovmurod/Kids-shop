@@ -2,24 +2,35 @@ import { useState } from "react";
 import { Box, Typography, Button, IconButton, TextField } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import { NavLink } from "react-router";
+import axios from "axios";
+
+const api = "https://swagger-wheat.vercel.app/api/users/login";
 
 export default function AuthModal({ open, onClose, onLogin }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
 
   if (!open) return null;
 
-  const handleLoginSubmit = (e) => {
+  async function handleLoginSubmit(e) {
     e.preventDefault();
-    if (onLogin) {
-      // Интиқоли маълумоти корбар ва ворид шудан ба система
-      onLogin({
-        name: email ? email.split("@")[0] : "Анна",
-        email: email || "annannnanana@gmail.com",
+    setError("");
+    setLoading(true);
+    try {
+      const { data } = await axios.get(api, {
+        auth: { username: email.trim(), password },
       });
+      onLogin(data.data.user, data.data.token);
+      setPassword("");
+      onClose();
+    } catch (error) {
+      setError(error.response?.data.message || "Не удалось войти. Попробуйте ещё раз.");
+    } finally {
+      setLoading(false);
     }
-    onClose();
-  };
+  }
 
   return (
     <Box
@@ -27,8 +38,9 @@ export default function AuthModal({ open, onClose, onLogin }) {
         position: "absolute",
         top: "79px",
         right: { xs: "16px", lg: "18.49%" },
-        width: "346px",
-        height: "350px",
+        width: { xs: "calc(100% - 32px)", sm: "346px" },
+        minHeight: "350px",
+        gap: "20px",
         backgroundColor: "#FFFFFF",
         boxShadow: "0px 0px 50px rgba(0, 0, 0, 0.16)",
         borderRadius: "12px",
@@ -72,6 +84,9 @@ export default function AuthModal({ open, onClose, onLogin }) {
       >
         <TextField
           fullWidth
+          required
+          type="email"
+          autoComplete="username"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           placeholder="Электронный адрес"
@@ -99,6 +114,8 @@ export default function AuthModal({ open, onClose, onLogin }) {
         <TextField
           fullWidth
           type="password"
+          required
+          autoComplete="current-password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           placeholder="Пароль"
@@ -123,6 +140,11 @@ export default function AuthModal({ open, onClose, onLogin }) {
             },
           }}
         />
+        {error && (
+          <Typography role="alert" sx={{ color: "#D32F2F", fontSize: "12px" }}>
+            {error}
+          </Typography>
+        )}
       </Box>
 
       {/* Кнопка ва Ссылкаҳо */}
@@ -144,6 +166,7 @@ export default function AuthModal({ open, onClose, onLogin }) {
           <Button
             type="submit"
             form="login-form"
+            disabled={loading}
             variant="contained"
             disableElevation
             sx={{
@@ -158,7 +181,7 @@ export default function AuthModal({ open, onClose, onLogin }) {
               "&:hover": { backgroundColor: "#68B7DE" },
             }}
           >
-            Войти
+            {loading ? "Вход..." : "Войти"}
           </Button>
 
           <Typography

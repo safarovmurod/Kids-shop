@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import {
   Box,
   Typography,
@@ -8,27 +8,45 @@ import {
   FormControlLabel,
 } from "@mui/material";
 import { useNavigate, useOutletContext } from "react-router";
+import axios from "axios";
+
+const api = "https://swagger-wheat.vercel.app/api/users";
 
 export default function RegisterPage() {
   const { login } = useOutletContext();
   const navigate = useNavigate();
 
-  const [name, setName] = useState("Анна");
+  const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [agree, setAgree] = useState(false);
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
 
-  const handleSubmit = (e) => {
+  async function handleSubmit(e) {
     e.preventDefault();
     if (!agree) return;
-
-    login({
-      name: name || "Анна",
-      email: email,
-    });
-
-    navigate("/");
-  };
+    setError("");
+    if (password !== confirmPassword) {
+      setError("Пароли не совпадают");
+      return;
+    }
+    const formData = new FormData();
+    formData.append("fullName", name.trim());
+    formData.append("email", email.trim());
+    formData.append("password", password);
+    setLoading(true);
+    try {
+      const { data } = await axios.post(api, formData);
+      login(data.data.user, data.data.token);
+      navigate("/");
+    } catch (error) {
+      setError(error.response?.data.message || "Не удалось зарегистрироваться. Попробуйте ещё раз.");
+    } finally {
+      setLoading(false);
+    }
+  }
 
   return (
     <Box
@@ -77,6 +95,8 @@ export default function RegisterPage() {
           <TextField
             fullWidth
             value={name}
+            required
+            autoComplete="name"
             onChange={(e) => setName(e.target.value)}
             variant="outlined"
             sx={{
@@ -100,6 +120,9 @@ export default function RegisterPage() {
         <TextField
           fullWidth
           value={email}
+          required
+          type="email"
+          autoComplete="username"
           onChange={(e) => setEmail(e.target.value)}
           placeholder="Электронный адрес"
           variant="outlined"
@@ -128,6 +151,8 @@ export default function RegisterPage() {
           fullWidth
           type="password"
           value={password}
+          required
+          autoComplete="new-password"
           onChange={(e) => setPassword(e.target.value)}
           placeholder="Пароль"
           variant="outlined"
@@ -156,6 +181,10 @@ export default function RegisterPage() {
           fullWidth
           type="password"
           placeholder="Повторите пароль"
+          required
+          autoComplete="new-password"
+          value={confirmPassword}
+          onChange={(e) => setConfirmPassword(e.target.value)}
           variant="outlined"
           sx={{
             "& .MuiOutlinedInput-root": {
@@ -235,11 +264,16 @@ export default function RegisterPage() {
           }}
         />
 
+        {error && (
+          <Typography role="alert" sx={{ color: "#D32F2F", fontSize: "12px" }}>
+            {error}
+          </Typography>
+        )}
         <Button
           type="submit"
           variant="contained"
           disableElevation
-          disabled={!agree}
+          disabled={!agree || loading}
           sx={{
             height: "38px",
             width: "fit-content",
@@ -258,7 +292,7 @@ export default function RegisterPage() {
             },
           }}
         >
-          Зарегистрироваться
+          {loading ? "Регистрация..." : "Зарегистрироваться"}
         </Button>
       </Box>
     </Box>
