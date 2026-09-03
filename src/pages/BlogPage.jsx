@@ -9,10 +9,12 @@ export default function BlogPage() {
   const [loading, setLoading] = useState(false);
   const [hasMore, setHasMore] = useState(true);
 
+  // Саҳифаи навбатии блогро мегирад; page=1 рӯйхатро иваз мекунад, page-ҳои дигар ба охираш илова мешаванд.
   async function get() {
     setLoading(true);
     const answer = await getList("blog", { page, pageSize: 12 });
 
+    // Агар ба саҳифаи охир расидем, тугмаи гирифтани маълумоти бештар пинҳон мешавад.
     if (page >= answer.totalPages) {
       setHasMore(false);
     }
@@ -26,6 +28,7 @@ export default function BlogPage() {
     setLoading(false);
   }
 
+  // Тугмаи «Показать ещё» page-ро зиёд мекунад ва ин effect request-и нав мефиристад.
   useEffect(() => {
     get();
   }, [page]);

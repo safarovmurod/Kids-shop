@@ -5,6 +5,7 @@ import { paymentSections, deliverySections } from "../data/delivery";
 
 export default function DeliveryPage() {
   const [searchParams] = useSearchParams();
+  // Tab-и аввал аз ?tab= меояд; пахши тугмаҳо баъдан tab-и local-ро иваз мекунад.
   const [tab, setTab] = useState(searchParams.get("tab") || "payment");
 
   const sections = tab === "payment" ? paymentSections : deliverySections;

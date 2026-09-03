@@ -8,15 +8,18 @@ export default function CartDialog() {
   const { state, dispatch } = useContext(AppContext);
   const navigate = useNavigate();
   const { pathname } = useLocation();
+  // Reducer product ва anchor-и тугмаро медиҳад; бе онҳо popup намоён намешавад.
   const item = state.dialogItem;
   const anchor = state.dialogAnchor;
 
   useEffect(() => {
+    // Ҳангоми гузариш ба route-и дигар popup-и пешина пӯшида мешавад.
     dispatch({ type: "closeDialog" });
   }, [pathname, dispatch]);
 
   useEffect(() => {
     if (!item) return;
+    // Escape popup-ро мепӯшонад; cleanup listener-ро ҳангоми пӯшидан мебардорад.
     function handleKeyDown(event) {
       if (event.key === "Escape") dispatch({ type: "closeDialog" });
     }
@@ -25,9 +28,11 @@ export default function CartDialog() {
   }, [item, dispatch]);
 
   if (!item || !anchor?.isConnected) return null;
+  // Count-ро аз корзинаи ҷорӣ мегирад, то плюс/минус дар popup ва корзина як рақам дошта бошанд.
   const cartItem = state.cart.find((el) => el.id === item.id);
   const count = cartItem ? cartItem.count : 1;
 
+  // Ҳам крестик, ҳам клик берун аз popup ва ҳам гузариш ба корзина ҳамин close-ро истифода мебаранд.
   function handleClose() {
     dispatch({ type: "closeDialog" });
   }

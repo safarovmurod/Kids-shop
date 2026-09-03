@@ -14,7 +14,9 @@ import {
 } from "@mui/icons-material";
 
 export default function ProductGallery({ item, isFavorite, onFavorite }) {
+  // Пахши сурати калон open=true мекунад; крестик ва onClose онро мепӯшонанд.
   const [open, setOpen] = useState(false);
+  // Пахши thumbnail индекси active-ро иваз мекунад ва ҳамон сурат калон нишон дода мешавад.
   const [active, setActive] = useState(0);
 
   // Агар images холӣ бошад, расми асосиро истифода мебарем

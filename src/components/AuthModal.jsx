@@ -9,21 +9,26 @@ const api = "https://swagger-wheat.vercel.app/api/users/login";
 
 export default function AuthModal({ open, onClose }) {
   const { login } = useContext(AppContext);
+  // Email ва password input-ҳоро идора мекунанд; loading пахши такрориро мебандад, error хаторо нишон медиҳад.
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
+  // Агар open=false бошад, modal умуман render намешавад.
   if (!open) return null;
 
+  // Submit reload-ро манъ мекунад ва email/password-ро барои login ба API мефиристад.
   async function handleLoginSubmit(e) {
     e.preventDefault();
     setError("");
     setLoading(true);
     try {
+      // Axios auth маълумотро ҳамчун Basic Authorization мефиристад.
       const { data } = await axios.get(api, {
         auth: { username: email.trim(), password },
       });
+      // Profile ва token ба Context мегузаранд; password тоза ва modal пӯшида мешавад.
       login(data.data.user, data.data.token);
       setPassword("");
       onClose();

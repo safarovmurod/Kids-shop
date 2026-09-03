@@ -148,10 +148,12 @@ export function getDiscount(promo, total) {
   return Math.round((total * found.percent) / 100);
 }
 
+// Аз category-ҳои маҳаллӣ object-и мувофиқи slug-и URL-ро меёбад.
 export function getCategory(slug) {
   return categories.find((el) => el.slug === slug);
 }
 
+// Дар дохили category subcategory-и мувофиқи slug-ро меёбад.
 export function getSubcategory(category, slug) {
   if (!category) {
     return null;

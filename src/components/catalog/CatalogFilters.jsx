@@ -11,8 +11,10 @@ import { Search } from "@mui/icons-material";
 import CheckboxList from "./CheckboxList";
 
 export default function CatalogFilters({ state, dispatch, options }) {
+  // Filter-ҳои интихобшударо барои chip-ҳо якҷо мекунад; крестик action-и removeChip медиҳад.
   const chips = [...state.brands, ...state.colors, ...state.materials];
 
+  // Ҷустуҷӯи бренд танҳо вариантҳои checkbox-ро кам мекунад, на худи product-ҳоро.
   const brands = options.brands.filter((el) =>
     el.toLowerCase().includes(state.brandSearch.toLowerCase()),
   );

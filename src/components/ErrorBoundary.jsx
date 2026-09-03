@@ -7,10 +7,12 @@ export default class ErrorBoundary extends Component {
     this.state = { hasError: false };
   }
 
+  // Ҳангоми хатои render hasError=true мешавад, то ба ҷойи app паёми хато намоён шавад.
   static getDerivedStateFromError() {
     return { hasError: true };
   }
 
+  // Хатои гирифташуда ба console меравад; ин танҳо хатои render аст, на ҳар хатои async/API.
   componentDidCatch(error) {
     console.error(error);
   }

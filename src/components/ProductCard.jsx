@@ -8,8 +8,11 @@ export default function ProductCard({ item }) {
   const { state, dispatch } = useContext(AppContext);
   const navigate = useNavigate();
 
+  // Аз Context месанҷад, ки ҳамин id дар избранное ҳаст ё не; аз ин дил пур ё холӣ мешавад.
   const isFavorite = state.favorites.find((el) => el.id === item.id);
 
+  // Барои корзина ва избранное танҳо id, name, price ва image нигоҳ дошта мешаванд.
+  // Тугмаи «В корзину» action-и add ва anchorEl медиҳад: count нав ва popup назди тугма кушода мешавад.
   const product = {
     id: item.id,
     name: item.name,
@@ -17,6 +20,7 @@ export default function ProductCard({ item }) {
     image: item.image,
   };
 
+  // Пахши сурат/ном detail-саҳифаи product-ро бо id мекушояд.
   function handleOpen() {
     navigate(`/product/${item.id}`);
   }

@@ -24,6 +24,7 @@ export default function ContactForm() {
   const [message, setMessage] = useState("");
   const [agree, setAgree] = useState(false);
 
+  // Ҳоло маълумоти форма танҳо дар console.log мебарояд; ба сервер ё почта фиристода намешавад.
   function handleSubmit() {
     console.log({ name, phone, message, agree });
   }

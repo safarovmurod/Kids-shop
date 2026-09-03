@@ -19,6 +19,7 @@ const inputStyle = {
   },
 };
 
+// Reducer маълумоти форма ва sent-ро нигоҳ медорад; onChange қиматро бо action.payload мефиристад.
 function reducer(state, action) {
   switch (action.type) {
     case "setName":
@@ -56,6 +57,7 @@ const initialState = {
 export default function WholesalePage() {
   const [state, dispatch] = useReducer(reducer, initialState);
 
+  // Ҳоло танҳо паёми муваффақиятро мекушояд; маълумоти форма ба сервер фиристода намешавад.
   function handleSend() {
     dispatch({ type: "sent", payload: true });
   }

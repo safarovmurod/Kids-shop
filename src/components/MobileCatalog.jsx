@@ -6,6 +6,7 @@ import { categories } from "../data/data";
 export default function MobileCatalog({ open, onClose }) {
   const navigate = useNavigate();
 
+  // Category-и интихобшударо мекушояд ва Drawer-ро мепӯшонад.
   function handleClick(path) {
     onClose();
     navigate(path);

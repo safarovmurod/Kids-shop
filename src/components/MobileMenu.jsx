@@ -17,16 +17,19 @@ export default function MobileMenu({ open, onClose, onOpenAuth }) {
 
   const user = state.user;
 
+  // Menu-ро мепӯшонад ва ба route-и интихобшуда мегузарад.
   function handleClick(path) {
     onClose();
     navigate(path);
   }
 
+  // Menu-и асосии mobile-ро пӯшида каталоги mobile-ро мекушояд.
   function handleCatalog() {
     onClose();
     setOpenCatalog(true);
   }
 
+  // User-ро аз Context мебарорад ва menu-ро мепӯшонад.
   function handleLogout() {
     logout();
     onClose();

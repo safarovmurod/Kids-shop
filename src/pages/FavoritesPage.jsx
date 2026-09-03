@@ -4,6 +4,7 @@ import ProductCard from "../components/ProductCard";
 import { AppContext } from "../context/AppContext";
 
 export default function FavoritesPage() {
+  // ProductCard-ҳоро аз state.favorites мегирад; пахши дубораи дил рӯйхатро фавран нав мекунад.
   const { state } = useContext(AppContext);
 
   return (

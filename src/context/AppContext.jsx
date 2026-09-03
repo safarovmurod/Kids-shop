@@ -1,10 +1,13 @@
 import { createContext, useEffect, useReducer } from "react";
 
+// Context state-и умумиро ба Header, корзина, избранное ва аккаунт мерасонад.
 export const AppContext = createContext();
 
+// Аз localStorage корзина ва избранное-и пешинаро мехонем, то баъди F5 барқарор шаванд.
 const savedCart = localStorage.getItem("cart");
 const savedFavorites = localStorage.getItem("favorites");
 
+// User ва token танҳо дар state ҳастанд; ҳоло баъди F5 login аз нав лозим мешавад.
 const initialState = {
   user: null,
   token: "",
@@ -18,11 +21,14 @@ const initialState = {
   dialogAnchor: null,
 };
 
+// dispatch action мефиристад; reducer аз рӯйи type нусхаи нави state-ро бармегардонад.
 function reducer(state, action) {
   switch (action.type) {
+    // Маълумоти меҳмонро танҳо дар state нигоҳ медорад; ба API намефиристад.
     case "saveGuestProfile":
       return { ...state, guestProfile: action.payload };
 
+    // Profile ва token-и аз API омадаро нигоҳ медорад; update-и profile token-и пешинаро нигоҳ медорад.
     case "login":
       return {
         ...state,
@@ -30,6 +36,7 @@ function reducer(state, action) {
         token: action.payload.token || state.token,
       };
 
+    // User ва token-ро аз state тоза мекунад, вале корзина ва избранное мемонанд.
     case "logout":
       return {
         ...state,
@@ -37,6 +44,7 @@ function reducer(state, action) {
         token: "",
       };
 
+    // Вақти пахши «В корзину»: агар product аллакай бошад count зиёд мешавад, набошад product-и нав илова мешавад.
     case "add": {
       const item = action.payload;
       const old = state.cart.find((el) => el.id === item.id);
@@ -52,6 +60,7 @@ function reducer(state, action) {
             return el;
           }),
           dialogItem: item,
+          // anchorEl худи тугмаи пахшшуда аст: popup ҷойи худро аз он мегирад.
           dialogAnchor: action.anchorEl,
         };
       }
@@ -64,6 +73,7 @@ function reducer(state, action) {
       };
     }
 
+    // Тугмаи плюс count-и маҳсулоти интихобшударо якто зиёд мекунад.
     case "increment":
       return {
         ...state,
@@ -76,6 +86,7 @@ function reducer(state, action) {
         }),
       };
 
+    // Тугмаи минус count-ро кам мекунад, вале аз 1 поён намебарад.
     case "decrement":
       return {
         ...state,
@@ -88,6 +99,7 @@ function reducer(state, action) {
         }),
       };
 
+    // Маҳсулотро аз корзина мебарорад ва барои «Отменить» ба deleted мегузорад.
     case "remove": {
       const item = state.cart.find((el) => el.id === action.payload);
 
@@ -98,6 +110,7 @@ function reducer(state, action) {
       };
     }
 
+    // «Отменить» маҳсулотро аз deleted боз ба корзина бармегардонад.
     case "restore":
       return {
         ...state,
@@ -105,12 +118,14 @@ function reducer(state, action) {
         deleted: state.deleted.filter((el) => el.id !== action.payload.id),
       };
 
+    // Хабарчаи маҳсулоти удалшударо мепӯшонад; маҳсулотро барқарор намекунад.
     case "hideDeleted":
       return {
         ...state,
         deleted: state.deleted.filter((el) => el.id !== action.payload),
       };
 
+    // Баъди payment-и demo корзина ва рӯйхати deleted-ро холӣ мекунад.
     case "clear":
       return {
         ...state,
@@ -118,6 +133,7 @@ function reducer(state, action) {
         deleted: [],
       };
 
+    // Пахши дил toggle аст: агар дар избранное бошад удал мекунад, набошад илова мекунад.
     case "favorite": {
       const item = action.payload;
       const old = state.favorites.find((el) => el.id === item.id);
@@ -135,6 +151,7 @@ function reducer(state, action) {
       };
     }
 
+    // Маҳсулот ва тугмаи пахшшударо нигоҳ медорад, то popup назди ҳамон тугма кушода шавад.
     case "openDialog":
       return {
         ...state,
@@ -142,6 +159,7 @@ function reducer(state, action) {
         dialogAnchor: action.anchorEl,
       };
 
+    // Маълумоти popup-ро null мекунад ва CartDialog пӯшида мешавад.
     case "closeDialog":
       return {
         ...state,
@@ -155,6 +173,7 @@ function reducer(state, action) {
 }
 
 export function AppProvider({ children }) {
+  // state маълумот аст; dispatch командаҳои add, remove, favorite ва дигарҳоро ба reducer медиҳад.
   const [state, dispatch] = useReducer(reducer, initialState);
 
   // Корзина ва избранное пас аз F5 намепаранд
@@ -163,13 +182,16 @@ export function AppProvider({ children }) {
   }, [state.cart]);
 
   useEffect(() => {
+    // Ҳар тағйири избранное дар браузер сабт мешавад.
     localStorage.setItem("favorites", JSON.stringify(state.favorites));
   }, [state.favorites]);
 
+  // AuthModal ва RegisterPage баъди ҷавоби муваффақи API ҳамин function-ро даъват мекунанд.
   function login(user, token) {
     dispatch({ type: "login", payload: { user, token } });
   }
 
+  // Session-и frontend-ро мебандад ва user-и кӯҳнаи localStorage-ро низ тоза мекунад.
   function logout() {
     dispatch({ type: "logout" });
     localStorage.removeItem("user");

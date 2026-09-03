@@ -13,6 +13,7 @@ import PaymentCard from "../components/payment/PaymentCard";
 import PaymentStatusDialog from "../components/payment/PaymentStatusDialog";
 import { AppContext } from "../context/AppContext";
 
+// Reducer қиматҳои корти demo ва ҳолатҳои processing/success-ро идора мекунад.
 function reducer(state, action) {
   switch (action.type) {
     case "setNumber":
@@ -52,12 +53,15 @@ export default function PaymentPage() {
   const [state, dispatch] = useReducer(reducer, initialState);
   const navigate = useNavigate();
 
+  // Маблағи маҳсулотро бо price × count ҷамъ мекунад; дар ин саҳифа delivery ва discount ба ҳисоб дохил нестанд.
   let totalPrice = 0;
 
   appState.cart.forEach((el) => {
     totalPrice = totalPrice + el.price * el.count;
   });
 
+  // Ин payment demo аст: баъди 2 сония success, тозакунии корзина ва баъд гузариш ба Home.
+  // Ба банк ё payment API request намеравад ва пул гирифта намешавад.
   function handlePay() {
     dispatch({ type: "processing" });
 

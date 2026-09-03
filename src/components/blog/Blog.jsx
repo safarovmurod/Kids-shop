@@ -2,6 +2,7 @@ import { Box, Typography, Button } from "@mui/material";
 import { useNavigate } from "react-router";
 
 export default function Blog({ items }) {
+  // «Читать» route-и /blog/:id-ро мекушояд; BlogDetailsPage мақоларо аз API мегирад.
   const navigate = useNavigate();
 
   return (

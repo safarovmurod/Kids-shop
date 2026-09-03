@@ -2,6 +2,7 @@ import { Box, Typography } from "@mui/material";
 import OrderCard from "../components/orders/OrderCard";
 import { orders } from "../data/data";
 
+// orders маълумоти demo аз data.js аст; ин саҳифа ҳоло заказҳоро аз API намегирад.
 export default function MyOrdersPage() {
   return (
     <Box

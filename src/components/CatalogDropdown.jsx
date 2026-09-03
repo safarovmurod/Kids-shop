@@ -5,6 +5,7 @@ import { categories, getCategory } from "../data/data";
 
 export default function CatalogDropdown({ onClose }) {
   const { pathname } = useLocation();
+  // Аз pathname category-и фаъолро муайян мекунад; интихоби чап subcategory-ҳои ростро иваз мекунад.
   let category = "";
   if (pathname.startsWith("/catalog/")) category = pathname.split("/")[2];
   if (pathname.startsWith("/akcii")) category = "akcii";

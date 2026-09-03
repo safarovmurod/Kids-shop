@@ -12,6 +12,7 @@ import { AppContext } from "../../context/AppContext";
 export default function CartItem({ item }) {
   const { state, dispatch } = useContext(AppContext);
 
+  // Дил favorite-ро toggle мекунад; плюс/минус count-ро иваз ва корзинаи партов remove-ро dispatch мекунад.
   const isFavorite = state.favorites.find((el) => el.id === item.id);
 
   return (

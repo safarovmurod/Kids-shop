@@ -7,8 +7,10 @@ import { getList } from "../../api/api";
 export default function Akcii() {
   const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(false);
+  // Аввал 6 акция намоён аст; «Показать ещё» боз 6-то аз рӯйхати гирифташуда нишон медиҳад.
   const [visibleCount, setVisibleCount] = useState(6);
 
+  // Аз API то 20 акция мегирад; loading вақти интизориро нишон медиҳад.
   async function get() {
     setLoading(true);
     const answer = await getList("promotions", { pageSize: 20 });
@@ -16,6 +18,7 @@ export default function Akcii() {
     setLoading(false);
   }
 
+  // Рӯйхати акцияҳо ҳангоми кушодани component бор мешавад.
   useEffect(() => {
     get();
   }, []);

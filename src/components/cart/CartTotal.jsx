@@ -7,9 +7,11 @@ import { getDiscount } from "../../data/data";
 
 export default function CartTotal() {
   const { state } = useContext(AppContext);
+  // promo матни input аст; applied танҳо баъди «Применить» нав мешавад ва discount аз он ҳисоб мешавад.
   const [promo, setPromo] = useState("");
   const [applied, setApplied] = useState("");
 
+  // Шумора ва маблағи маҳсулотро ҷамъ мекунад: ҳар product price × count.
   let totalCount = 0;
   let totalPrice = 0;
 

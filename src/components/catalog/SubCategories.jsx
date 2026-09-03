@@ -2,6 +2,7 @@ import { Box, Typography } from "@mui/material";
 import { useNavigate } from "react-router";
 
 export default function SubCategories({ category, activeSlug }) {
+  // Пахши category ё subcategory URL-ро иваз мекунад ва CatalogPage рӯйхати мувофиқро мегирад.
   const navigate = useNavigate();
 
   return (

@@ -13,6 +13,7 @@ import ProductCharacteristics from "./ProductCharacteristics";
 import ProductReviews from "./ProductReviews";
 
 export default function ProductTabs({ item, reviews, onAddReview }) {
+  // Пахши tab индекси фаъолро иваз мекунад: тавсиф, характеристика ё review-ҳо.
   const [tab, setTab] = useState(0);
 
   const description = (

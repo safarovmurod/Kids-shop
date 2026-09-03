@@ -17,6 +17,7 @@ export default function CheaperDialog({ open, onClose }) {
   const [phone, setPhone] = useState("");
   const [sent, setSent] = useState(false);
 
+  // Demo: паёми success нишон медиҳад, баъди 1.5 сония input-ҳоро тоза ва dialog-ро мепӯшонад; request нест.
   function handleSend() {
     setSent(true);
 

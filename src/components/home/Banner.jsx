@@ -4,6 +4,7 @@ import baby from "../../assets/images/baby-suit.png";
 import background from "../../assets/images/banner-background.svg";
 
 export default function Banner() {
+  // Тугмаи баннер ба каталоги либос мегузарад.
   const navigate = useNavigate();
 
   return (

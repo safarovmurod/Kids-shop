@@ -29,6 +29,7 @@ export function getOptions(products) {
   return { brands, colors, materials };
 }
 
+// Ҳар product бояд ба ҳамаи filter-ҳои интихобшуда мувофиқ бошад; return false онро аз натиҷа мебарорад.
 export function filterProducts(products, state) {
   return products.filter((item) => {
     if (state.priceFrom && item.price < Number(state.priceFrom)) {
@@ -47,6 +48,7 @@ export function filterProducts(products, state) {
       return false;
     }
 
+    // some кофӣ будани як ранги мувофиқро месанҷад; барои materials ҳам ҳамин қоида аст.
     if (state.colors.length > 0) {
       const colors = item.colorOptions || [];
 
@@ -67,6 +69,8 @@ export function filterProducts(products, state) {
   });
 }
 
+// Нусхаи array-ро sort мекунад, то array-и state тағйир наёбад.
+// Барои popularity comparator 0 медиҳад, яъне тартиби аз API омадаро нигоҳ медорад.
 export function sortProducts(products, sortValue) {
   const list = [...products];
 

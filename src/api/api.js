@@ -3,6 +3,7 @@ import { api } from "../data/data";
 
 // Ҳамаи ссылкаҳо дар як ҷо: як case — як ссылка
 export function getUrl(type, options) {
+  // Агар page/pageSize дода нашаванд, request аз саҳифаи 1 бо 20 сабт оғоз мешавад.
   const page = options.page || 1;
   const size = options.pageSize || 20;
 
@@ -19,6 +20,7 @@ export function getUrl(type, options) {
     case "reviews":
       return `${api}/products/${options.id}/reviews`;
 
+    // encodeURIComponent матни search-ро барои URL бехатар мекунад, аз ҷумла фосила ва ҳарфҳои тоҷикӣ.
     case "search":
       return `${api}/products/search?search=${encodeURIComponent(options.search)}&page=${page}&pageSize=${size}`;
 
@@ -49,6 +51,7 @@ export function getUrl(type, options) {
 // { data, page, pageSize, total, totalPages }
 export async function getData(type, options = {}) {
   try {
+    // await то омадани response интизор мешавад; data ин body-и ҷавоби API аст.
     const { data } = await axios.get(getUrl(type, options));
     return data;
   } catch (error) {
@@ -71,6 +74,7 @@ export async function getList(type, options = {}) {
 // Сабти корбар: ҳам барои регистрация, ҳам барои маълумоти шахсӣ
 export async function saveUser(form) {
   try {
+    // FormData майдонҳо ва File-и avatar-ро дар як multipart request мефиристад.
     const formData = new FormData();
 
     formData.append("fullName", form.fullName);
@@ -94,6 +98,7 @@ export async function saveUser(form) {
   }
 }
 
+// URL-и avatar-ро аз id месозад; browser суратро аз ҳамин endpoint мегирад.
 export function getAvatarUrl(id) {
   return `${api}/users/${id}/avatar`;
 }

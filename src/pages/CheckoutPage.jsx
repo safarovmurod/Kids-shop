@@ -7,6 +7,7 @@ import DeliveryMethod from "../components/checkout/DeliveryMethod";
 import ReceiverForm from "../components/checkout/ReceiverForm";
 import PaymentMethod from "../components/checkout/PaymentMethod";
 
+// Input ва интихоби доставка/payment тавассути dispatch ба ҳамин state мегузаранд; ин маълумот ҳоло ба API-и заказ фиристода намешавад.
 function reducer(state, action) {
   switch (action.type) {
     case "setCity":
@@ -39,6 +40,7 @@ function reducer(state, action) {
     case "setPromo":
       return { ...state, promo: action.payload };
 
+    // Промокод танҳо баъди пахши «Применить» аз promo ба applied мегузарад.
     case "applyPromo":
       return { ...state, applied: state.promo };
 

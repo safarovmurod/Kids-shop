@@ -2,6 +2,7 @@ import { Box, Typography } from "@mui/material";
 import { useNavigate } from "react-router";
 
 export default function AkciiCard({ item }) {
+  // Пахши карточка route-и акцияро бо slug мекушояд.
   const navigate = useNavigate();
 
   return (

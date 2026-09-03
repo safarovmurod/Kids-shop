@@ -9,6 +9,7 @@ export default function AkciiDetailsPage() {
   const [item, setItem] = useState(null);
   const [loading, setLoading] = useState(true);
 
+  // Акцияи интихобшударо бо id ё slug-и URL аз API мегирад.
   async function get() {
     setLoading(true);
     const answer = await getData("promotion", { id });
@@ -16,6 +17,7 @@ export default function AkciiDetailsPage() {
     setLoading(false);
   }
 
+  // Ҳангоми иваз шудани id акция аз нав бор мешавад.
   useEffect(() => {
     get();
   }, [id]);

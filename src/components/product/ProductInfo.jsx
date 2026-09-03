@@ -6,7 +6,9 @@ import CheaperDialog from "./CheaperDialog";
 
 export default function ProductInfo({ item }) {
   const { dispatch } = useContext(AppContext);
+  // Индекси ранги интихобшуда танҳо дар ҳамин component аст; ҳоло ранг ба корзина фиристода намешавад.
   const [color, setColor] = useState(0);
+  // Пахши «Нашли дешевле?» формаи CheaperDialog-ро мекушояд.
   const [openCheaper, setOpenCheaper] = useState(false);
   const navigate = useNavigate();
 
@@ -19,10 +21,12 @@ export default function ProductInfo({ item }) {
     image: item.image,
   };
 
+  // Маҳсулотро ба корзина илова мекунад; currentTarget ҷойи popup-ро муайян мекунад.
   function handleAdd(event) {
     dispatch({ type: "add", payload: product, anchorEl: event.currentTarget });
   }
 
+  // «Быстрый заказ» product-ро илова карда popup-ро мепӯшонад ва ба checkout мегузарад.
   function handleFastOrder() {
     dispatch({ type: "add", payload: product });
     dispatch({ type: "closeDialog" });

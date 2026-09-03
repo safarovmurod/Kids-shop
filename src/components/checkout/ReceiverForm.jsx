@@ -9,6 +9,7 @@ const inputStyle = {
   },
 };
 
+// Input-ҳои controlled: value аз state меояд, onChange қимати навро ба reducer-и CheckoutPage медиҳад.
 export default function ReceiverForm({ state, dispatch }) {
   return (
     <Box>

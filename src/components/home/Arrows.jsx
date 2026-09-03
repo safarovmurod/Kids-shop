@@ -1,6 +1,7 @@
 import { Box, IconButton } from "@mui/material";
 import { ArrowBack, ArrowForward } from "@mui/icons-material";
 
+// Тирчаҳо onPrev/onNext-и parent-ро даъват мекунанд; disabled ҳудуди аввалию охиринро мебандад.
 export default function Arrows({ onPrev, onNext, disabledPrev, disabledNext }) {
   return (
     <Box

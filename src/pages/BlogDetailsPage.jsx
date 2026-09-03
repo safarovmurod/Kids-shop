@@ -8,6 +8,7 @@ export default function BlogDetailsPage() {
   const [post, setPost] = useState(null);
   const [loading, setLoading] = useState(true);
 
+  // Мақолаи пурраро бо id-и URL аз API мегирад.
   async function get() {
     setLoading(true);
     const answer = await getData("blogItem", { id });
@@ -15,6 +16,7 @@ export default function BlogDetailsPage() {
     setLoading(false);
   }
 
+  // Ҳангоми кушодани мақола ё иваз шудани id маълумот аз нав гирифта мешавад.
   useEffect(() => {
     get();
   }, [id]);

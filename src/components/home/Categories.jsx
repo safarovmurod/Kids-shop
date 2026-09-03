@@ -6,11 +6,13 @@ import { getList } from "../../api/api";
 export default function Categories() {
   const [data, setData] = useState([]);
 
+  // Category-ҳоро аз API мегирад ва akcii-ро аз ин рӯйхат хориҷ мекунад.
   async function get() {
     const answer = await getList("categories");
     setData(answer.list.filter((el) => el.slug !== "akcii"));
   }
 
+  // Ҳангоми аввалин кушодани component category-ҳо бор мешаванд.
   useEffect(() => {
     get();
   }, []);

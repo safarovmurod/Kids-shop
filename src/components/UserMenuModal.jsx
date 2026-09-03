@@ -12,6 +12,7 @@ export default function UserMenuModal({ open, onClose }) {
 
   const user = state.user;
 
+  // Menu танҳо вақте намоён аст, ки open=true ва user login бошад; «Выйти» logout ва onClose-ро иҷро мекунад.
   if (!open || !user) {
     return null;
   }

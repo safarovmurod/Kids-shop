@@ -18,6 +18,7 @@ AOS.init({
   offset: 60,
 });
 
+// React-ро ба элементи root пайваст мекунад; ErrorBoundary хатои render-и component-ҳоро мегирад.
 createRoot(document.getElementById("root")).render(
   <StrictMode>
     <ThemeProvider theme={theme}>

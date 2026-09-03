@@ -3,6 +3,7 @@ import { LocationOnOutlined } from "@mui/icons-material";
 import { NavLink } from "react-router";
 import { menuLinks } from "../data/data";
 
+// NavLink route-ро мекушояд; onNavigate ба parent хабар медиҳад, то menu-и кушода пӯшида шавад.
 export default function HeaderNav({ onNavigate }) {
   return (
     <Box

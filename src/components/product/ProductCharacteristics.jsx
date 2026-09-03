@@ -28,6 +28,7 @@ export default function ProductCharacteristics({ item }) {
     rows.push({ name: "Цвет", value: item.colorOptions.join(", ") });
   }
 
+  // Майдонҳои object ба rows илова мешаванд; номи такрорӣ дигар илова намешавад.
   if (item.characteristics) {
     Object.keys(item.characteristics).forEach((key) => {
       const old = rows.find((el) => el.name === key);

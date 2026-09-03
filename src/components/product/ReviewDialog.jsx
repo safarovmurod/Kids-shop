@@ -21,6 +21,7 @@ const inputStyle = {
   },
 };
 
+// Reducer майдонҳои review-ро идора мекунад; clear баъди фиристодани demo формаро холӣ мекунад.
 function reducer(state, action) {
   switch (action.type) {
     case "setName":
@@ -57,6 +58,8 @@ const initialState = {
 export default function ReviewDialog({ open, onClose, onSend }) {
   const [state, dispatch] = useReducer(reducer, initialState);
 
+  // Review-и demo бо id-и вақт ва rating=5 месозад ва ба parent медиҳад; POST ба API нест.
+  // Баъди 1.5 сония форма тоза ва dialog пӯшида мешавад.
   function handleSend() {
     onSend({
       id: Date.now(),

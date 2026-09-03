@@ -7,6 +7,7 @@ import { getDiscount } from "../../data/data";
 export default function OrderTotal({ state, dispatch }) {
   const { state: appState } = useContext(AppContext);
 
+  // Маблағ ва шумораи product-ҳоро аз корзинаи умумӣ ҳисоб мекунад.
   let totalCount = 0;
   let totalPrice = 0;
 
@@ -15,6 +16,7 @@ export default function OrderTotal({ state, dispatch }) {
     totalPrice = totalPrice + el.price * el.count;
   });
 
+  // Доставкаи tk дар ин demo 120 аст, дигар роҳҳо 0; итог = product-ҳо + delivery − discount.
   const delivery = state.delivery === "tk" ? 120 : 0;
   const discount = getDiscount(state.applied, totalPrice);
 

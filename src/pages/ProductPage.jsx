@@ -16,6 +16,7 @@ export default function ProductPage() {
   const [reviews, setReviews] = useState([]);
   const [loading, setLoading] = useState(true);
 
+  // Product-ро бо id-и URL аз API мегирад; барои ҳамин direct URL ва F5 ҳам request мекунанд.
   async function get() {
     setLoading(true);
     const answer = await getData("product", { id });
@@ -26,6 +27,7 @@ export default function ProductPage() {
     setLoading(false);
   }
 
+  // Бо ҳар тағйири id product-и нав гирифта мешавад.
   useEffect(() => {
     get();
   }, [id]);
@@ -63,6 +65,7 @@ export default function ProductPage() {
 
   const isFavorite = state.favorites.find((el) => el.id === item.id);
 
+  // Маҳсулоти ҷориро ба избранное илова мекунад ё аз он мебарорад.
   function handleFavorite() {
     dispatch({
       type: "favorite",
@@ -75,6 +78,7 @@ export default function ProductPage() {
     });
   }
 
+  // Review-и навро танҳо ба state-и ҳамин саҳифа илова мекунад; баъди F5 он гум мешавад.
   function handleAddReview(review) {
     setReviews([review, ...reviews]);
   }

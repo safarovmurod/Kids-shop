@@ -2,6 +2,7 @@ import { lazy, Suspense } from "react";
 import { createBrowserRouter, RouterProvider } from "react-router";
 import Layout from "./layout/Layout";
 
+// lazy коди ҳар саҳифаро танҳо ҳангоми кушодани он бор мекунад.
 const Home = lazy(() => import("./pages/Home"));
 const CatalogPage = lazy(() => import("./pages/CatalogPage"));
 const ProductPage = lazy(() => import("./pages/ProductPage"));
@@ -22,6 +23,7 @@ const ProfileSettingsPage = lazy(() => import("./pages/ProfileSettingsPage"));
 const Contacts = lazy(() => import("./pages/Contacts"));
 const InfoPage = lazy(() => import("./pages/InfoPage"));
 const NotFound = lazy(() => import("./pages/NotFound"));
+// Suspense интизор мешавад, то component-и lazy бор шавад; fallback=null муваққатан чизе нишон намедиҳад.
 function page(Component) {
   return (
     <Suspense fallback={null}>
@@ -30,6 +32,7 @@ function page(Component) {
   );
 }
 
+// Router URL-ро ба саҳифа мепайвандад; :id, :category ва :subcategory параметрҳои динамикӣ ҳастанд.
 const router = createBrowserRouter([
   {
     path: "/",

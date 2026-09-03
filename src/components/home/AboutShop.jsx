@@ -27,6 +27,7 @@ const brands = [
 export default function AboutShop() {
   const [page, setPage] = useState(1);
 
+  // Тирчаҳо page-ро иваз мекунанд; slice ҳар дафъа 3 брендро аз array интихоб мекунад.
   const start = (page - 1) * 3;
   const current = brands.slice(start, start + 3);
 

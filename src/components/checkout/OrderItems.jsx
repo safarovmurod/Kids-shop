@@ -3,6 +3,7 @@ import { Box, Typography } from "@mui/material";
 import { AppContext } from "../../context/AppContext";
 
 export default function OrderItems() {
+  // Дар checkout ҳамон product-ҳои корзинаи Context истифода мешаванд.
   const { state } = useContext(AppContext);
 
   return (

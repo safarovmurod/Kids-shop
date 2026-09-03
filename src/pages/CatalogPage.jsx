@@ -24,16 +24,19 @@ import { getCategory, getSubcategory, sortOptions } from "../data/data";
 import NotFound from "./NotFound";
 
 export default function CatalogPage() {
+  // Параметрҳои URL муайян мекунанд кадом category ё subcategory кушода аст.
   const { category, subcategory } = useParams();
   const [state, dispatch] = useReducer(reducer, initialState);
   const [openFilters, setOpenFilters] = useState(false);
   const [searchParams] = useSearchParams();
 
+  // Матни search аз query-и URL меояд, мисол ?search=коляска.
   const search = searchParams.get("search") || "";
 
   const currentCategory = getCategory(category);
   const currentSub = getSubcategory(currentCategory, subcategory);
 
+  // Аз рӯйи search, subcategory ё category endpoint интихоб шуда, то 60 product гирифта мешавад.
   async function get() {
     dispatch({ type: "setLoading", payload: true });
 
@@ -55,14 +58,17 @@ export default function CatalogPage() {
     dispatch({ type: "setLoading", payload: false });
   }
 
+  // Ҳар тағйири category, subcategory ё search рӯйхатро аз API нав мекунад.
   useEffect(() => {
     if (currentCategory) {
       get();
     }
   }, [category, subcategory, search]);
 
+  // Вариантҳои бренд, ранг ва материал аз product-ҳои гирифташуда ҷамъ мешаванд.
   const options = useMemo(() => getOptions(state.products), [state.products]);
 
+  // Filter ва sort дар frontend иҷро мешаванд; useMemo натиҷаро то тағйири state нигоҳ медорад.
   const products = useMemo(() => {
     return sortProducts(filterProducts(state.products, state), state.sortValue);
   }, [state]);
@@ -71,6 +77,7 @@ export default function CatalogPage() {
     return <NotFound />;
   }
 
+  // Танҳо visibleCount product нишон дода мешавад; «Показать ещё» онро 12-то зиёд мекунад.
   const shown = products.slice(0, state.visibleCount);
 
   let title = currentCategory.name;

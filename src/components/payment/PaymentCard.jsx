@@ -1,12 +1,14 @@
 import { Box, Typography, InputBase } from "@mui/material";
 
 export default function PaymentCard({ state, dispatch }) {
+  // Танҳо 16 рақамро қабул карда, ҳар 4 рақамро бо фосила ҷудо мекунад; ин танҳо формат аст.
   function handleNumber(e) {
     const digits = e.target.value.replace(/\D/g, "").slice(0, 16);
     const formatted = digits.replace(/(\d{4})(?=\d)/g, "$1 ");
     dispatch({ type: "setNumber", payload: formatted });
   }
 
+  // Танҳо 4 рақамро нигоҳ дошта, баъди ду рақам / мегузорад, мисол 1228 → 12/28.
   function handleExpiry(e) {
     const digits = e.target.value.replace(/\D/g, "").slice(0, 4);
 
@@ -21,6 +23,7 @@ export default function PaymentCard({ state, dispatch }) {
     dispatch({ type: "setExpiry", payload: digits });
   }
 
+  // Аз input танҳо 3 рақамро нигоҳ медорад; маълумот ба банк фиристода намешавад.
   function handleCvc(e) {
     const digits = e.target.value.replace(/\D/g, "").slice(0, 3);
     dispatch({ type: "setCvc", payload: digits });

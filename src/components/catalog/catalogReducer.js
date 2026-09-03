@@ -1,3 +1,4 @@
+// Агар checkbox интихоб бошад қимат удал мешавад; набошад ба array илова мешавад.
 function toggleItem(list, item) {
   if (list.includes(item)) {
     return list.filter((el) => el !== item);
@@ -20,8 +21,10 @@ export const initialState = {
   materials: [],
 };
 
+// Action-ҳои filter, sort, loading ва «Показать ещё»-ро ба state-и каталог татбиқ мекунад.
 export function reducer(state, action) {
   switch (action.type) {
+    // Бо рӯйхати нав visibleCount боз 12 мешавад.
     case "setProducts":
       return { ...state, products: action.payload, visibleCount: 12 };
 
@@ -55,6 +58,7 @@ export function reducer(state, action) {
         materials: toggleItem(state.materials, action.payload),
       };
 
+    // Пахши крестики chip ҳамон қиматро аз filter-ҳои интихобшуда мебарорад.
     case "removeChip":
       return {
         ...state,
@@ -63,6 +67,7 @@ export function reducer(state, action) {
         materials: state.materials.filter((el) => el !== action.payload),
       };
 
+    // Нарх, акция, бренд, ранг ва материалро reset мекунад; sort ва матни ҷустуҷӯи бренд мемонанд.
     case "reset":
       return {
         ...state,
@@ -74,6 +79,7 @@ export function reducer(state, action) {
         materials: [],
       };
 
+    // Боз 12 product-ро аз рӯйхати аллакай гирифташуда намоён мекунад.
     case "more":
       return { ...state, visibleCount: state.visibleCount + 12 };
 

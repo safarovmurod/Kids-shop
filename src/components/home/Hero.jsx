@@ -4,6 +4,7 @@ import hero from "../../assets/images/hero.png";
 import circle from "../../assets/images/circle.png";
 
 export default function Hero() {
+  // Тугмаи баннер ба каталоги мебели кӯдакона мегузарад.
   const navigate = useNavigate();
 
   return (

@@ -1,5 +1,6 @@
 import { Box, Typography, Checkbox, FormControlLabel } from "@mui/material";
 
+// selected муайян мекунад checkbox фаъол аст ё не; пахш onToggle(el)-ро ба parent мефиристад.
 export default function CheckboxList({ title, items, selected, onToggle }) {
   if (items.length === 0) {
     return null;

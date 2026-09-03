@@ -4,6 +4,7 @@ import Stars from "./Stars";
 import ReviewDialog from "./ReviewDialog";
 
 export default function ProductReviews({ reviews, onAdd }) {
+  // Тугма формаи review-ро мекушояд; onSend review-и навро ба parent мерасонад.
   const [open, setOpen] = useState(false);
 
   return (

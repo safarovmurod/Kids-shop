@@ -8,6 +8,7 @@ export default function OfferCard({ item }) {
 
   const isFavorite = state.favorites.find((el) => el.id === item.id);
 
+  // Маҳсулоти аксиявиро ба корзина меандозад ва popup-ро назди тугмаи пахшшуда мекушояд.
   function handleAdd(event) {
     dispatch({
       type: "add",
@@ -21,6 +22,7 @@ export default function OfferCard({ item }) {
     });
   }
 
+  // Пахши дил ҳамин маҳсулотро ба избранное илова ё аз он удал мекунад.
   function handleFavorite() {
     dispatch({
       type: "favorite",

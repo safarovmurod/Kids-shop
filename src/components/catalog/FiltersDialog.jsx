@@ -11,6 +11,7 @@ import {
 import { Close as CloseIcon } from "@mui/icons-material";
 import CatalogFilters from "./CatalogFilters";
 
+// Dialog ҳамон state ва dispatch-и CatalogPage-ро истифода мебарад; filter ҳангоми интихоб фавран тағйир меёбад.
 export default function FiltersDialog({
   open,
   onClose,

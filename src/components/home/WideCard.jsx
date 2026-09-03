@@ -5,13 +5,16 @@ import { getList } from "../../api/api";
 
 export default function WideCard() {
   const [data, setData] = useState([]);
+  // Дар mobile пахши нуқта active-ро иваз мекунад ва як баннери интихобшуда намоён мешавад.
   const [active, setActive] = useState(0);
 
+  // Барои баннерҳо 2 product аз category-и akcii мегирад.
   async function get() {
     const answer = await getList("category", { category: "akcii", pageSize: 2 });
     setData(answer.list);
   }
 
+  // Ҳангоми аввалин кушодани component request-и акцияҳо иҷро мешавад.
   useEffect(() => {
     get();
   }, []);

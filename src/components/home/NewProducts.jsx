@@ -9,12 +9,14 @@ export default function NewProducts({ title }) {
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
 
+  // Барои ҳар page 4 product мегирад ва totalPages-ро барои ҳудуди тирчаҳо нигоҳ медорад.
   async function get() {
     const answer = await getList("products", { page, pageSize: 4 });
     setData(answer.list);
     setTotalPages(answer.totalPages);
   }
 
+  // Тирчаҳо page-ро иваз мекунанд ва product-ҳои нав аз API гирифта мешаванд.
   useEffect(() => {
     get();
   }, [page]);

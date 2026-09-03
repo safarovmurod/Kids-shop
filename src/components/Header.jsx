@@ -25,6 +25,7 @@ import { AppContext } from "../context/AppContext";
 
 export default function Header() {
   const { state } = useContext(AppContext);
+  // Ҳар boolean як menu/modal-ро идора мекунад; user бошад menu-и аккаунт, набошад login кушода мешавад.
   const [openAuthModal, setOpenAuthModal] = useState(false);
   const [openUserModal, setOpenUserModal] = useState(false);
   const [openCatalog, setOpenCatalog] = useState(false);
@@ -35,6 +36,7 @@ export default function Header() {
   const user = state.user;
   let cartCount = 0;
 
+  // Badge шумораи ҳамаи донаҳоро ҷамъ мекунад, на танҳо шумораи намудҳои product-ро.
   state.cart.forEach((el) => {
     cartCount = cartCount + el.count;
   });
@@ -166,6 +168,7 @@ export default function Header() {
               component={NavLink}
               to="/profile-settings"
               onClick={(event) => {
+                // Клик ба «Личный кабинет» набояд onClick-и parent-ро ҳам фаъол карда menu-ро боз кушояд.
                 event.stopPropagation();
                 setOpenUserModal(false);
               }}

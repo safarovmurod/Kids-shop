@@ -1,6 +1,7 @@
 import { Box, Typography, Dialog, CircularProgress } from "@mui/material";
 import { CheckCircle } from "@mui/icons-material";
 
+// open dialog-ро идора мекунад; success=false интизорӣ ва success=true натиҷаи demo-ро нишон медиҳад.
 export default function PaymentStatusDialog({ open, success }) {
   return (
     <Dialog

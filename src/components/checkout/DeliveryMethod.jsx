@@ -22,6 +22,7 @@ const deliveryCards = [
   },
 ];
 
+// Пахши роҳ setDelivery, пахши компания setCompany медиҳад; интихоби фаъол дар CheckoutPage нигоҳ дошта мешавад.
 export default function DeliveryMethod({ state, dispatch }) {
   return (
     <Box>

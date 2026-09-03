@@ -6,6 +6,8 @@ import Footer from "../components/Footer";
 import CartDialog from "../components/CartDialog";
 import { AppProvider } from "../context/AppContext";
 
+// AppProvider ҳамаи саҳифаҳоро бо state-и умумӣ мепӯшонад; Outlet саҳифаи мувофиқи URL-ро нишон медиҳад.
+// CartDialog як бор дар Layout ҳаст, барои ҳамин аз ҳар саҳифа кушода мешавад.
 export default function Layout() {
   return (
     <AppProvider>

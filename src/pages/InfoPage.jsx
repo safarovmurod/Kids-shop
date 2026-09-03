@@ -40,6 +40,7 @@ const returnSteps = [
 
 export default function InfoPage() {
   const { pathname } = useLocation();
+  // Як component ду route дорад: /about матни About, route-и дигар матни Return-ро интихоб мекунад.
   const isAbout = pathname === "/about";
   const title = isAbout ? "О нас" : "Возврат";
   const items = isAbout ? aboutItems : returnSteps;

@@ -14,6 +14,7 @@ const payments = [
   { id: "paypal", name: "Онлайн-платежом PayPal" },
 ];
 
+// Radio усули payment-ро иваз мекунад; comment ва subscribe ҳам танҳо дар state-и CheckoutPage нигоҳ дошта мешаванд.
 export default function PaymentMethod({ state, dispatch }) {
   return (
     <Box>

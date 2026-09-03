@@ -21,6 +21,7 @@ const inputStyle = {
   },
 };
 
+// Reducer қиматҳои input, розигӣ, loading ва error-и регистрацияро якҷо идора мекунад.
 function reducer(state, action) {
   switch (action.type) {
     case "setName":
@@ -68,6 +69,7 @@ export default function RegisterPage() {
   const [state, dispatch] = useReducer(reducer, initialState);
   const navigate = useNavigate();
 
+  // Password-и такрорӣ ва розигиро месанҷад, баъд аккаунтро дар API месозад.
   async function handleSubmit(event) {
     event.preventDefault();
     if (state.password !== state.repeat) {
@@ -83,6 +85,7 @@ export default function RegisterPage() {
     dispatch({ type: "setError", payload: "" });
     dispatch({ type: "setLoading", payload: true });
 
+    // Майдонҳои регистрация дар FormData ҷамъ мешаванд; номи field бояд ба API мувофиқ бошад.
     const formData = new FormData();
     formData.append("fullName", state.name.trim());
     formData.append("tel", state.phone);
@@ -91,6 +94,7 @@ export default function RegisterPage() {
 
     try {
       const { data } = await axios.post(api + "/users", formData);
+      // Баъди registration user-ро login карда ба Home мегузарад.
       login(data.data.user, data.data.token);
       navigate("/");
     } catch (error) {

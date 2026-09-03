@@ -13,6 +13,7 @@ import { AppContext } from "../context/AppContext";
 import axios from "axios";
 import { api } from "../data/data";
 
+// Reducer майдонҳои profile, File-и avatar, preview ва натиҷаи сабтро идора мекунад.
 function reducer(state, action) {
   switch (action.type) {
     case "loadUser":
@@ -61,6 +62,7 @@ export default function ProfileSettingsPage() {
   const { state: appState, dispatch: appDispatch, login } = useContext(AppContext);
 
   const user = appState.user;
+  // Агар user login набошад, форма аз guestProfile пур мешавад.
   const profile = user || appState.guestProfile;
 
   const [state, dispatch] = useReducer(reducer, {
@@ -76,9 +78,11 @@ export default function ProfileSettingsPage() {
   });
 
   useEffect(() => {
+    // Ҳангоми иваз шудани profile майдонҳои форма ҳам нав мешаванд.
     dispatch({ type: "loadUser", payload: profile });
   }, [profile]);
 
+  // Ҳангоми иваз шудани user хабарҳои аккаунти пешина тоза мешаванд.
   useEffect(() => {
     dispatch({ type: "saved", payload: false });
     dispatch({ type: "setError", payload: "" });
@@ -89,11 +93,13 @@ export default function ProfileSettingsPage() {
       dispatch({ type: "setAvatarPreview", payload: "" });
       return;
     }
+    // File-ро бе upload барои preview мекушояд; cleanup URL-ро озод мекунад, то дар memory намонад.
     const url = URL.createObjectURL(state.avatar);
     dispatch({ type: "setAvatarPreview", payload: url });
     return () => URL.revokeObjectURL(url);
   }, [state.avatar]);
 
+  // Барои меҳмон танҳо Context-ро нав мекунад; барои user profile ва avatar-ро дар API сабт мекунад.
   async function handleSave(event) {
     event.preventDefault();
     if (!user) {
@@ -114,6 +120,7 @@ export default function ProfileSettingsPage() {
     if (state.avatar) formData.append("avatar", state.avatar);
 
     try {
+      // Bearer token ба сервер нишон медиҳад, ки ин соҳиби аккаунт аст.
       const { data } = await axios.post(api + "/users/" + user.id, formData, {
         headers: { Authorization: "Bearer " + appState.token },
       });

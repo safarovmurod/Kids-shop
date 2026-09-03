@@ -22,6 +22,7 @@ const buttonStyle = {
   "&:hover": { backgroundColor: "#68B7DE" },
 };
 
+// Reducer input-ҳо ва қадами формаи demo-ро нигоҳ медорад; step муайян мекунад кадом қисми форма кушода бошад.
 function reducer(state, action) {
   switch (action.type) {
     case "setEmail":
@@ -56,6 +57,7 @@ export default function ForgotPasswordPage() {
   const [state, dispatch] = useReducer(reducer, initialState);
   const navigate = useNavigate();
 
+  // Танҳо холӣ набудани email-ро месанҷад ва ба step=2 мегузарад; email ё код фиристода намешавад.
   function handleSendEmail() {
     if (!state.email) {
       dispatch({ type: "setError", payload: "Введите электронный адрес" });
@@ -66,6 +68,7 @@ export default function ForgotPasswordPage() {
     dispatch({ type: "setStep", payload: 2 });
   }
 
+  // Танҳо баробарии ду password-ро месанҷад ва step=3 мекунад; password дар сервер иваз намешавад.
   function handleSavePassword() {
     if (state.password !== state.repeat) {
       dispatch({ type: "setError", payload: "Пароли не совпадают" });

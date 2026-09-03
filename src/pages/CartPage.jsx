@@ -10,6 +10,7 @@ import { AppContext } from "../context/AppContext";
 export default function CartPage() {
   const { state } = useContext(AppContext);
 
+  // Шумораи ҳамаи донаҳои корзинаро ҷамъ мекунад; рӯйхати холӣ ҳолати «Корзина пуста»-ро нишон медиҳад.
   let totalCount = 0;
 
   state.cart.forEach((el) => {

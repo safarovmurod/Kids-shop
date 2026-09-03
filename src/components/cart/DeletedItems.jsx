@@ -6,6 +6,7 @@ import { AppContext } from "../../context/AppContext";
 export default function DeletedItems() {
   const { state, dispatch } = useContext(AppContext);
 
+  // «Отменить» restore мекунад; крестик танҳо хабарро hideDeleted мекунад. Агар deleted холӣ бошад, блок намоён нест.
   if (state.deleted.length === 0) {
     return null;
   }

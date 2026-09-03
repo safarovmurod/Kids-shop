@@ -4,6 +4,7 @@ import { useNavigate } from "react-router";
 const colors = ["#F8E5E2", "#FAF4EC", "#E9F4FB"];
 
 export default function CategoryCard({ item, index }) {
+  // Тугма route-и /catalog/:slug-ро мекушояд ва CatalogPage product-ҳоро бор мекунад.
   const navigate = useNavigate();
 
   return (

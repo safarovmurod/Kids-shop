@@ -8,11 +8,13 @@ export default function AlsoBuy({ items, title }) {
   const [products, setProducts] = useState([]);
   const [page, setPage] = useState(1);
 
+  // Агар product-ҳои монанд аз props наоянд, 12 product-ро аз API мегирад.
   async function get() {
     const answer = await getList("products", { pageSize: 12 });
     setProducts(answer.list);
   }
 
+  // Агар items дода шавад, ҳамон рӯйхат истифода мешавад; вагарна get() request мекунад.
   useEffect(() => {
     // Агар маҳсулоти шабеҳ дода шуда бошад, запрос лозим нест
     if (items && items.length > 0) {
@@ -23,6 +25,7 @@ export default function AlsoBuy({ items, title }) {
     get();
   }, [items]);
 
+  // Pagination-и маҳаллӣ: аз рӯйхати гирифташуда дар ҳар page 4 product нишон дода мешавад.
   const start = (page - 1) * 4;
   const current = products.slice(start, start + 4);
 
