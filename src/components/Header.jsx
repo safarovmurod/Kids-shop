@@ -148,6 +148,7 @@ export default function Header() {
             }}
           >
             <Avatar
+              src={user.avatar}
               sx={{
                 width: 36,
                 height: 36,
@@ -161,6 +162,12 @@ export default function Header() {
             </Avatar>
 
             <Typography
+              component={NavLink}
+              to="/profile-settings"
+              onClick={(event) => {
+                event.stopPropagation();
+                setOpenUserModal(false);
+              }}
               sx={{ color: "#446B80", fontSize: "13px", fontWeight: 500 }}
             >
               Личный кабинет

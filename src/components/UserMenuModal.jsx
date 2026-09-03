@@ -36,6 +36,7 @@ export default function UserMenuModal({ open, onClose }) {
     >
       <Box sx={{ display: "flex", alignItems: "center", gap: "12px" }}>
         <Avatar
+          src={user.avatar}
           sx={{
             width: 40,
             height: 40,

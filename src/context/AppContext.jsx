@@ -2,12 +2,12 @@ import { createContext, useEffect, useReducer } from "react";
 
 export const AppContext = createContext();
 
-const savedUser = localStorage.getItem("user");
 const savedCart = localStorage.getItem("cart");
 const savedFavorites = localStorage.getItem("favorites");
 
 const initialState = {
-  user: savedUser ? JSON.parse(savedUser) : null,
+  user: null,
+  token: "",
   cart: savedCart ? JSON.parse(savedCart) : [],
   favorites: savedFavorites ? JSON.parse(savedFavorites) : [],
   // Маҳсулоти нест кардашуда, то ки корбар "Отменить" карда тавонад
@@ -21,13 +21,15 @@ function reducer(state, action) {
     case "login":
       return {
         ...state,
-        user: action.payload,
+        user: action.payload.user,
+        token: action.payload.token || state.token,
       };
 
     case "logout":
       return {
         ...state,
         user: null,
+        token: "",
       };
 
     case "add": {
@@ -155,9 +157,8 @@ export function AppProvider({ children }) {
     localStorage.setItem("favorites", JSON.stringify(state.favorites));
   }, [state.favorites]);
 
-  function login(userData) {
-    dispatch({ type: "login", payload: userData });
-    localStorage.setItem("user", JSON.stringify(userData));
+  function login(user, token) {
+    dispatch({ type: "login", payload: { user, token } });
   }
 
   function logout() {

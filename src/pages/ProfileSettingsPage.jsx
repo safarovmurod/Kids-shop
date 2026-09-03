@@ -1,4 +1,4 @@
-import { useContext, useReducer } from "react";
+import { useContext, useEffect, useReducer } from "react";
 import {
   Box,
   Typography,
@@ -10,10 +10,17 @@ import {
 } from "@mui/material";
 import { PhotoCamera } from "@mui/icons-material";
 import { AppContext } from "../context/AppContext";
-import { saveUser, getAvatarUrl } from "../api/api";
+import axios from "axios";
+import { api } from "../data/data";
 
 function reducer(state, action) {
   switch (action.type) {
+    case "loadUser":
+      return { ...state, name: action.payload.fullName, phone: action.payload.tel, email: action.payload.email, address: action.payload.address, avatar: null, saved: false };
+
+    case "setError":
+      return { ...state, error: action.payload };
+
     case "setName":
       return { ...state, name: action.payload };
 
@@ -53,27 +60,39 @@ export default function ProfileSettingsPage() {
     avatar: null,
     loading: false,
     saved: false,
+    error: "",
   });
 
-  async function handleSave() {
+  useEffect(() => {
+    if (user) dispatch({ type: "loadUser", payload: user });
+  }, [user]);
+
+  async function handleSave(event) {
+    event.preventDefault();
     dispatch({ type: "setLoading", payload: true });
+    dispatch({ type: "setError", payload: "" });
+    dispatch({ type: "saved", payload: false });
+    const formData = new FormData();
+    formData.append("fullName", state.name.trim());
+    formData.append("tel", state.phone);
+    formData.append("address", state.address);
+    if (state.avatar) formData.append("avatar", state.avatar);
 
-    // Ҳамон POST /api/users, вале бо id — маълумот нав карда мешавад
-    const answer = await saveUser({
-      id: user ? user.id : "",
-      fullName: state.name,
-      tel: state.phone,
-      email: state.email,
-      address: state.address,
-      avatar: state.avatar,
-    });
-
-    dispatch({ type: "setLoading", payload: false });
-
-    if (answer) {
-      login(answer);
+    try {
+      const { data } = await axios.post(api + "/users/" + user.id, formData, {
+        headers: { Authorization: "Bearer " + appState.token },
+      });
+      login(data.data);
       dispatch({ type: "saved", payload: true });
+    } catch (error) {
+      dispatch({ type: "setError", payload: error.response?.data.message || "Не удалось сохранить изменения" });
+    } finally {
+      dispatch({ type: "setLoading", payload: false });
     }
+  }
+
+  if (!user) {
+    return <Box sx={{ padding: "40px 20px" }}>Войдите в аккаунт через кнопку входа вверху страницы.</Box>;
   }
 
   return (
@@ -101,6 +120,8 @@ export default function ProfileSettingsPage() {
       </Typography>
 
       <Box
+        component="form"
+        onSubmit={handleSave}
         sx={{
           maxWidth: "480px",
           display: "flex",
@@ -111,7 +132,7 @@ export default function ProfileSettingsPage() {
         <Box sx={{ display: "flex", alignItems: "center", gap: "16px" }}>
           <Box sx={{ position: "relative" }}>
             <Avatar
-              src={user && user.id ? getAvatarUrl(user.id) : ""}
+              src={user.avatar}
               sx={{
                 width: { xs: 72, lg: 64 },
                 height: { xs: 72, lg: 64 },
@@ -177,6 +198,7 @@ export default function ProfileSettingsPage() {
 
           <TextField
             variant="standard"
+            required
             value={state.name}
             onChange={(e) =>
               dispatch({ type: "setName", payload: e.target.value })
@@ -253,7 +275,7 @@ export default function ProfileSettingsPage() {
         </Box>
 
         <Button
-          onClick={handleSave}
+          type="submit"
           disabled={state.loading}
           sx={{
             width: { xs: "100%", lg: "260px" },
@@ -269,6 +291,8 @@ export default function ProfileSettingsPage() {
         >
           {state.loading ? "Сохраняем..." : "Сохранить изменения"}
         </Button>
+
+        {state.error && <Typography role="alert" sx={{ color: "#E53935" }}>{state.error}</Typography>}
 
         {state.saved && (
           <Typography sx={{ color: "#4CAF50", fontSize: "14px" }}>

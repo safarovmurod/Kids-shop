@@ -9,7 +9,8 @@ import {
 } from "@mui/material";
 import { useNavigate, NavLink } from "react-router";
 import { AppContext } from "../context/AppContext";
-import { saveUser } from "../api/api";
+import axios from "axios";
+import { api } from "../data/data";
 
 const inputStyle = {
   "& .MuiOutlinedInput-root": {
@@ -67,7 +68,8 @@ export default function RegisterPage() {
   const [state, dispatch] = useReducer(reducer, initialState);
   const navigate = useNavigate();
 
-  async function handleSubmit() {
+  async function handleSubmit(event) {
+    event.preventDefault();
     if (state.password !== state.repeat) {
       dispatch({ type: "setError", payload: "Пароли не совпадают" });
       return;
@@ -81,23 +83,21 @@ export default function RegisterPage() {
     dispatch({ type: "setError", payload: "" });
     dispatch({ type: "setLoading", payload: true });
 
-    // Корбар дар сервер сабт мешавад: POST /api/users
-    const user = await saveUser({
-      fullName: state.name,
-      tel: state.phone,
-      email: state.email,
-      address: "",
-    });
+    const formData = new FormData();
+    formData.append("fullName", state.name.trim());
+    formData.append("tel", state.phone);
+    formData.append("email", state.email.trim());
+    formData.append("password", state.password);
 
-    dispatch({ type: "setLoading", payload: false });
-
-    if (!user) {
-      dispatch({ type: "setError", payload: "Не удалось зарегистрироваться" });
-      return;
+    try {
+      const { data } = await axios.post(api + "/users", formData);
+      login(data.data.user, data.data.token);
+      navigate("/");
+    } catch (error) {
+      dispatch({ type: "setError", payload: error.response?.data.message || "Не удалось зарегистрироваться" });
+    } finally {
+      dispatch({ type: "setLoading", payload: false });
     }
-
-    login(user);
-    navigate("/");
   }
 
   return (
@@ -125,6 +125,8 @@ export default function RegisterPage() {
       </Typography>
 
       <Box
+        component="form"
+        onSubmit={handleSubmit}
         sx={{
           maxWidth: { xs: "100%", lg: "420px" },
           display: "flex",
@@ -134,6 +136,7 @@ export default function RegisterPage() {
       >
         <TextField
           fullWidth
+          required
           label="Имя"
           value={state.name}
           onChange={(e) =>
@@ -154,6 +157,9 @@ export default function RegisterPage() {
 
         <TextField
           fullWidth
+          required
+          type="email"
+          autoComplete="email"
           placeholder="Электронный адрес"
           value={state.email}
           onChange={(e) =>
@@ -164,6 +170,8 @@ export default function RegisterPage() {
 
         <TextField
           fullWidth
+          required
+          autoComplete="new-password"
           type="password"
           placeholder="Пароль"
           value={state.password}
@@ -175,6 +183,8 @@ export default function RegisterPage() {
 
         <TextField
           fullWidth
+          required
+          autoComplete="new-password"
           type="password"
           placeholder="Повторите пароль"
           value={state.repeat}
@@ -222,7 +232,7 @@ export default function RegisterPage() {
         )}
 
         <Button
-          onClick={handleSubmit}
+          type="submit"
           disabled={state.loading}
           sx={{
             width: "100%",

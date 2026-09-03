@@ -61,6 +61,7 @@ export default function MobileMenu({ open, onClose, onOpenAuth }) {
           <Box sx={{ marginTop: "16px" }}>
             <Box sx={{ display: "flex", alignItems: "center", gap: "10px" }}>
               <Avatar
+          src={user.avatar}
                 sx={{
                   width: 36,
                   height: 36,
