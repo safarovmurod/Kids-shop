@@ -1,12 +1,12 @@
 import { Box, Typography, Button } from "@mui/material";
 import { useNavigate } from "react-router";
 import hero from "../../assets/images/hero.png";
-
+import circle from "../../assets/images/circle.png";
 export default function Hero() {
   const navigate = useNavigate();
 
   return (
-    <Box sx={{ width: "100%", backgroundColor: "#FCF6F5" }}>
+    <Box sx={{ width: "100%", backgroundColor: "#ECC7C1" }}>
       <Box
         sx={{
           display: "flex",

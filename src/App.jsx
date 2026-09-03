@@ -22,8 +22,6 @@ const ProfileSettingsPage = lazy(() => import("./pages/ProfileSettingsPage"));
 const Contacts = lazy(() => import("./pages/Contacts"));
 const InfoPage = lazy(() => import("./pages/InfoPage"));
 const NotFound = lazy(() => import("./pages/NotFound"));
-
-// Ҳар як саҳифа дар Suspense печонида мешавад
 function page(Component) {
   return (
     <Suspense fallback={null}>
