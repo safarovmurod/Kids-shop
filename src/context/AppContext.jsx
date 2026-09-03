@@ -1,0 +1,183 @@
+import { createContext, useEffect, useReducer } from "react";
+
+export const AppContext = createContext();
+
+const savedCart = localStorage.getItem("cart");
+const savedFavorites = localStorage.getItem("favorites");
+
+const initialState = {
+  user: null,
+  token: "",
+  guestProfile: { fullName: "", tel: "", email: "", address: "", avatar: null },
+  cart: savedCart ? JSON.parse(savedCart) : [],
+  favorites: savedFavorites ? JSON.parse(savedFavorites) : [],
+  // Маҳсулоти нест кардашуда, то ки корбар "Отменить" карда тавонад
+  deleted: [],
+  // Маҳсулоте, ки дар Dialog нишон дода мешавад (агар null бошад, Dialog пӯшида аст)
+  dialogItem: null,
+  dialogAnchor: null,
+};
+
+function reducer(state, action) {
+  switch (action.type) {
+    case "saveGuestProfile":
+      return { ...state, guestProfile: action.payload };
+
+    case "login":
+      return {
+        ...state,
+        user: action.payload.user,
+        token: action.payload.token || state.token,
+      };
+
+    case "logout":
+      return {
+        ...state,
+        user: null,
+        token: "",
+      };
+
+    case "add": {
+      const item = action.payload;
+      const old = state.cart.find((el) => el.id === item.id);
+
+      if (old) {
+        return {
+          ...state,
+          cart: state.cart.map((el) => {
+            if (el.id === item.id) {
+              return { ...el, count: el.count + 1 };
+            }
+
+            return el;
+          }),
+          dialogItem: item,
+          dialogAnchor: action.anchorEl,
+        };
+      }
+
+      return {
+        ...state,
+        cart: [...state.cart, { ...item, count: 1 }],
+        dialogItem: item,
+        dialogAnchor: action.anchorEl,
+      };
+    }
+
+    case "increment":
+      return {
+        ...state,
+        cart: state.cart.map((el) => {
+          if (el.id === action.payload) {
+            return { ...el, count: el.count + 1 };
+          }
+
+          return el;
+        }),
+      };
+
+    case "decrement":
+      return {
+        ...state,
+        cart: state.cart.map((el) => {
+          if (el.id === action.payload && el.count > 1) {
+            return { ...el, count: el.count - 1 };
+          }
+
+          return el;
+        }),
+      };
+
+    case "remove": {
+      const item = state.cart.find((el) => el.id === action.payload);
+
+      return {
+        ...state,
+        cart: state.cart.filter((el) => el.id !== action.payload),
+        deleted: item ? [...state.deleted, item] : state.deleted,
+      };
+    }
+
+    case "restore":
+      return {
+        ...state,
+        cart: [...state.cart, action.payload],
+        deleted: state.deleted.filter((el) => el.id !== action.payload.id),
+      };
+
+    case "hideDeleted":
+      return {
+        ...state,
+        deleted: state.deleted.filter((el) => el.id !== action.payload),
+      };
+
+    case "clear":
+      return {
+        ...state,
+        cart: [],
+        deleted: [],
+      };
+
+    case "favorite": {
+      const item = action.payload;
+      const old = state.favorites.find((el) => el.id === item.id);
+
+      if (old) {
+        return {
+          ...state,
+          favorites: state.favorites.filter((el) => el.id !== item.id),
+        };
+      }
+
+      return {
+        ...state,
+        favorites: [...state.favorites, item],
+      };
+    }
+
+    case "openDialog":
+      return {
+        ...state,
+        dialogItem: action.payload,
+        dialogAnchor: action.anchorEl,
+      };
+
+    case "closeDialog":
+      return {
+        ...state,
+        dialogItem: null,
+        dialogAnchor: null,
+      };
+
+    default:
+      return state;
+  }
+}
+
+export function AppProvider({ children }) {
+  const [state, dispatch] = useReducer(reducer, initialState);
+
+  // Корзина ва избранное пас аз F5 намепаранд
+  useEffect(() => {
+    localStorage.setItem("cart", JSON.stringify(state.cart));
+  }, [state.cart]);
+
+  useEffect(() => {
+    localStorage.setItem("favorites", JSON.stringify(state.favorites));
+  }, [state.favorites]);
+
+  function login(user, token) {
+    dispatch({ type: "login", payload: { user, token } });
+  }
+
+  function logout() {
+    dispatch({ type: "logout" });
+    localStorage.removeItem("user");
+  }
+
+  return (
+    <AppContext.Provider value={{ state, dispatch, login, logout }}>
+      {children}
+    </AppContext.Provider>
+  );
+}

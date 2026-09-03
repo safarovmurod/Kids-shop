@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="790" height="475" viewBox="0 0 790 475" preserveAspectRatio="none">
+  <defs>
+    <pattern id="loops" width="70" height="70" patternUnits="userSpaceOnUse" patternTransform="rotate(25)">
+      <path d="M-20 18C0-8 35-8 35 18S70 44 90 18M-20 28C0 2 25 2 25 28S70 64 90 28M15 70C-5 45 15 30 35 45S65 65 65 85" fill="none" stroke="#EAE1D5" stroke-width="2" opacity="0.2"/>
+    </pattern>
+    <path id="shape" d="M48 475C-46 358 8 267 150 230C330 183 334 131 410 53C473-12 624-12 680 64C731 133 707 201 752 298C777 353 811 422 769 475Z"/>
+  </defs>
+  <use href="#shape" fill="#FCF7F1"/>
+  <use href="#shape" fill="url(#loops)"/>
+</svg>
