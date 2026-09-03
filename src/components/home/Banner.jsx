@@ -8,6 +8,7 @@ export default function Banner() {
 
   return (
     <Box
+      data-aos="fade-up"
       sx={{
         width: "100%",
         marginTop: { xs: "60px", lg: "110px" },

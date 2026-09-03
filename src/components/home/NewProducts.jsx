@@ -21,6 +21,7 @@ export default function NewProducts({ title }) {
 
   return (
     <Box
+      data-aos="fade-up"
       sx={{
         width: "100%",
         maxWidth: "1200px",

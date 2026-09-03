@@ -7,7 +7,7 @@ export default function Hero() {
   const navigate = useNavigate();
 
   return (
-    <Box sx={{ width: "100%", backgroundColor: "#FCF6F5" }}>
+    <Box data-aos="fade" sx={{ width: "100%", backgroundColor: "#FCF6F5" }}>
       <Box
         sx={{
           position: "relative",

@@ -34,6 +34,7 @@ export default function OfferCard({ item }) {
 
   return (
     <Box
+      data-aos="fade-up"
       sx={{
         position: "relative",
         display: "flex",

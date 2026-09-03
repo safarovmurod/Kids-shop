@@ -71,6 +71,7 @@ export default function InfoPage() {
       </Box>
       <Typography
         component="h1"
+        data-aos="fade"
         sx={{
           fontSize: { xs: "34px", lg: "42px" },
           fontWeight: 700,
@@ -81,6 +82,7 @@ export default function InfoPage() {
         {title}
       </Typography>
       <Box
+        data-aos="fade-up"
         sx={{
           display: "flex",
           flexDirection: { xs: "column", md: "row" },
@@ -164,6 +166,8 @@ export default function InfoPage() {
         {items.map((item) => (
           <Box
             key={item.id}
+            data-aos="fade-up"
+            data-aos-delay={(item.id - 1) * 100}
             sx={{
               padding: "26px",
               border: "1px solid #E5EEF3",

@@ -17,6 +17,7 @@ export default function Categories() {
 
   return (
     <Box
+      data-aos="fade-up"
       sx={{
         width: "100%",
         maxWidth: "1200px",
