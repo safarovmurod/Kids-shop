@@ -1,14 +1,13 @@
 import { useContext, useState } from "react";
 import { Box, Typography, Button, IconButton, TextField } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
-import { NavLink, useNavigate } from "react-router";
+import { NavLink } from "react-router";
 import { AppContext } from "../context/AppContext";
 
 export default function AuthModal({ open, onClose }) {
   const { login } = useContext(AppContext);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const navigate = useNavigate();
 
   if (!open) {
     return null;
@@ -26,8 +25,8 @@ export default function AuthModal({ open, onClose }) {
       address: "",
     });
 
+    // Танҳо диалогро мепӯшем — корбар дар ҳамон саҳифа мемонад
     onClose();
-    navigate("/profile-settings");
   }
 
   return (

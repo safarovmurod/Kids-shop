@@ -16,7 +16,6 @@ import {
 import { NavLink, useNavigate } from "react-router";
 import logo from "../assets/images/logo.png";
 import AuthModal from "./AuthModal";
-import UserMenuModal from "./UserMenuModal";
 import CatalogDropdown from "./CatalogDropdown";
 import HeaderNav from "./HeaderNav";
 import MobileMenu from "./MobileMenu";
@@ -26,7 +25,6 @@ import { AppContext } from "../context/AppContext";
 export default function Header() {
   const { state } = useContext(AppContext);
   const [openAuthModal, setOpenAuthModal] = useState(false);
-  const [openUserModal, setOpenUserModal] = useState(false);
   const [openCatalog, setOpenCatalog] = useState(false);
   const [openMobileMenu, setOpenMobileMenu] = useState(false);
   const navigate = useNavigate();
@@ -139,7 +137,7 @@ export default function Header() {
 
         {user ? (
           <Box
-            onClick={() => setOpenUserModal(!openUserModal)}
+            onClick={() => navigate("/profile-settings")}
             sx={{
               display: { xs: "none", lg: "flex" },
               alignItems: "center",
@@ -234,11 +232,6 @@ export default function Header() {
       />
 
       <AuthModal open={openAuthModal} onClose={() => setOpenAuthModal(false)} />
-
-      <UserMenuModal
-        open={openUserModal}
-        onClose={() => setOpenUserModal(false)}
-      />
     </Box>
   );
 }

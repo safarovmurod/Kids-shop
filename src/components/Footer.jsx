@@ -16,7 +16,7 @@ const leftLinks = [
 const rightLinks = [
   { id: 1, name: "Оптовым клиентам", path: "/wholesale" },
   { id: 2, name: "Оплата и доставка", path: "/delivery" },
-  { id: 3, name: "Вовзрат", path: "/returns" },
+  { id: 3, name: "Возврат", path: "/returns" },
 ];
 
 const socials = [

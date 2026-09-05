@@ -9,7 +9,9 @@ import {
   IconButton,
 } from "@mui/material";
 import { PhotoCamera } from "@mui/icons-material";
+import { NavLink } from "react-router";
 import { AppContext } from "../context/AppContext";
+import { userMenuLinks } from "../data/data";
 import { saveUser, getAvatarUrl } from "../api/api";
 
 function reducer(state, action) {
@@ -41,7 +43,7 @@ function reducer(state, action) {
 }
 
 export default function ProfileSettingsPage() {
-  const { state: appState, login } = useContext(AppContext);
+  const { state: appState, login, logout } = useContext(AppContext);
 
   const user = appState.user;
 
@@ -91,7 +93,7 @@ export default function ProfileSettingsPage() {
     >
       <Typography
         sx={{
-          marginBottom: { xs: "30px", lg: "32px" },
+          marginBottom: { xs: "20px", lg: "24px" },
           color: "#2B5674",
           fontSize: { xs: "34px", lg: "32px" },
           fontWeight: 700,
@@ -99,6 +101,47 @@ export default function ProfileSettingsPage() {
       >
         Личные данные
       </Typography>
+
+      {/* Менюи шахсии корбар — пештар дар дропдауни шапка буд */}
+      <Box
+        sx={{
+          display: "flex",
+          flexWrap: "wrap",
+          gap: { xs: "16px", lg: "28px" },
+          marginBottom: { xs: "30px", lg: "40px" },
+        }}
+      >
+        {userMenuLinks.map((el) => (
+          <Box
+            key={el.id}
+            component={NavLink}
+            to={el.path}
+            sx={{
+              color: "#446B80",
+              fontSize: { xs: "16px", lg: "14px" },
+              textDecoration: "none",
+              transition: "color 0.25s ease",
+              "&:hover": { color: "#7FC9F0" },
+              "&.active": { color: "#7FC9F0", fontWeight: 600 },
+            }}
+          >
+            {el.name}
+          </Box>
+        ))}
+
+        <Typography
+          onClick={logout}
+          sx={{
+            color: "#446B80",
+            fontSize: { xs: "16px", lg: "14px" },
+            cursor: "pointer",
+            transition: "color 0.25s ease",
+            "&:hover": { color: "#FF6B6B" },
+          }}
+        >
+          Выйти
+        </Typography>
+      </Box>
 
       <Box
         sx={{
